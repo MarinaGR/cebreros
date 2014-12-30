@@ -1,7 +1,88 @@
-function ajax_recover_data(type, container) {
-	var extern_url='http://w3.cebreros.es/api/v1/';
+var extern_url='http://w3.cebreros.es/api/v1/';
+
+function onBodyLoad()
+{	
+    document.addEventListener("deviceready", onDeviceReady, false); 
 	
-	function successCallback(data) {
+	var fecha=getLocalStorage("fecha"); 
+	if(typeof fecha == "undefined"  || fecha==null)	
+	{	
+		var nueva_fecha=now; //new Date(2014,0,1).getTime(); 
+		setLocalStorage("fecha", nueva_fecha);
+	}	
+
+	ajax_recover_data("category/1","contenido");	
+	
+}
+function onDeviceReady()
+{
+	document.addEventListener("offline", onOffline, false);
+	document.addEventListener("online", onOnline, false);
+
+	cordova.plugins.backgroundMode.enable(); 	
+	
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	document.addEventListener("menubutton", onMenuKeyDown, false);
+	
+}    
+function onBackKeyDown()
+{
+	if($("#contenido").attr("src")=="offline.html") 
+	{		
+		navigator.app.exitApp();
+		return false;
+	}
+	window.history.back();
+}
+function onMenuKeyDown()
+{
+	//window.location.href='index.html';
+}
+function onOnline()
+{
+	setTimeout(function(){
+		$("#contenido").attr("src",extern_siteurl);
+	},250);
+	
+	/*var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    alert('Conexión: ' + states[networkState]);*/
+
+}
+function onOffline()
+{
+	setTimeout(function(){
+		$("#contenido").attr("src","offline.html");
+	},250);
+
+}
+
+
+
+
+function ajax_recover_data(type, container) {
+	
+	
+	$.ajax({
+	  url: extern_url+type,
+	  type: 'GET',
+	  dataType: 'json',
+	  crossDomain: true, 
+	  success: f_success,
+	  error: f_error,
+	  async:false,
+	});
+	function f_success(data) {
 		console.log(data);
 		//data = $.parseJSON(data);
 		var cadena="";
@@ -15,28 +96,12 @@ function ajax_recover_data(type, container) {
 		$("#"+container).html(cadena);
 				
 	}
-	function jsonpCallback(data){
-		successCallback(data);
-	}
-	
-	$.ajax({
-	  url: extern_url+type,
-	  type: 'GET',
-	  dataType: 'json',
-	  crossDomain: true, 
-	  success: 'successCallback',
-	  error:function(jqXHR, textStatus, errorThrown){
-			alert('Error de conexión. No se han podido recuperar los datos. Por favor inténtalo de nuevo.');	
-			console.log(jqXHR);
-			console.log(textStatus+" "+errorThrown);
-	  },
-	  async:false,
-	});
-	
+	function f_error(jqXHR, textStatus, errorThrown){
+		alert('Error: '+textStatus+" "+errorThrown);	
+	}	
 }
 
 function ajax_recover_data_jsonp(type, container) {
-	var extern_url='http://w3.cebreros.es/api/v1/';
 	
 	function successCallback(data) {
 		console.log(data);
@@ -72,4 +137,23 @@ function ajax_recover_data_jsonp(type, container) {
 	  async:false,
 	});
 	
+}
+
+function setLocalStorage(keyinput,valinput) 
+{
+	if(typeof(window.localStorage) != 'undefined') { 
+		window.localStorage.setItem(keyinput,valinput); 
+	} 
+	else { 
+		alert("localStorage no definido"); 
+	}
+}
+function getLocalStorage(keyoutput)
+{
+	if(typeof(window.localStorage) != 'undefined') { 
+		return window.localStorage.getItem(keyoutput); 
+	} 
+	else { 
+		alert("localStorage no definido"); 
+	}
 }
