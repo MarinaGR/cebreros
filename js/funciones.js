@@ -4,14 +4,14 @@ function onBodyLoad()
 {	
     document.addEventListener("deviceready", onDeviceReady, false); 
 	
-	var fecha=getLocalStorage("fecha"); 
+	/*var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
 	{	
 		var nueva_fecha=now; //new Date(2014,0,1).getTime(); 
 		setLocalStorage("fecha", nueva_fecha);
-	}	
-
-	ajax_recover_data("category/1","contenido");	
+	}	*/	
+	
+	//ajax_recover_data("category/1","contenido");
 	
 }
 function onDeviceReady()
@@ -24,10 +24,12 @@ function onDeviceReady()
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
+	ajax_recover_data("category/1","contenido");
+	
 }    
 function onBackKeyDown()
 {
-	if($("#contenido").attr("src")=="offline.html") 
+	if(window.location.href=="index.html") 
 	{		
 		navigator.app.exitApp();
 		return false;
@@ -36,11 +38,11 @@ function onBackKeyDown()
 }
 function onMenuKeyDown()
 {
-	//window.location.href='index.html';
+	window.location.href='index.html';
 }
 function onOnline()
 {
-	setTimeout(function(){
+	/*setTimeout(function(){
 		$("#contenido").attr("src",extern_siteurl);
 	},250);
 	
@@ -61,17 +63,14 @@ function onOnline()
 }
 function onOffline()
 {
-	setTimeout(function(){
+	alert("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
+	/*setTimeout(function(){
 		$("#contenido").attr("src","offline.html");
-	},250);
+	},250);*/
 
 }
 
-
-
-
 function ajax_recover_data(type, container) {
-	
 	
 	$.ajax({
 	  url: extern_url+type,
@@ -83,6 +82,7 @@ function ajax_recover_data(type, container) {
 	  async:false,
 	});
 	function f_success(data) {
+		alert("OK");
 		console.log(data);
 		//data = $.parseJSON(data);
 		var cadena="";
@@ -92,6 +92,8 @@ function ajax_recover_data(type, container) {
 					"Title : "+d.Title+", "+
 					"DatePublish : "+d.DatePublish+"<br>";
 		});
+		
+		alert(cadena);
 		
 		$("#"+container).html(cadena);
 				
