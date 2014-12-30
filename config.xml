@@ -4,10 +4,10 @@
 		id          = "com.ovnyline.cddiocesanos"
 		version     = "1.0.0" >
 
-    <name>CD Colegios Diocesanos</name>
+    <name>Cebreros</name>
 
     <description>
-		Aplicación con toda la información sobre el Club Deportivo Colegios Diocesanos de Ávila.
+		Aplicación con toda la información sobre Cebreros.
     </description>
 
     <author href="http://www.ovnyline.com" email="info@ovnyline.com">
