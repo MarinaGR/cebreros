@@ -73,11 +73,11 @@ function onOffline()
 
 function ajax_recover_data(type, container) {
 	
-	alert("recoverData: "+type+" "+container);
+	alert("recoverData: "+(extern_url+type)+" en "+container);
 	
 	$.ajax({
 	  url: extern_url+type,
-	  type: 'POST',
+	  type: 'GET',
 	  dataType: 'json',
 	  crossDomain: true, 
 	  success: f_success,
@@ -102,7 +102,8 @@ function ajax_recover_data(type, container) {
 				
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
-		alert('Error: '+textStatus+" "+errorThrown);	
+		alert('Error: '+textStatus+" - "+errorThrown);	
+		$("#"+container).html("No se han cargado los datos");
 	}	
 }
 
