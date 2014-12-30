@@ -2,6 +2,9 @@ var extern_url='http://w3.cebreros.es/api/v1/';
 
 function onBodyLoad()
 {	
+
+	alert("bodyLoad");
+
     document.addEventListener("deviceready", onDeviceReady, false); 
 	
 	/*var fecha=getLocalStorage("fecha"); 
@@ -12,10 +15,12 @@ function onBodyLoad()
 	}	*/	
 	
 	//ajax_recover_data("category/1","contenido");
-	
+		
 }
 function onDeviceReady()
 {
+	alert("deviceReady");
+
 	document.addEventListener("offline", onOffline, false);
 	document.addEventListener("online", onOnline, false);
 
@@ -72,9 +77,11 @@ function onOffline()
 
 function ajax_recover_data(type, container) {
 	
+	alert("recoverData: "+type+" "+container);
+	
 	$.ajax({
 	  url: extern_url+type,
-	  type: 'GET',
+	  type: 'POST',
 	  dataType: 'json',
 	  crossDomain: true, 
 	  success: f_success,
