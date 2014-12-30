@@ -1,4 +1,5 @@
-var extern_url='http://w3.cebreros.es/api/v1/';
+var api_url='http://w3.cebreros.es/api/v1/';
+var extern_url='http://w3.cebreros.es/';
 
 function onBodyLoad()
 {	
@@ -44,7 +45,7 @@ function onMenuKeyDown()
 function onOnline()
 {
 	/*setTimeout(function(){
-		$("#contenido").attr("src",extern_siteurl);
+		$("#contenido").attr("src",º_siteurl);
 	},250);
 	
 	/*var networkState = navigator.connection.type;
@@ -72,11 +73,9 @@ function onOffline()
 }
 
 function ajax_recover_data(type, container) {
-	
-	alert("recoverData: "+(extern_url+type)+" en "+container);
-	
+
 	$.ajax({
-	  url: extern_url+type,
+	  url: api_url+type,
 	  type: 'GET',
 	  dataType: 'json',
 	  crossDomain: true, 
@@ -85,19 +84,21 @@ function ajax_recover_data(type, container) {
 	  async:false,
 	});
 	function f_success(data) {
-		alert("OK");
-		console.log(data);
+
 		//data = $.parseJSON(data);
 		var cadena="";
 		
-		$.each(data.Result.Items, function(index, d){            
-			cadena+="ID : "+d.ID+", "+
-					"Title : "+d.Title+", "+
-					"DatePublish : "+d.DatePublish+"<br>";
+		cadena+="<p>"+data.Result.ItemCount+" noticia/s</p>";
+		
+		$.each(data.Result.Items, function(index, d){     
+			var fecha=d.DatePublish.getDate()+"/"+d.DatePublish.getMonth()+"/"+d.DatePublish.getFullYear();
+			var image=d.Image;
+			cadena+="<p style='border-bottom: 1px dashed #EEE'>"
+			if(image!=null) 
+				cadena+="<img src='"+extern_url+image"' width='50' /><br>";
+			cadena+=d.Title+"<br>"+fecha+" ::: <a href='"+extern_url+d.Permalink+"'>Leer más&gt;</a> </p>";
 		});
-		
-		alert(cadena);
-		
+
 		$("#"+container).html(cadena);
 				
 	}
@@ -128,7 +129,7 @@ function ajax_recover_data_jsonp(type, container) {
 	}
 	
 	$.ajax({
-	  url: extern_url+type,
+	  url: api_url+type,
 	  type: 'GET',
 	  dataType: 'jsonp',
 	  crossDomain: true, 
