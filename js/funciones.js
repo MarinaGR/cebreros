@@ -85,6 +85,7 @@ function ajax_recover_data(type, container) {
 	});
 	function f_success(data) {
 
+		alert("OK");
 		//data = $.parseJSON(data);
 		var cadena="";
 		
@@ -95,8 +96,8 @@ function ajax_recover_data(type, container) {
 			var image=d.Image;
 			cadena+="<p style='border-bottom: 1px dashed #EEE'>"
 			if(image!=null) 
-				cadena+="<img src='"+extern_url+image"' width='50' /><br>";
-			cadena+=d.Title+"<br>"+fecha+" ::: <a href='"+extern_url+d.Permalink+"'>Leer más&gt;</a> </p>";
+				cadena+="<img src='"+(extern_url+image)+"' width='50' /><br>";
+			cadena+=d.Title+"<br>"+fecha+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
 		});
 
 		$("#"+container).html(cadena);
