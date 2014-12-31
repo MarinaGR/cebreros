@@ -14,6 +14,11 @@
 		<script src="./js/jquery_ui.js"></script>
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
+		<script>
+			$(window).load(function() {
+				ajax_recover_data('page', '/1', 'contenido');
+			});
+		</script>
 	</head>
 
 	<body onload="onBodyLoad()">
@@ -25,15 +30,7 @@
 			</div>
 			
 			<div class="section_02">
-				<h2>Bienvenido a la App oficial del Ayuntamiento de Cebreros. </h2>
-				<div class="article_01" id="contenido">
-					<p>				
-					Desde aquí podrás encontrar toda la información que necesites para conocer y disfrutar en profundidad la Villa de Cebreros, desde su patrimonio turístico y monumental, a los más de 130 kilómetros de rutas de senderismo que podrás recorrer a través de geolocalización. 
-					</p>
-					<p>
-					Así mismo pretendemos que desde esta aplicación tengas disponibles todos los recursos que ofrece la versión móvil de la página web del Ayuntamiento de Cebreros para poder realizar diferentes gestiones por medio de su sede electrónica, así como visualizar los mapas y fotografías donde descubrir nuestro entorno.
-					</p>
-				</div>
+				<div class="article_01" id="contenido"> </div>
 			</div>	
 			
 			<div class="footer_01">
