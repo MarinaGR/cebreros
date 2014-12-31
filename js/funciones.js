@@ -85,19 +85,18 @@ function ajax_recover_data(type, container) {
 	});
 	function f_success(data) {
 
-		alert("OK");
 		//data = $.parseJSON(data);
 		var cadena="";
 		
 		cadena+="<p>"+data.Result.ItemCount+" noticia/s</p>";
 		
-		$.each(data.Result.Items, function(index, d){     
-			var fecha=d.DatePublish.getDate()+"/"+d.DatePublish.getMonth()+"/"+d.DatePublish.getFullYear();
-			var image=d.Image;
+		$.each(data.Result.Items, function(index, d){   
+			var fecha=new Date(d.DatePublish);
+			var imagen=d.Image;  alert(imagen); alert(extern_url+imagen);
 			cadena+="<p style='border-bottom: 1px dashed #EEE'>"
-			if(image!=null) 
-				cadena+="<img src='"+(extern_url+image)+"' width='50' /><br>";
-			cadena+=d.Title+"<br>"+fecha+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
+			if(imagen!=null) 
+				cadena+="<img src='"+(extern_url+imagen)+"' width='50' /><br>";
+			cadena+=d.Title+"<br>"+fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear()+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
 		});
 
 		$("#"+container).html(cadena);
