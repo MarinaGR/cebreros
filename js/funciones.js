@@ -1,9 +1,10 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 
-function onBodyLoad()
+function onBodyLoad(type, container)
 {	
-    document.addEventListener("deviceready", onDeviceReady, false); 
+    document.addEventListener("deviceready", onDeviceReady, false);
+	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	
 	/*var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
@@ -11,14 +12,10 @@ function onBodyLoad()
 		var nueva_fecha=now; //new Date(2014,0,1).getTime(); 
 		setLocalStorage("fecha", nueva_fecha);
 	}	*/	
-	
-	//ajax_recover_data("category/1","contenido");
 		
 }
 function onDeviceReady()
 {
-	ajax_recover_data("category/1","contenido");
-
 	document.addEventListener("offline", onOffline, false);
 	document.addEventListener("online", onOnline, false);
 
@@ -26,8 +23,6 @@ function onDeviceReady()
 	
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
-	
-	
 }    
 function onBackKeyDown()
 {
@@ -72,10 +67,10 @@ function onOffline()
 
 }
 
-function ajax_recover_data(type, container) {
+function ajax_recover_data(type, id, container) {
 
 	$.ajax({
-	  url: api_url+type,
+	  url: api_url+type+id,
 	  type: 'GET',
 	  dataType: 'json',
 	  crossDomain: true, 
@@ -84,22 +79,58 @@ function ajax_recover_data(type, container) {
 	  async:false,
 	});
 	function f_success(data) {
-
+	
 		//data = $.parseJSON(data);
-		var cadena="";
 		
-		cadena+="<p>"+data.Result.ItemCount+" noticia/s</p>";
-		
-		$.each(data.Result.Items, function(index, d){   
-			var fecha=new Date(d.DatePublish);
-			var imagen=d.Image;  alert(imagen); alert(extern_url+imagen);
-			cadena+="<p style='border-bottom: 1px dashed #EEE'>"
-			if(imagen!=null) 
-				cadena+="<img src='"+(extern_url+imagen)+"' width='50' /><br>";
-			cadena+=d.Title+"<br>"+fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear()+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
-		});
+		switch(type)
+		{
+			case "category": 			
+					var cadena="";
+					
+					cadena+="<p>"+data.Result.ItemCount+" noticia/s</p>";
+					
+					$.each(data.Result.Items, function(index, d){   
+						var fecha=new Date(d.DatePublish);
+						var imagen=d.Image; 
+						cadena+="<p style='border-bottom: 1px dashed #EEE'>"
+						if(imagen!=null) 
+							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+"public/images/"+imagen)+" no-repeat center);background-size:cover;'></div>";
+						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>"+d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
+					});
 
-		$("#"+container).html(cadena);
+					$("#"+container).html(cadena);
+				
+					break;
+					
+			case "page": 			
+					var cadena="";
+				
+					var d=data.Result.Data;
+					
+					var fecha=new Date(d.DatePublish);
+					var imagen=d.Image; 
+					cadena+="<h2>"+d.Title+"</h2>";
+					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
+					if(imagen!=null) 
+						cadena+="<img src='"+(extern_url+"public/images/"+imagen)+"' alt='Imagen de la noticia' />";
+					
+					cadena+=d.Page;
+				
+					$("#"+container).html(cadena);
+				
+					break;
+					
+			case "calendar": break;
+			case "calendar_day": break;
+			case "event": break;
+			case "galleries": break;
+			case "gallery": break;
+			case "routes": break;
+			case "route": break;
+
+		}
+
+		
 				
 	}
 	function f_error(jqXHR, textStatus, errorThrown){

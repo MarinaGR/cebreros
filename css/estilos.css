@@ -29,11 +29,29 @@ img {
 	background-size: cover;
 }
 .header_02 {
-	width:100%;
+	position: relative;
+	width:90%;
+	padding: 3% 5%;
 	height: 25vh;
-	max-height: 25vh;
-	background-color: #00405D;
-	color: #EEEEEE;
+	min-height: 100px;
+	max-height: 200px;
+	color: #EEEEEE;	
+	background: url(../resources/images/general/portada.jpg) no-repeat center #177AAF;
+	background-blend-mode: luminosity;
+	/*screen, overlay, darken, lighten, color-dodge, color-burn, hard-light, soft-light, difference, exclusion, hue, saturation, color, multiply, luminosity*/
+	
+}
+
+.header_02 h1 {
+	color: #FFFFFF;
+	padding: 0;
+	margin: 0;
+	font-size:3em;
+	line-height: 0.9em;
+	text-shadow: 1px 1px 4px #111111;
+}
+.h1_mini {
+	font-size: 0.5em;
 }
 
 .nav_01 {
@@ -48,11 +66,35 @@ img {
 	padding: 5px;
 }
 
+.nav_02 {
+	width: 40px;
+	height: 40px;
+	padding: 5px;
+	background-color: #fff;
+	color: #333;
+	box-shadow: 1px 1px 4px #111111;
+	border-radius: 100px;
+	line-height: 40px;
+	text-align: center;
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	font-size: 0.9em;
+	cursor:pointer;
+}
+
 .section_01 {
 	min-height: 25vh;
 	padding: 25px 50px;
 	background-color: #00405D;
 	color: #EEEEEE;
+}
+.section_01 a {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.section_01 a:hover {
+	color: #DDDDDD;
 }
 .section_02 {
 	min-height: 50vh;
