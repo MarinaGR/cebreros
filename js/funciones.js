@@ -92,10 +92,13 @@ function ajax_recover_data(type, id, container) {
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
-						cadena+="<p style='border-bottom: 1px dashed #EEE'>"
+						cadena+="<div style='border-bottom: 1px dashed #EEE'>";
+						
+						cadena+=extern_url+"public/images/"+imagen;
+						
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+"public/images/"+imagen)+" no-repeat center);background-size:cover;'></div>";
-						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>"+d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Leer más&gt;</a> </p>";
+							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+"public/images/"+imagen)+") no-repeat center;background-size:cover;'></div>";
+						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>"+d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Ver &gt;</a> </div>";
 					});
 
 					$("#"+container).html(cadena);
@@ -111,6 +114,9 @@ function ajax_recover_data(type, id, container) {
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
 					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
+					
+					cadena+=extern_url+"public/images/"+imagen;
+					
 					if(imagen!=null) 
 						cadena+="<img src='"+(extern_url+"public/images/"+imagen)+"' alt='Imagen de la noticia' />";
 					
