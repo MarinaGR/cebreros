@@ -92,9 +92,7 @@ function ajax_recover_data(type, id, container) {
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
-						cadena+="<div style='border-bottom: 1px dashed #EEE'>";
-						
-						cadena+=extern_url+"public/images/"+imagen;
+						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
 						
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+imagen)+") no-repeat center;background-size:cover;'></div>";
