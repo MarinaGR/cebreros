@@ -97,8 +97,15 @@ function ajax_recover_data(type, id, container) {
 						cadena+=extern_url+"public/images/"+imagen;
 						
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+"public/images/"+imagen)+") no-repeat center;background-size:cover;'></div>";
-						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>"+d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Ver &gt;</a> </div>";
+							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+imagen)+") no-repeat center;background-size:cover;'></div>";
+						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
+						cadena+=d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Ver en web &gt;</a>";
+						cadena+="<br><a href='noticia.html?"+data
+						
+						/**/**
+						
+						+"'>Ver en app &gt;</a>"
+						cadena+="</div>";
 					});
 
 					$("#"+container).html(cadena);
@@ -118,9 +125,34 @@ function ajax_recover_data(type, id, container) {
 					cadena+=extern_url+"public/images/"+imagen;
 					
 					if(imagen!=null) 
-						cadena+="<img src='"+(extern_url+"public/images/"+imagen)+"' alt='Imagen de la noticia' />";
+						cadena+="<img src='"+(extern_url+imagen)+"' alt='Imagen de la noticia' />";
 					
 					cadena+=d.Page;
+					
+					var imagenes=data.Result.Images;
+					if(imagenes.TotalImages>0) 
+					{
+						for(i=0;i<imagenes.TotalImages;i++)
+							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen noticia' />";
+					}
+					var adjuntos=data.Result.Attachments;
+					if(adjuntos.TotalAttachments>0) 
+					{
+						for(i=0;i<adjuntos.TotalAttachments;i++)
+							cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces.Attachments[i].Description+"</a>";
+					}
+					var enlaces=data.Result.Links;
+					if(enlaces.TotalLinks>0) 
+					{
+						for(i=0;i<enlaces.TotalLinks;i++)
+							cadena+="<br><a href='"+enlaces.Links[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
+					}
+					var videos=data.Result.Videos;
+					if(videos.TotalVideos>0) 
+					{
+						for(i=0;i<videos.TotalVideos;i++)
+							cadena+="<br>"+videos.Videos[i].Embed;
+					}
 				
 					$("#"+container).html(cadena);
 				
@@ -180,6 +212,27 @@ function ajax_recover_data_jsonp(type, container) {
       jsonpCallback: 'jsonpCallback',
 	  async:false,
 	});
+	
+}
+
+function get_var_url(variable){
+
+	var tipo=typeof variable;
+	var direccion=location.href;
+	var posicion=direccion.indexOf("?");
+	
+	posicion=direccion.indexOf(variable,posicion) + variable.length; 
+	
+	if (direccion.charAt(posicion)== "=")
+	{ 
+        var fin=direccion.indexOf("&",posicion); 
+        if(fin==-1)
+        	fin=direccion.length;
+        	
+        return direccion.substring(posicion+1, fin); 
+    } 
+	else
+		return false;
 	
 }
 
