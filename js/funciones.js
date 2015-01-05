@@ -98,13 +98,10 @@ function ajax_recover_data(type, id, container) {
 						
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+imagen)+") no-repeat center;background-size:cover;'></div>";
+							
 						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
 						cadena+=d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Ver en web &gt;</a>";
-						cadena+="<br><a href='noticia.html?"+data
-						
-						/**/**
-						
-						+"'>Ver en app &gt;</a>"
+						cadena+="<br><a href='noticia.html?id="+d.ID+"'>Ver en app &gt;</a>"
 						cadena+="</div>";
 					});
 
