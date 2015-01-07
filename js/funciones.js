@@ -131,11 +131,7 @@ function ajax_recover_data(type, id, container) {
 						var geo_lon=geolocation[2];
 						if(geolocation!="")
 						{
-							cadena+="<br><iframe src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></ifrae>";
-							
-							var url="+"&destination="+destination+"&avoid=tolls|highways&mode=walking&language=es&zoom=15&center="+latlong;
-  		
-  	$('#restaurants_map_frame').attr('src',url);
+							cadena+="<br><iframe src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
 						}
 						
 						var imagenes=data.Result.Images;
