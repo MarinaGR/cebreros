@@ -22,9 +22,10 @@ img {
 	background-color: #FFFFFF;
 }
 .header_01 {
-	width:100%;
-	height: 50vh;
-	max-height: 50vh;
+	width:90%;
+	padding: 3% 5%;
+	height: 45vh;
+	max-height: 45vh;
 	background:url(../resources/images/general/portada.jpg) no-repeat center;
 	background-size: cover;
 }
@@ -39,7 +40,7 @@ img {
 	background: url(../resources/images/general/portada_02.jpg) no-repeat center;
 }
 
-.header_02 h1 {
+.header_01 h1, .header_02 h1 {
 	color: #FFFFFF;
 	padding: 0;
 	margin: 0;
@@ -97,10 +98,11 @@ img {
 }
 .section_02 {
 	min-height: 50vh;
-	padding: 25px 50px;
+	padding: 25px;
 	background-color: #EEEEEE;
 }
 .article_01 {
+	position:relative;
 }
 .footer_01 {
 	min-height: 5vh;

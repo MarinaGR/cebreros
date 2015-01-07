@@ -98,8 +98,7 @@ function ajax_recover_data(type, id, container) {
 							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+imagen)+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
-						cadena+=d.Title+" ::: <a href='"+(extern_url+d.Permalink)+"'>Ver en web &gt;</a>";
-						cadena+="<br><a href='noticia.html?id="+d.ID+"'>Ver en app &gt;</a>"
+						cadena+=d.Title+" ::: <a href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
 						cadena+="</div>";
 					});
 
@@ -158,8 +157,52 @@ function ajax_recover_data(type, id, container) {
 			case "event": break;
 			case "galleries": break;
 			case "gallery": break;
-			case "routes": break;
-			case "route": break;
+			case "routes": 
+					var cadena="";
+					
+					cadena+="<p>"+data.Result.ItemCount+" ruta/s</p>";
+					
+					$.each(data.Result.Items, function(index, d){   
+						var fecha=new Date(d.DatePublish);
+						var imagen=d.Image; 
+						cadena+="<div style='border-top: 1px dashed #CCC'>";
+						
+						if(imagen!=null) 
+							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							
+						cadena+=d.Title+" ::: <a href='mapa.html?id="+d.ID+"'>Ver &gt;</a>"
+						cadena+="</div>";
+					});
+
+					$("#"+container).html(cadena);
+					break;
+					
+			case "route": 
+					var cadena="";
+					
+					draw_route(container); 
+				
+					var d=data.Result.Data;
+
+					var imagen=d.Image; 
+					cadena+="<h2>"+d.Title+"</h2>";
+					cadena+=extern_url+"public/images/"+imagen;
+					
+					if(imagen!=null) 
+						cadena+="<img src='"+imagen+"' alt='Imagen de la ruta' />";
+					
+					cadena+=d.Page;
+					
+					var imagenes=data.Result.Items;
+					if(imagenes.TotalImages>0) 
+					{
+						for(i=0;i<imagenes.TotalImages;i++)
+							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen noticia' />";
+					}
+				
+					$("#"+container).append(cadena);
+					
+					break;
 
 		}
 
@@ -208,6 +251,65 @@ function ajax_recover_data_jsonp(type, container) {
 	  async:false,
 	});
 	
+}
+
+function draw_route(container) 
+{
+	$("#"+container).html('<img src="./resources/images/mapas/mapa_prueba.jpg" width="768" id="imagen_mapa" />');
+			
+	 $("#imagen_mapa").load(function() {
+		
+		var width=$(this).width();
+		var height=$(this).height();
+		
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
+		
+		var canvas = document.getElementById("canvas");						
+		canvas.style.border="1px solid red";
+		
+		$.get("./resources/rutas/ruta-pcr-1-camino-de-rasueros.gpx", function(xml) { 
+		}).done(function(xml_Doc) {
+		
+			var trabajo = canvas.getContext("2d");
+			trabajo.lineWidth = 4;
+			trabajo.fillStyle = "blue";		
+			trabajo.strokeStyle = "orange";		
+			trabajo.font = '12px "Tahoma"';							
+			
+			var altura=(coord_image[0][1]-coord_image[1][1]);
+			var anchura=(coord_image[0][2]-coord_image[2][2]);
+			
+			var k=0;
+			$(xml_Doc).find("wpt").each(function() {
+				var lat=$(this).attr("lat");
+				var lon=$(this).attr("lon");
+				
+				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
+				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+				
+				lat_canvas=Math.round(lat_canvas * 100)/100;
+				lon_canvas=Math.round(lon_canvas * 100)/100;
+				
+				//$("#"+container).append(lat+", "+lon+"<br>");
+				//$("#"+container).append(lat_canvas+", "+lon_canvas+"<br><br>");
+			
+				trabajo.lineTo(lon_canvas,lat_canvas);								
+				trabajo.stroke();
+				
+				trabajo.beginPath();
+				trabajo.arc(lon_canvas,lat_canvas, 1, 0, 2 * Math.PI, true);
+				trabajo.fill();
+				
+				//trabajo.fillText(k,lon_canvas,lat_canvas);
+				k++;
+				
+			});	
+			
+		}).fail(function(){
+			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
+		});
+	});
+
 }
 
 function get_var_url(variable){
