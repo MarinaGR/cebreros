@@ -14,13 +14,10 @@
 		<script src="./js/jquery_ui.js"></script>
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
-		
-		<script>		
-			//var coord_image=[["top-left", "40.472435", "-4.478185"],["bottom-left", "40.433340", "-4.478185"], ["top-right","40.472435", "-4.370632"], ["bottom-right","40.433340","-4.370632"]];
-			
-			var id=get_var_url("id");
-			ajax_recover_data('route', '/'+id, 'contenido');
-
+		<script>
+			$(window).load(function() {
+				ajax_recover_data('page', '/60', 'contenido');
+			});
 		</script>
 	</head>
 
@@ -30,11 +27,9 @@
 			<div class="header_02">
 				<h1><span class="h1_mini">Ayuntamiento de</span><br> CEBREROS</h1>
 				<div class="nav_02" id="boton_menu"> </div>
-				<div id="boton_menu"></div>
 			</div>
 			
 			<div class="section_02">
-				<h2>RUTA</h2>
 				<div class="article_01" id="contenido"> </div>
 			</div>	
 			

@@ -64,6 +64,12 @@ img {
 	padding: 5px 2px;
 }
 
+ul li b {
+	width: 150px;
+	display: inline-block;
+	padding: 5px 0;
+}
+
 .nav_02 {
 	width: 30px;
 	height: 30px;

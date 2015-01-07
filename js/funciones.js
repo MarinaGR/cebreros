@@ -119,33 +119,49 @@ function ajax_recover_data(type, id, container) {
 					cadena+=extern_url+"public/images/"+imagen;
 					
 					if(imagen!=null) 
-						cadena+="<img src='"+(extern_url+imagen)+"' alt='Imagen de la noticia' />";
+						cadena+="<img src='"+(extern_url+imagen)+"' alt='Imagen principal' />";
 					
 					cadena+=d.Page;
 					
-					var imagenes=data.Result.Images;
-					if(imagenes.TotalImages>0) 
+					//if(online)
 					{
-						for(i=0;i<imagenes.TotalImages;i++)
-							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen noticia' />";
-					}
-					var adjuntos=data.Result.Attachments;
-					if(adjuntos.TotalAttachments>0) 
-					{
-						for(i=0;i<adjuntos.TotalAttachments;i++)
-							cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces.Attachments[i].Description+"</a>";
-					}
-					var enlaces=data.Result.Links;
-					if(enlaces.TotalLinks>0) 
-					{
-						for(i=0;i<enlaces.TotalLinks;i++)
-							cadena+="<br><a href='"+enlaces.Links[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
-					}
-					var videos=data.Result.Videos;
-					if(videos.TotalVideos>0) 
-					{
-						for(i=0;i<videos.TotalVideos;i++)
-							cadena+="<br>"+videos.Videos[i].Embed;
+						var geolocation=data.Result.Geolocation;
+						geolocation=geolocation(/[(,)]/);
+						var geo_lat=geolocation[1];
+						var geo_lon=geolocation[2];
+						if(geolocation!="")
+						{
+							cadena+="<br><iframe src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></ifrae>";
+							
+							var url="+"&destination="+destination+"&avoid=tolls|highways&mode=walking&language=es&zoom=15&center="+latlong;
+  		
+  	$('#restaurants_map_frame').attr('src',url);
+						}
+						
+						var imagenes=data.Result.Images;
+						if(imagenes.TotalImages>0) 
+						{
+							for(i=0;i<imagenes.TotalImages;i++)
+								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen' />";
+						}
+						var adjuntos=data.Result.Attachments;
+						if(adjuntos.TotalAttachments>0) 
+						{
+							for(i=0;i<adjuntos.TotalAttachments;i++)
+								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces.Attachments[i].Description+"</a>";
+						}
+						var enlaces=data.Result.Links;
+						if(enlaces.TotalLinks>0) 
+						{
+							for(i=0;i<enlaces.TotalLinks;i++)
+								cadena+="<br><a href='"+enlaces.Links[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
+						}
+						var videos=data.Result.Videos;
+						if(videos.TotalVideos>0) 
+						{
+							for(i=0;i<videos.TotalVideos;i++)
+								cadena+="<br>"+videos.Videos[i].Embed;
+						}
 					}
 				
 					$("#"+container).html(cadena);
@@ -159,8 +175,6 @@ function ajax_recover_data(type, id, container) {
 			case "gallery": break;
 			case "routes": 
 					var cadena="";
-					
-					cadena+="<p>"+data.Result.ItemCount+" ruta/s</p>";
 					
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
@@ -255,6 +269,8 @@ function ajax_recover_data_jsonp(type, container) {
 
 function draw_route(container) 
 {
+	var coord_image=[["top-left", "40.472435", "-4.478185"],["bottom-left", "40.433340", "-4.478185"], ["top-right","40.472435", "-4.370632"], ["bottom-right","40.433340","-4.370632"]];
+
 	$("#"+container).html('<img src="./resources/images/mapas/mapa_prueba.jpg" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
@@ -303,14 +319,16 @@ function draw_route(container)
 				//trabajo.fillText(k,lon_canvas,lat_canvas);
 				k++;
 				
+				
+				
 			});	
 			
 		}).fail(function(){
 			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
 		});
 	});
-
 }
+
 
 function get_var_url(variable){
 
