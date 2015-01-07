@@ -126,11 +126,11 @@ function ajax_recover_data(type, id, container) {
 					//if(online)
 					{
 						var geolocation=data.Result.Geolocation;
-						geolocation=geolocation(/[(,)]/);
-						var geo_lat=geolocation[1];
-						var geo_lon=geolocation[2];
 						if(geolocation!="")
 						{
+							geolocation=geolocation(/[(,)]/);
+							var geo_lat=geolocation[1];
+							var geo_lon=geolocation[2];
 							cadena+="<br><iframe src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
 						}
 						
