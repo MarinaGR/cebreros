@@ -127,13 +127,13 @@ function ajax_recover_data(type, id, container) {
 					alert(cadena);
 					
 					//if(online)
-					/*{
-						var geolocation=d.Geolocation;
-						if(geolocation!="")
+					{
+						var geolocation2=d.Geolocation;
+						if(geolocation2!="" || geolocation2!=null)
 						{
-							geolocation=geolocation(/[(,)]/);
-							var geo_lat=geolocation[1];
-							var geo_lon=geolocation[2];
+							geolocation2=geolocation2.split(/[(,)]/);
+							var geo_lat=geolocation2[1];
+							var geo_lon=geolocation2[2];
 							cadena+="<br><iframe width='100%' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
 						}
 						
@@ -141,27 +141,27 @@ function ajax_recover_data(type, id, container) {
 						if(imagenes.TotalImages>0) 
 						{
 							for(i=0;i<imagenes.TotalImages;i++)
-								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen' />";
+								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].Image)+"' alt='Imagen' />";
 						}
-						var adjuntos=data.Result.Attachments;
+					/*	var adjuntos=data.Result.Attachments;
 						if(adjuntos.TotalAttachments>0) 
 						{
 							for(i=0;i<adjuntos.TotalAttachments;i++)
-								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces.Attachments[i].Description+"</a>";
+								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces[i].Description+"</a>";
 						}
 						var enlaces=data.Result.Links;
 						if(enlaces.TotalLinks>0) 
 						{
 							for(i=0;i<enlaces.TotalLinks;i++)
-								cadena+="<br><a href='"+enlaces.Links[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
+								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
 						}
 						var videos=data.Result.Videos;
 						if(videos.TotalVideos>0) 
 						{
 							for(i=0;i<videos.TotalVideos;i++)
-								cadena+="<br>"+videos.Videos[i].Embed;
-						}
-					}*/
+								cadena+="<br>"+videos[i].Embed;
+						}*/
+					}
 				
 					$("#"+container).html(cadena);
 				
@@ -207,7 +207,7 @@ function ajax_recover_data(type, id, container) {
 					alert(cadena);
 					
 					//if(online)
-					/*{
+					{
 						if(d.Total>0) 
 						{
 							var imagenes=d.Items;
@@ -215,7 +215,7 @@ function ajax_recover_data(type, id, container) {
 								cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen' />";
 						}
 						
-					}*/
+					}
 					break;
 					
 			case "routes": 
@@ -267,11 +267,12 @@ function ajax_recover_data(type, id, container) {
 							"<p>Panorámicas:  "+d.Panoramics+"</p>";
 					
 					var imagenes=d.Items;
-					if(imagenes.Total>0) 
+					if(d.Total>0) 
 					{
-						for(i=0;i<imagenes.Total;i++)
+						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
 					}
+					
 				
 					$("#"+container).append(cadena);
 					
@@ -330,6 +331,8 @@ function ajax_recover_data_jsonp(type, container) {
 
 function draw_route(container,src_image, src_gpx) 
 {
+	alert(src_image);
+	
 	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
