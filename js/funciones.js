@@ -1,6 +1,8 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 
+var array_coord_image=new Array();
+
 function onBodyLoad(type, container)
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -272,12 +274,10 @@ function ajax_recover_data(type, id, container) {
 						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
 					}
-				
-					$("#"+container).html(cadena);
-					
-					alert(container);
 					
 					draw_route(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
+					
+					$("#"+container).append(cadena);
 					
 					break;
 
