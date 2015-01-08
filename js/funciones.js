@@ -239,7 +239,7 @@ function ajax_recover_data(type, id, container) {
 						case "2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
 					}
 				
-					var d=data.Result.Data;
+					var d=data.Result;
 
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
@@ -250,11 +250,19 @@ function ajax_recover_data(type, id, container) {
 					
 					cadena+=d.Page;
 					
-					var imagenes=data.Result.Items;
+					cadena+="<p>DATOS DE LA RUTA</p>";
+					cadena+="<p>Altitud máxima: "+d.MaxAltitude+"</p>"+
+							"<p>Altitud mínima: "+d.MinAltitude+"</p>"+
+							"<p>Dificultad:  "+d.Difficulty+"</p>"+
+							"<p>Distancia:  "+d.Distance+"</p>"+
+							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
+							"<p>Panorámicas:  "+d.Panoramics+"</p>";
+					
+					var imagenes=d.Items;
 					if(imagenes.TotalImages>0) 
 					{
 						for(i=0;i<imagenes.TotalImages;i++)
-							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes.Images[i].Image)+"' alt='Imagen noticia' />";
+							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].MinImage)+"' alt='Imagen noticia' />";
 					}
 				
 					$("#"+container).append(cadena);
