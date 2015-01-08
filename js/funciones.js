@@ -268,6 +268,8 @@ function ajax_recover_data(type, id, container) {
 					
 					alert(cadena);
 					
+					cadena="hola";
+					
 					/*var imagenes=d.Items;
 					if(d.Total>0) 
 					{
