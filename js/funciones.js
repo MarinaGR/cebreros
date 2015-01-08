@@ -127,7 +127,7 @@ function ajax_recover_data(type, id, container) {
 					alert(cadena);
 					
 					//if(online)
-					{
+					/*{
 						var geolocation=d.Geolocation;
 						if(geolocation!="")
 						{
@@ -161,7 +161,7 @@ function ajax_recover_data(type, id, container) {
 							for(i=0;i<videos.TotalVideos;i++)
 								cadena+="<br>"+videos.Videos[i].Embed;
 						}
-					}
+					}*/
 				
 					$("#"+container).html(cadena);
 				
@@ -207,7 +207,7 @@ function ajax_recover_data(type, id, container) {
 					alert(cadena);
 					
 					//if(online)
-					{
+					/*{
 						if(d.Total>0) 
 						{
 							var imagenes=d.Items;
@@ -215,7 +215,7 @@ function ajax_recover_data(type, id, container) {
 								cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen' />";
 						}
 						
-					}
+					}*/
 					break;
 					
 			case "routes": 
@@ -267,10 +267,10 @@ function ajax_recover_data(type, id, container) {
 							"<p>Panorámicas:  "+d.Panoramics+"</p>";
 					
 					var imagenes=d.Items;
-					if(imagenes.TotalImages>0) 
+					if(imagenes.Total>0) 
 					{
-						for(i=0;i<imagenes.TotalImages;i++)
-							cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].MinImage)+"' alt='Imagen noticia' />";
+						for(i=0;i<imagenes.Total;i++)
+							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
 					}
 				
 					$("#"+container).append(cadena);
@@ -330,7 +330,7 @@ function ajax_recover_data_jsonp(type, container) {
 
 function draw_route(container,src_image, src_gpx) 
 {
-	$("#"+container).html('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
+	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
 		
