@@ -240,7 +240,7 @@ function ajax_recover_data(type, id, container) {
 					
 			case "route": 
 					var cadena="";
-					var src_image="";
+					var src_image="./resources/images/mapas/mapa_prueba.jpg";
 					
 					switch(id)
 					{
@@ -332,7 +332,7 @@ function ajax_recover_data_jsonp(type, container) {
 
 function draw_route(container,src_image, src_gpx) 
 {
-	alert(src_image);
+	alert(src_image+" "+src_gpx);
 	
 	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
