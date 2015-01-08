@@ -96,7 +96,7 @@ function ajax_recover_data(type, id, container) {
 						var imagen=d.Image; 
 
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							cadena+="<div style='width:100%;height:75px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<div>";
 						cadena+="<h3>"+d.Title+"</h3><br>";
@@ -473,6 +473,8 @@ function draw_points(trabajo)
 		var array_points=array_coord_image[i].split(",");
 		var lat_canvas=array_points[0];
 		var lon_canvas=array_points[1];
+		
+		$("#"+container).append(lat_canvas+", "+lon_canvas+"<br>");
 
 		trabajo.lineTo(lon_canvas,lat_canvas);								
 		trabajo.stroke();
