@@ -1,6 +1,7 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 
+var coord_image=new Array();
 var array_coord_image=new Array();
 
 function onBodyLoad(type, container)
@@ -246,7 +247,9 @@ function ajax_recover_data(type, id, container) {
 					
 					switch(id)
 					{
-						case "1": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
+						case "1": src_image='./resources/images/mapas/mapa_prueba.jpg';  
+								  coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
+								  break;
 						case "2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
 					}
 				
@@ -473,7 +476,6 @@ function draw_route(container,src_image, src_gpx)
 
 function draw_points(trabajo)
 {
-
 	for(i=0;i<array_coord_image.length;i++)
 	{
 		var array_points=array_coord_image[i].split(",");
