@@ -277,7 +277,7 @@ function ajax_recover_data(type, id, container) {
 					
 					alert(container);
 					
-					draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
+					draw_route(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
 					
 					break;
 
