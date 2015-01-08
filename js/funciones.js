@@ -81,6 +81,7 @@ function ajax_recover_data(type, id, container) {
 	function f_success(data) {
 	
 		//data = $.parseJSON(data);
+	
 		
 		switch(type)
 		{
@@ -111,6 +112,8 @@ function ajax_recover_data(type, id, container) {
 				
 					var d=data.Result.Data;
 					
+							
+					
 					var fecha=new Date(d.DatePublish);
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
@@ -121,9 +124,11 @@ function ajax_recover_data(type, id, container) {
 					
 					cadena+=d.Page;
 					
+					alert(cadena);
+					
 					//if(online)
 					{
-						var geolocation=data.Result.Geolocation;
+						var geolocation=d.Geolocation;
 						if(geolocation!="")
 						{
 							geolocation=geolocation(/[(,)]/);
@@ -199,6 +204,7 @@ function ajax_recover_data(type, id, container) {
 						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
 					
 					cadena+=d.Description;
+					alert(cadena);
 					
 					//if(online)
 					{
@@ -249,6 +255,8 @@ function ajax_recover_data(type, id, container) {
 						cadena+="<img src='"+imagen+"' alt='Imagen de la ruta' />";
 					
 					cadena+=d.Page;
+					
+					alert(cadena);
 					
 					cadena+="<p>DATOS DE LA RUTA</p>";
 					cadena+="<p>Altitud máxima: "+d.MaxAltitude+"</p>"+
