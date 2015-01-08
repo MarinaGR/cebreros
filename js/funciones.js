@@ -265,23 +265,19 @@ function ajax_recover_data(type, id, container) {
 							"<p>Distancia:  "+d.Distance+"</p>"+
 							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
 							"<p>Panoramicas:  "+d.Panoramics+"</p>";
-					
-					alert(cadena);
-					
-					cadena="hola";
-					
-					/*var imagenes=d.Items;
+										
+					var imagenes=d.Items;
 					if(d.Total>0) 
 					{
 						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
-					}*/
+					}
 				
 					$("#"+container).html(cadena);
 					
 					alert(container);
 					
-					//draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
+					draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
 					
 					break;
 

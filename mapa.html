@@ -17,9 +17,10 @@
 		
 		<script>		
 			//var coord_image=[["top-left", "40.472435", "-4.478185"],["bottom-left", "40.433340", "-4.478185"], ["top-right","40.472435", "-4.370632"], ["bottom-right","40.433340","-4.370632"]];
-			
-			var id=get_var_url("id");
-			ajax_recover_data('route', '/'+id, 'contenido');
+			$(window).load(function() {
+				var id=get_var_url("id");
+				ajax_recover_data('route', '/'+id, 'contenido');
+			});
 
 		</script>
 	</head>
