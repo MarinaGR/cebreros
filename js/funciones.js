@@ -192,6 +192,8 @@ function ajax_recover_data(type, id, container) {
 						cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a></div>";
 
 					});
+					
+					cadena+="<div style='clear:both'> </div>";
 
 					$("#"+container).html(cadena);
 					break;
