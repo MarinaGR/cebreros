@@ -98,7 +98,7 @@ function ajax_recover_data(type, id, container) {
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:75px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<div>";
+						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 						cadena+="<h3>"+d.Title+"</h3><br>";
 						cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
 
@@ -135,7 +135,7 @@ function ajax_recover_data(type, id, container) {
 							
 							<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3035.649766162187!2d-4.4656033!3d40.4608881!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI3JzM5LjIiTiA0wrAyNyc1Ni4yIlc!5e0!3m2!1ses!2ses!4v1420718903973" width="600" height="450" frameborder="0" style="border:0"></iframe>
 						}
-						
+						*/
 						var imagenes=data.Result.Images;
 						if(d.Result.TotalImages>0) 
 						{
@@ -159,7 +159,7 @@ function ajax_recover_data(type, id, container) {
 						{
 							for(i=0;i<d.Result.TotalVideos;i++)
 								cadena+="<br>"+videos[i].Embed;
-						}*/
+						}
 					}
 				
 					$("#"+container).html(cadena);
