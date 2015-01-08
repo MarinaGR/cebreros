@@ -240,6 +240,7 @@ function ajax_recover_data(type, id, container) {
 					
 			case "route": 
 					var cadena="";
+					var src_image="";
 					
 					switch(id)
 					{
@@ -251,7 +252,6 @@ function ajax_recover_data(type, id, container) {
 
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
-					cadena+=extern_url+"public/images/"+imagen;
 					
 					if(imagen!=null) 
 						cadena+="<img src='"+imagen+"' alt='Imagen de la ruta' />";
@@ -274,11 +274,12 @@ function ajax_recover_data(type, id, container) {
 						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
 					}*/
-					alert(container);
 				
-					$("#"+container).append(cadena);
+					$("#"+container).html(cadena);
 					
-					draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
+					alert(container);
+					
+					//draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
 					
 					break;
 
