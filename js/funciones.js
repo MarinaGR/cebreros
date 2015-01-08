@@ -128,39 +128,41 @@ function ajax_recover_data(type, id, container) {
 					
 					//if(online)
 					{
-						var geolocation2=d.Geolocation;
+						/*var geolocation2=d.Geolocation;
 						if(geolocation2!="" || geolocation2!=null)
 						{
 							geolocation2=geolocation2.split(/[(,)]/);
 							var geo_lat=geolocation2[1];
 							var geo_lon=geolocation2[2];
-							cadena+="<br><iframe width='100%' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
-						}
+							cadena+="<br><iframe width='100%;border:none;' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
+							
+							<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3035.649766162187!2d-4.4656033!3d40.4608881!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI3JzM5LjIiTiA0wrAyNyc1Ni4yIlc!5e0!3m2!1ses!2ses!4v1420718903973" width="600" height="450" frameborder="0" style="border:0"></iframe>
+						}*/
 						
 						var imagenes=data.Result.Images;
-						if(imagenes.TotalImages>0) 
+						if(d.Result.TotalImages>0) 
 						{
 							for(i=0;i<imagenes.TotalImages;i++)
 								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].Image)+"' alt='Imagen' />";
 						}
-					/*	var adjuntos=data.Result.Attachments;
-						if(adjuntos.TotalAttachments>0) 
+						var adjuntos=data.Result.Attachments;
+						if(d.Result.TotalAttachments>0) 
 						{
-							for(i=0;i<adjuntos.TotalAttachments;i++)
-								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos.Attachments[i].File)+"' target='_blank' />"+enlaces[i].Description+"</a>";
+							for(i=0;i<d.Result.TotalAttachments;i++)
+								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos[i].File)+"' target='_blank' />"+enlaces[i].Description+"</a>";
 						}
 						var enlaces=data.Result.Links;
-						if(enlaces.TotalLinks>0) 
+						if(d.Result.TotalLinks>0) 
 						{
-							for(i=0;i<enlaces.TotalLinks;i++)
-								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' />"+enlaces.Links[i].Description+"</a>";
+							for(i=0;i<d.Result.TotalLinks;i++)
+								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' />"+enlaces[i].Description+"</a>";
 						}
 						var videos=data.Result.Videos;
-						if(videos.TotalVideos>0) 
+						if(d.Result.TotalVideos>0) 
 						{
-							for(i=0;i<videos.TotalVideos;i++)
+							for(i=0;i<d.Result.TotalVideos;i++)
 								cadena+="<br>"+videos[i].Embed;
-						}*/
+						}
 					}
 				
 					$("#"+container).html(cadena);
@@ -266,12 +268,12 @@ function ajax_recover_data(type, id, container) {
 							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
 							"<p>Panorámicas:  "+d.Panoramics+"</p>";
 					
-					var imagenes=d.Items;
+					/*var imagenes=d.Items;
 					if(d.Total>0) 
 					{
 						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
-					}
+					}*/
 					
 				
 					$("#"+container).append(cadena);
