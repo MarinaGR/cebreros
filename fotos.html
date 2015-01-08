@@ -16,8 +16,10 @@
 		<script src="./cordova.js"></script>
 		
 		<script>		
-			var id=get_var_url("id");
-			ajax_recover_data('gallery', '/'+id, 'contenido');
+			$(window).load(function() {
+				var id=get_var_url("id");
+				ajax_recover_data('gallery', '/'+id, 'contenido');
+			});
 
 		</script>
 	</head>

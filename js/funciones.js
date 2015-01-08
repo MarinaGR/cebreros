@@ -63,7 +63,7 @@ function onOnline()
 }
 function onOffline()
 {
-	alert("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
+	$(body).prepend("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
 	/*setTimeout(function(){
 		$("#contenido").attr("src","offline.html");
 	},250);*/
@@ -84,7 +84,6 @@ function ajax_recover_data(type, id, container) {
 	function f_success(data) {
 	
 		//data = $.parseJSON(data);
-	
 		
 		switch(type)
 		{
@@ -183,13 +182,15 @@ function ajax_recover_data(type, id, container) {
 					var cadena="";
 					
 					$.each(data.Result.Items, function(index, d){   
-						var imagen=d.minImage; 
+						var imagen=d.MinImage; 
 						
+						cadena+="<div class='buttons_galleries'>";
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<h3>"+d.Title+"</h3>";
-						cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a>"
+						cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a></div>";
+
 					});
 
 					$("#"+container).html(cadena);
@@ -205,11 +206,7 @@ function ajax_recover_data(type, id, container) {
 					cadena+="<h2>"+d.Title+"</h2>";
 					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
 					
-					if(imagen!=null) 
-						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
-					
 					cadena+=d.Description;
-					alert(cadena);
 					
 					//if(online)
 					{
@@ -221,6 +218,7 @@ function ajax_recover_data(type, id, container) {
 						}
 						
 					}
+					$("#"+container).html(cadena);
 					break;
 					
 			case "routes": 
@@ -483,8 +481,6 @@ function draw_points(trabajo)
 		var array_points=array_coord_image[i].split(",");
 		var lat_canvas=array_points[0];
 		var lon_canvas=array_points[1];
-		
-		$("#"+container).append(lat_canvas+", "+lon_canvas+"<br>");
 
 		trabajo.lineTo(lon_canvas,lat_canvas);								
 		trabajo.stroke();
