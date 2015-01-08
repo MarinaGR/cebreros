@@ -137,7 +137,7 @@ function ajax_recover_data(type, id, container) {
 							cadena+="<br><iframe width='100%;border:none;' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
 							
 							<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3035.649766162187!2d-4.4656033!3d40.4608881!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI3JzM5LjIiTiA0wrAyNyc1Ni4yIlc!5e0!3m2!1ses!2ses!4v1420718903973" width="600" height="450" frameborder="0" style="border:0"></iframe>
-						}*/
+						}
 						
 						var imagenes=data.Result.Images;
 						if(d.Result.TotalImages>0) 
@@ -162,7 +162,7 @@ function ajax_recover_data(type, id, container) {
 						{
 							for(i=0;i<d.Result.TotalVideos;i++)
 								cadena+="<br>"+videos[i].Embed;
-						}
+						}*/
 					}
 				
 					$("#"+container).html(cadena);
@@ -258,8 +258,6 @@ function ajax_recover_data(type, id, container) {
 					
 					cadena+=d.Page;
 					
-					alert(cadena);
-					
 					cadena+="<p>DATOS DE LA RUTA</p>";
 					cadena+="<p>Altitud máxima: "+d.MaxAltitude+"</p>"+
 							"<p>Altitud mínima: "+d.MinAltitude+"</p>"+
@@ -268,13 +266,15 @@ function ajax_recover_data(type, id, container) {
 							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
 							"<p>Panorámicas:  "+d.Panoramics+"</p>";
 					
+					alert(cadena);
+					
 					/*var imagenes=d.Items;
 					if(d.Total>0) 
 					{
 						for(i=0;i<d.Total;i++)
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
 					}*/
-					
+					alert(container);
 				
 					$("#"+container).append(cadena);
 					
