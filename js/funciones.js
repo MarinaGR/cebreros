@@ -96,11 +96,11 @@ function ajax_recover_data(type, id, container) {
 						var imagen=d.Image; 
 
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:75px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
-						cadena+="<h3>"+d.Title+"</h3><br>";
-						cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
+						cadena+="<h3>"+d.Title+"</h3>";
+						cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>VER</a>"
 
 					});
 
@@ -125,40 +125,49 @@ function ajax_recover_data(type, id, container) {
 					
 					//if(online)
 					{
-						/*var geolocation2=d.Geolocation;
+						var geolocation2=d.Geolocation;
 						if(geolocation2!="" || geolocation2!=null)
 						{
 							geolocation2=geolocation2.split(/[(,)]/);
 							var geo_lat=geolocation2[1];
 							var geo_lon=geolocation2[2];
-							cadena+="<br><iframe width='100%;border:none;' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
+							var my_zoom=parseInt(geolocation2[3]);
 							
-							<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3035.649766162187!2d-4.4656033!3d40.4608881!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI3JzM5LjIiTiA0wrAyNyc1Ni4yIlc!5e0!3m2!1ses!2ses!4v1420718903973" width="600" height="450" frameborder="0" style="border:0"></iframe>
+							cadena+="<br><iframe width='100%' style='height:300px;border:none;'  src='http://maps.google.es/maps?q=loc:"+geo_lat+","+geo_lon+"&z="+my_zoom+"&output=embed' ></iframe>";
+							
 						}
-						*/
+						
 						var imagenes=data.Result.Images;
-						if(d.Result.TotalImages>0) 
+						if(data.Result.TotalImages>0) 
 						{
-							for(i=0;i<imagenes.TotalImages;i++)
+							for(i=0;i<data.Result.TotalImages;i++)
 								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].Image)+"' alt='Imagen' />";
+								
+							cadena+="<br>";
 						}
 						var adjuntos=data.Result.Attachments;
-						if(d.Result.TotalAttachments>0) 
+						if(data.Result.TotalAttachments>0) 
 						{
-							for(i=0;i<d.Result.TotalAttachments;i++)
-								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos[i].File)+"' target='_blank' />"+enlaces[i].Description+"</a>";
+							for(i=0;i<data.Result.TotalAttachments;i++)
+								cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos[i].File)+"' target='_blank' >"+adjuntos[i].Description+"</a>";
+							
+							cadena+="<br>";
 						}
 						var enlaces=data.Result.Links;
-						if(d.Result.TotalLinks>0) 
+						if(data.Result.TotalLinks>0) 
 						{
-							for(i=0;i<d.Result.TotalLinks;i++)
-								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' />"+enlaces[i].Description+"</a>";
+							for(i=0;i<data.Result.TotalLinks;i++)
+								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' >"+enlaces[i].Description+"</a>";
+							
+							cadena+="<br>";
 						}
 						var videos=data.Result.Videos;
-						if(d.Result.TotalVideos>0) 
+						if(data.Result.TotalVideos>0) 
 						{
-							for(i=0;i<d.Result.TotalVideos;i++)
+							for(i=0;i<data.Result.TotalVideos;i++)
 								cadena+="<br>"+videos[i].Embed;
+							
+							cadena+="<br>";
 						}
 					}
 				
@@ -175,13 +184,12 @@ function ajax_recover_data(type, id, container) {
 					
 					$.each(data.Result.Items, function(index, d){   
 						var imagen=d.minImage; 
-						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
 						
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+=d.Title+" ::: <a href='fotos.html?id="+d.ID+"'>Ver &gt;</a>"
-						cadena+="</div>";
+						cadena+="<h3>"+d.Title+"</h3>";
+						cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a>"
 					});
 
 					$("#"+container).html(cadena);
@@ -221,14 +229,16 @@ function ajax_recover_data(type, id, container) {
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
-						cadena+="<div class='buttons_routes' onclick='mapa.html?id="+d.ID+"'>";
+						cadena+="<div class='buttons_routes' onclick='window.location.href=\"mapa.html?id="+d.ID+"\"'>";
 						
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:100px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+=d.Title;
+						cadena+="<h5>"+d.Title+"</h5>";
 						cadena+="</div>";
 					});
+					
+					cadena+="<div style='clear:both'> </div>";
 
 					$("#"+container).html(cadena);
 					break;
@@ -239,10 +249,10 @@ function ajax_recover_data(type, id, container) {
 					
 					switch(id)
 					{
-						case "1": src_image='./resources/images/mapas/mapa_prueba.jpg';  
+						case "/1": src_image='./resources/images/mapas/mapa_prueba.jpg';  
 								  coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
 								  break;
-						case "2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
+						case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
 					}
 				
 					var d=data.Result;

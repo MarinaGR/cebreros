@@ -127,23 +127,24 @@ ul li b {
 }
 .buttons_routes {
 	float: left;
-	width: 25%;
-	height: 250px;
+	width: 28%;
+	height: 170px;
 	max-width: 250px;
-	min-width: 100px;
-	padding: 5px;
+	min-width: 110px;
+	padding: 1%;
 	color: #fff;
 	background-color: #00405D;
-	margin: 10px;
+	margin: 10px 1.5%;
 }
 .vermas {
 	display: inline-block;
+	text-decoration: none;
 	border: 6px solid #00405D;
 	border-radius: 25px;
 	background: #00405D;
 	color: #FFDB42;
 	padding: 2px 25px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 }
 .footer_01 {
 	min-height: 5vh;
