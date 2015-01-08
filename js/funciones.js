@@ -334,9 +334,7 @@ function ajax_recover_data_jsonp(type, container) {
 }
 
 function draw_route(container,src_image, src_gpx) 
-{
-	alert(src_image+" "+src_gpx);
-	
+{	
 	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
@@ -347,7 +345,7 @@ function draw_route(container,src_image, src_gpx)
 		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
 		
 		var canvas = document.getElementById("canvas");						
-		canvas.style.border="1px solid red";
+		canvas.style.border="1px solid #AAA";
 		
 		/*canvas.addEventListener('click', function zoom(event)
 		{
@@ -467,10 +465,7 @@ function draw_route(container,src_image, src_gpx)
 			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
 		});
 			
-			
-		
 	});
-
 
 }
 
@@ -542,12 +537,10 @@ function draw_geoloc(position)
 	$("#contenido").append("<p>Tu posicion: "+lat+", "+lon+"</p>");	
 		
 }
-
 function error_geoloc(error)
 {
 	$("#contenido").append("La geolocalización ha fallado.");	
 }
-			
 
 
 function get_var_url(variable){
