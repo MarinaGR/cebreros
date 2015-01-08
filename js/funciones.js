@@ -259,12 +259,12 @@ function ajax_recover_data(type, id, container) {
 					cadena+=d.Page;
 					
 					cadena+="<p>DATOS DE LA RUTA</p>";
-					cadena+="<p>Altitud máxima: "+d.MaxAltitude+"</p>"+
-							"<p>Altitud mínima: "+d.MinAltitude+"</p>"+
+					cadena+="<p>Altitud maxima: "+d.MaxAltitude+"</p>"+
+							"<p>Altitud minima: "+d.MinAltitude+"</p>"+
 							"<p>Dificultad:  "+d.Difficulty+"</p>"+
 							"<p>Distancia:  "+d.Distance+"</p>"+
 							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
-							"<p>Panorámicas:  "+d.Panoramics+"</p>";
+							"<p>Panoramicas:  "+d.Panoramics+"</p>";
 					
 					alert(cadena);
 					
