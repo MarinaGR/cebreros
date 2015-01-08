@@ -95,7 +95,7 @@ function ajax_recover_data(type, id, container) {
 						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
 						
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+(extern_url+imagen)+") no-repeat center;background-size:cover;'></div>";
+							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
 						cadena+=d.Title+" ::: <a href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
@@ -115,11 +115,9 @@ function ajax_recover_data(type, id, container) {
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
 					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
-					
-					cadena+=extern_url+"public/images/"+imagen;
-					
+
 					if(imagen!=null) 
-						cadena+="<img src='"+(extern_url+imagen)+"' alt='Imagen principal' />";
+						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
 					
 					cadena+=d.Page;
 					
@@ -131,7 +129,7 @@ function ajax_recover_data(type, id, container) {
 							geolocation=geolocation(/[(,)]/);
 							var geo_lat=geolocation[1];
 							var geo_lon=geolocation[2];
-							cadena+="<br><iframe src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
+							cadena+="<br><iframe width='100%' src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+geo_lat+","+geo_lon+"' ></iframe>";
 						}
 						
 						var imagenes=data.Result.Images;
@@ -167,8 +165,53 @@ function ajax_recover_data(type, id, container) {
 			case "calendar": break;
 			case "calendar_day": break;
 			case "event": break;
-			case "galleries": break;
-			case "gallery": break;
+			
+			case "galleries": 
+					var cadena="";
+					
+					cadena+="<p>"+data.Result.ItemCount+" galería/s</p>";
+					
+					$.each(data.Result.Items, function(index, d){   
+						var imagen=d.minImage; 
+						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
+						
+						if(imagen!=null) 
+							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							
+						cadena+=d.Title+" ::: <a href='fotos.html?id="+d.ID+"'>Ver &gt;</a>"
+						cadena+="</div>";
+					});
+
+					$("#"+container).html(cadena);
+					break;
+					
+			case "gallery": 
+					var cadena="";
+				
+					var d=data.Result;
+					
+					var fecha=new Date(d.DatePublish);
+					var imagen=d.Image; 
+					cadena+="<h2>"+d.Title+"</h2>";
+					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
+					
+					if(imagen!=null) 
+						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
+					
+					cadena+=d.Description;
+					
+					//if(online)
+					{
+						if(d.Total>0) 
+						{
+							var imagenes=d.Items;
+							for(i=0;i<d.Total;i++)
+								cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen' />";
+						}
+						
+					}
+					break;
+					
 			case "routes": 
 					var cadena="";
 					
@@ -190,7 +233,11 @@ function ajax_recover_data(type, id, container) {
 			case "route": 
 					var cadena="";
 					
-					draw_route(container); 
+					switch(id)
+					{
+						case "1": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
+						case "2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
+					}
 				
 					var d=data.Result.Data;
 
@@ -211,6 +258,8 @@ function ajax_recover_data(type, id, container) {
 					}
 				
 					$("#"+container).append(cadena);
+					
+					draw_route(container,src_image,'.resources/rutas/'+data.Result.DownloadGPX); 
 					
 					break;
 
@@ -263,67 +312,220 @@ function ajax_recover_data_jsonp(type, container) {
 	
 }
 
-function draw_route(container) 
+function draw_route(container,src_image, src_gpx) 
 {
-	var coord_image=[["top-left", "40.472435", "-4.478185"],["bottom-left", "40.433340", "-4.478185"], ["top-right","40.472435", "-4.370632"], ["bottom-right","40.433340","-4.370632"]];
-
-	$("#"+container).html('<img src="./resources/images/mapas/mapa_prueba.jpg" width="768" id="imagen_mapa" />');
+	$("#"+container).html('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
 		
-		var width=$(this).width();
-		var height=$(this).height();
+		width=$(this).width();
+		height=$(this).height();
 		
 		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
 		
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid red";
 		
-		$.get("./resources/rutas/ruta-pcr-1-camino-de-rasueros.gpx", function(xml) { 
+		/*canvas.addEventListener('click', function zoom(event)
+		{
+		
+			var mousex = event.clientX - canvas.offsetLeft;
+			var mousey = event.clientY - canvas.offsetTop;
+				
+			var originx=0,originy=0;
+
+			var trabajo = canvas.getContext("2d");
+
+			var zoom;
+				
+			if(first_click)
+			{
+				zoom = 1.2;
+											
+				trabajo.translate(
+					originx,
+					originy
+				);
+				trabajo.scale(zoom,zoom);
+				trabajo.translate(
+					-( mousex / scale + originx - mousex / ( scale * zoom ) ),
+					-( mousey / scale + originy - mousey / ( scale * zoom ) )
+				);
+
+				originx = ( mousex / scale + originx - mousex / ( scale * zoom ) );
+				originy = ( mousey / scale + originy - mousey / ( scale * zoom ) );
+				scale *= zoom;
+
+				var img = new Image();
+				img.src = src_image;
+				img.onload = function(){
+					trabajo.drawImage(img, 0, 0, width, height);
+				   
+					trabajo.lineWidth = 3;
+					trabajo.fillStyle = "blue";		
+					trabajo.strokeStyle = "orange";		
+					trabajo.font = '12px "Tahoma"';		
+				
+					draw_points(trabajo);
+				}
+				
+				first_click=false;
+			}
+			else
+			{
+			
+				zoom = 1;
+				trabajo.translate(
+					originx,
+					originy
+				);
+				trabajo.scale(zoom,zoom);
+
+				
+				var img = new Image();
+				img.src = src_image;
+				img.onload = function(){
+					trabajo.drawImage(img, 0, 0, width, height);
+				   
+					trabajo.lineWidth = 3;
+					trabajo.fillStyle = "blue";		
+					trabajo.strokeStyle = "orange";		
+					trabajo.font = '12px "Tahoma"';		
+				
+					draw_points(trabajo);
+				}
+				
+				first_click=true;
+			}
+		}
+		, false);*/
+
+		
+		$.get(src_gpx, function(xml) { 
 		}).done(function(xml_Doc) {
 		
-			var trabajo = canvas.getContext("2d");
-			trabajo.lineWidth = 4;
-			trabajo.fillStyle = "blue";		
-			trabajo.strokeStyle = "orange";		
-			trabajo.font = '12px "Tahoma"';							
-			
 			var altura=(coord_image[0][1]-coord_image[1][1]);
 			var anchura=(coord_image[0][2]-coord_image[2][2]);
 			
 			var k=0;
-			$(xml_Doc).find("wpt").each(function() {
+			$(xml_Doc).find("rtept").each(function() {
 				var lat=$(this).attr("lat");
 				var lon=$(this).attr("lon");
 				
 				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
 				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+
+				lat_canvas=lat_canvas.toFixed(3);
+				lon_canvas=lon_canvas.toFixed(3);
 				
-				lat_canvas=Math.round(lat_canvas * 100)/100;
-				lon_canvas=Math.round(lon_canvas * 100)/100;
-				
-				//$("#"+container).append(lat+", "+lon+"<br>");
-				//$("#"+container).append(lat_canvas+", "+lon_canvas+"<br><br>");
-			
-				trabajo.lineTo(lon_canvas,lat_canvas);								
-				trabajo.stroke();
-				
-				trabajo.beginPath();
-				trabajo.arc(lon_canvas,lat_canvas, 1, 0, 2 * Math.PI, true);
-				trabajo.fill();
-				
-				//trabajo.fillText(k,lon_canvas,lat_canvas);
+				array_coord_image[k]=lat_canvas+","+lon_canvas;
 				k++;
 				
+			});
+
+			
+			var img = new Image();
+			img.src = src_image;
+			img.onload = function(){
+			
+				var trabajo = canvas.getContext("2d");
+				trabajo.drawImage(img, 0, 0, width, height);
 				
-				
-			});	
+				trabajo.lineWidth = 3;
+				trabajo.fillStyle = "blue";		
+				trabajo.strokeStyle = "orange";		
+				trabajo.font = '12px "Tahoma"';		
+
+				draw_points(trabajo);
+			
+			}
 			
 		}).fail(function(){
 			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
 		});
+			
+			
+		
 	});
+
+
 }
+
+function draw_points(trabajo)
+{
+
+	for(i=0;i<array_coord_image.length;i++)
+	{
+		var array_points=array_coord_image[i].split(",");
+		var lat_canvas=array_points[0];
+		var lon_canvas=array_points[1];
+
+		trabajo.lineTo(lon_canvas,lat_canvas);								
+		trabajo.stroke();
+		
+		trabajo.beginPath();
+		trabajo.arc(lon_canvas,lat_canvas, 1, 0, 2 * Math.PI, true);
+		trabajo.fill();
+		trabajo.closePath();
+			
+		//trabajo.fillText(i,lon_canvas,lat_canvas);
+	}
+	
+	show_geoloc();
+}
+
+function show_geoloc()
+{
+	if (navigator.geolocation)
+	{
+		navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
+	}
+	else
+	{
+		$("#contenido").append("Tu dispositivo no permite la geolocalización dinámica.");			
+	}
+}
+
+function draw_geoloc(position)
+{
+	//var lat = position.coords.latitude;
+  	//var lon = position.coords.longitude;
+	
+	var lat=40.46;
+	var lon=-4.46;
+
+	var canvas = document.getElementById("canvas");						
+	var trabajo = canvas.getContext("2d");
+	trabajo.fillStyle = "blue";		
+	trabajo.strokeStyle = "blue";		
+	trabajo.font = '12px "Tahoma"';		
+
+	var width=canvas.width;
+	var height=canvas.height;
+							
+	var altura=(coord_image[0][1]-coord_image[1][1]);
+	var anchura=(coord_image[0][2]-coord_image[2][2]);
+							
+	var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
+	var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+								
+	lat_canvas=Math.round(lat_canvas * 100)/100;
+	lon_canvas=Math.round(lon_canvas * 100)/100;
+	
+	trabajo.beginPath();
+	trabajo.arc(lon_canvas,lat_canvas, 6, 0, 2 * Math.PI, true);
+	trabajo.fill();
+	trabajo.closePath();
+	
+	$("#contenido").append("<p>Tu posicion: "+lat+", "+lon+"</p>");	
+		
+}
+
+function error_geoloc(error)
+{
+	$("#contenido").append("La geolocalización ha fallado.");	
+}
+			
 
 
 function get_var_url(variable){

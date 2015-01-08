@@ -14,32 +14,26 @@
 		<script src="./js/jquery_ui.js"></script>
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
+		
+		<script>				
+			$(window).load(function() {
+				ajax_recover_data('category', '/4', 'contenido');				
+			});
+		</script>
 	</head>
 
 	<body onload="onBodyLoad()">
 
 		<div class="contenedor">
-			<div class="header_01">
+			<div class="header_02">
 				<h1><span class="h1_mini">Ayuntamiento de</span><br> CEBREROS</h1>
-				<div id="boton_menu"></div>
+				<div class="nav_02" id="boton_menu"> </div>
 			</div>
 			
-			<div class="section_01">
-			
-				<div class="nav_01">
-					<ul>
-						<a href="bienvenida.html"><li>BIENVENIDO A CEBREROS</li></a>
-						<a href="ayto.html"><li>AYUNTAMIENTO DE CEBREROS</li></a>
-						<a href="noticias.html"><li>NOTICIAS</li></a>
-						<a href="turismo.html"><li>TURISMO</li></a>
-						<a href="mapas.html"><li>PATRIMONIO NATURAL Y SENDERISMO</li></a>
-						<a href="fiestas.html"><li>FIESTAS Y CARNAVAL</li></a>
-						<a href="galerias.html"><li>FOTOS</li></a>
-						<!--<a href="mapas.html"><li>MAPAS</li></a>-->
-						<a href="comollegar.html"><li>COMO LLEGAR</li></a>
-						<a href="tlfs.html"><li>TELÉFONOS DE INTERÉS</li></a>
-						<a href="creditos.html"><li>CRÉDITOS</li></a>
-					</ul>
+			<div class="section_02">
+				<h2>TURISMO</h2>
+				<div class="article_01" id="contenido">
+					
 				</div>
 			</div>	
 			
