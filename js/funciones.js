@@ -90,20 +90,18 @@ function ajax_recover_data(type, id, container) {
 		{
 			case "category": 			
 					var cadena="";
-					
-					cadena+="<p>"+data.Result.ItemCount+" noticia/s</p>";
-					
+
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
-						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
-						
+
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
-						cadena+=d.Title+" ::: <a href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
-						cadena+="</div>";
+						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<div>";
+						cadena+="<h3>"+d.Title+"</h3><br>";
+						cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>Ver &gt;</a>"
+
 					});
 
 					$("#"+container).html(cadena);
@@ -114,20 +112,16 @@ function ajax_recover_data(type, id, container) {
 					var cadena="";
 				
 					var d=data.Result.Data;
-					
-							
-					
+						
 					var fecha=new Date(d.DatePublish);
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
-					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
+					cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
 					if(imagen!=null) 
 						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
 					
 					cadena+=d.Page;
-					
-					alert(cadena);
 					
 					//if(online)
 					{
@@ -179,8 +173,6 @@ function ajax_recover_data(type, id, container) {
 			case "galleries": 
 					var cadena="";
 					
-					cadena+="<p>"+data.Result.ItemCount+" galería/s</p>";
-					
 					$.each(data.Result.Items, function(index, d){   
 						var imagen=d.minImage; 
 						cadena+="<div style='border-bottom: 1px dashed #CCC'>";
@@ -229,12 +221,12 @@ function ajax_recover_data(type, id, container) {
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
-						cadena+="<div style='border-top: 1px dashed #CCC'>";
+						cadena+="<div class='buttons_routes' onclick='mapa.html?id="+d.ID+"'>";
 						
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:50px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							cadena+="<div style='width:100%;height:100px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+=d.Title+" ::: <a href='mapa.html?id="+d.ID+"'>Ver &gt;</a>"
+						cadena+=d.Title;
 						cadena+="</div>";
 					});
 
