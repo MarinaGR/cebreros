@@ -1,9 +1,7 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 
-var coord_image_ppal=new Array();
 var coord_image=new Array();
-var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
 var first_click=true;
@@ -285,12 +283,8 @@ function ajax_recover_data(type, id, container, local) {
 					
 					switch(id)
 					{
-						case "/1": //src_image='./resources/images/mapas/mapa_prueba.jpg';  
-								  //coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
-								  
-								  src_image='./resources/images/mapas/mapa_01.jpg';  
-								  coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
-								  
+						case "/1": src_image='./resources/images/mapas/mapa_01.jpg';  
+								  coord_image=[["top-left", "40.4755", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4755", "-4.3698"]];
 								  break;
 								  
 						case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  
@@ -390,14 +384,12 @@ function ajax_recover_data_jsonp(type, container) {
 
 function draw_route(container,src_image, src_gpx) 
 {	
-	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" style="opacity:0" />');
+	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" />');
 			
 	 $("#imagen_mapa").load(function() {
 		
 		width=$(this).width();
 		height=$(this).height();
-		
-		var cuadrantes=[[width/3],[height/2]];
 		
 		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas><p id="text_geo"> </p>');
 		
@@ -407,69 +399,35 @@ function draw_route(container,src_image, src_gpx)
 		canvas.addEventListener('click', function zoom(event)
 		{
 		
-			var mousex = event.offsetX;
-			var mousey = event.offsetY;
+			var mousex = event.clientX - canvas.offsetLeft;
+			var mousey = event.clientY - canvas.offsetTop;
+				
+			var originx=0,originy=0;
 
 			var trabajo = canvas.getContext("2d");
 
+			var zoom;
 				
 			if(first_click)
-			{			
-				src_image_new='';			
-			
-				if(mousey<cuadrantes[1]) 
-				{
-					if(mousex<=cuadrantes[0]) {
-						console.log("cuadrante 1");
-						//Para cada ruta 6 archivos de corrdenadas (uno por imagen ampliada)
-						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 
-						coord_image=[["top-left", "40.4667", "-4.4745"],["bottom-left", "40.4472", "-4.4745"], ["top-right","40.4667", "-4.4189"]];
-					}
-					else if(mousex<=cuadrantes[0]*2) {
-						console.log("cuadrante 2");
-						
-					} else if(mousex<=cuadrantes[0]*3) {
-						console.log("cuadrante 3");
-						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-						coord_image=[["top-left", "40.4661", "-4.4194"],["bottom-left", "40.4466", "-4.4194"], ["top-right","40.4661", "-4.3637"]];
-					}
-				}
-				else if(mousey<cuadrantes[1]*2) 
-				{
-					if(mousex<=cuadrantes[0]) {
-						console.log("cuadrante 4");
-					}
-					else if(mousex<=cuadrantes[0]*2) {
-						console.log("cuadrante 5");
-					} else if(mousex<=cuadrantes[0]*3) {
-						console.log("cuadrante 6");
-					}
-				}
-				
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
-				
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+			{
+				zoom = 1.2;
+											
+				trabajo.translate(
+					originx,
+					originy
+				);
+				trabajo.scale(zoom,zoom);
+				trabajo.translate(
+					-( mousex / scale + originx - mousex / ( scale * zoom ) ),
+					-( mousey / scale + originy - mousey / ( scale * zoom ) )
+				);
 
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-
-				trabajo.clearRect(0,0,width, height);
+				originx = ( mousex / scale + originx - mousex / ( scale * zoom ) );
+				originy = ( mousey / scale + originy - mousey / ( scale * zoom ) );
+				scale *= zoom;
 
 				var img = new Image();
-				img.src = src_image_new;
+				img.src = src_image;
 				img.onload = function(){
 					trabajo.drawImage(img, 0, 0, width, height);
 				   
@@ -485,29 +443,14 @@ function draw_route(container,src_image, src_gpx)
 			}
 			else
 			{
-				coord_image=coord_image_ppal;
-				
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
 			
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+				zoom = 1;
+				trabajo.translate(
+					originx,
+					originy
+				);
+				trabajo.scale(zoom,zoom);
 
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-				
-				trabajo.clearRect(0,0,width, height);
 				
 				var img = new Image();
 				img.src = src_image;
@@ -531,8 +474,6 @@ function draw_route(container,src_image, src_gpx)
 		$.get(src_gpx, function(xml) { 
 		}).done(function(xml_Doc) {
 		
-			coord_image=coord_image_ppal;
-		
 			var altura=(coord_image[0][1]-coord_image[1][1]);
 			var anchura=(coord_image[0][2]-coord_image[2][2]);
 			
@@ -541,26 +482,6 @@ function draw_route(container,src_image, src_gpx)
 				var lat=$(this).attr("lat");
 				var lon=$(this).attr("lon");
 				
-				/*var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
-
-				lat_canvas=lat_canvas.toFixed(3);
-				lon_canvas=lon_canvas.toFixed(3);
-				
-				array_coord_image[k]=lat_canvas+","+lon_canvas;*/
-				
-				array_coord_image_ppal[k]=lat+","+lon;
-				k++;
-				
-			});
-			
-			k=0;
-			array_coord_image_ppal.forEach(function(latlon) {
-			
-				var latlon_split=latlon.split(",");
-				lat=latlon_split[0];
-				lon=latlon_split[1];
-			
 				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
 				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
 
@@ -569,6 +490,7 @@ function draw_route(container,src_image, src_gpx)
 				
 				array_coord_image[k]=lat_canvas+","+lon_canvas;
 				k++;
+				
 			});
 
 			
@@ -661,7 +583,7 @@ function draw_geoloc(position)
 	trabajo.fill();
 	trabajo.closePath();
 	
-	//$(".section_02").prepend("<p>Tu posici&oacute;n: "+lat+", "+lon+"</p>");	
+	$(".section_02").prepend("<p>Tu posici&oacute;n: "+lat+", "+lon+"</p>");	
 		
 }
 function error_geoloc(error)

@@ -146,11 +146,11 @@ ul li b {
 }
 .buttons_routes {
 	float: left;
-	width: 28%;
+	width: 27%;
 	height: 170px;
 	max-width: 250px;
 	min-width: 110px;
-	padding: 1%;
+	padding: 1.5%;
 	color: #fff;
 	background-color: #00405D;
 	margin: 10px 1.5%;
