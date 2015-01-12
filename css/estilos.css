@@ -4,7 +4,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-size: 14px;
+	font-size: 13px;
 	font-family: "OpenSans", Arial;
 	background-color: #DDDDDD;
 }
@@ -56,6 +56,16 @@ h1,h2,h3,h4 {
 	font-size: 0.5em;
 }
 
+ul {
+	padding: 0 20px;
+}
+
+ul li b {
+	width: 145px;
+	display: inline-block;
+	padding: 6px 0;
+}
+
 .nav_01 {
 	width: 100%;
 }
@@ -65,13 +75,10 @@ h1,h2,h3,h4 {
 }
 .nav_01 ul li {
 	border-bottom: 1px solid #EEEEEE;
-	padding: 10px 2px;
+	padding: 12px 2px;
 }
-
-ul li b {
-	width: 150px;
-	display: inline-block;
-	padding: 5px 0;
+.nav_01 ul:first-child  {
+	border-top: 1px solid #EEEEEE;
 }
 
 .nav_02 {
@@ -95,7 +102,7 @@ ul li b {
 
 .section_01 {
 	min-height: 25vh;
-	padding: 25px 50px;
+	padding: 25px 35px;
 	background-color: #00405D;
 	color: #EEEEEE;
 }
@@ -108,7 +115,7 @@ ul li b {
 }
 .section_02 {
 	min-height: 50vh;
-	padding: 25px;
+	padding: 25px 35px;
 	background-color: #EEEEEE;
 }
 .article_01 {
