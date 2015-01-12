@@ -57,11 +57,11 @@ h1,h2,h3,h4 {
 }
 
 ul {
-	padding: 0 20px;
+	padding: 0 15px;
 }
 
 ul li b {
-	width: 145px;
+	width: 1450px;
 	display: inline-block;
 	padding: 6px 0;
 }
@@ -97,7 +97,7 @@ ul li b {
 	font-size: 0.75em;
 	cursor:pointer;
 	background: #fff url(../resources/images/general/menu.png) no-repeat center;
-	background-size: 18px;
+	background-size: 20px;
 }
 
 .section_01 {
@@ -132,6 +132,19 @@ ul li b {
 	font-size: 0.9em;
 	color: #00405D;
 }
+
+.title_01 {
+	color: #FFDB42;
+	font-size: 1.2em;
+	border-bottom: 1px solid #FFDB42;
+}
+
+.data_route {
+	color: #fff;
+	background-color: #00405D;
+	padding: 5px 20px;
+	font-size: 1.1em;
+}
 .buttons_routes {
 	float: left;
 	width: 28%;
@@ -157,11 +170,10 @@ ul li b {
 .vermas {
 	display: inline-block;
 	text-decoration: none;
-	border: 6px solid #00405D;
 	border-radius: 25px;
 	background: #00405D;
 	color: #FFDB42;
-	padding: 2px 25px;
+	padding: 8px 30px;
 	margin-bottom: 40px;
 }
 .footer_01 {

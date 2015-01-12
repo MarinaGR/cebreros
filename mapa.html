@@ -16,7 +16,7 @@
 		<script src="./cordova.js"></script>
 		
 		<script>		
-			$(window).load(function() {
+			$(document).ready(function() {
 				var id=get_var_url("id");
 				ajax_recover_data('route', '/'+id, 'contenido');
 			});

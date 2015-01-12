@@ -19,7 +19,17 @@
         following tag to your config.xml; you will still have the INTERNET
         permission on your app, which PhoneGap requires.
     
-    <preference name="permissions" value="none"/>-->
+    -->
+	
+	<preference name="permissions" value="none"/>
+
+    <!-- to enable individual permissions use the following examples -->
+    <feature name="http://api.phonegap.com/1.0/file"/>
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <feature name="http://api.phonegap.com/1.0/network"/>
+    <feature name="http://api.phonegap.com/1.0/notification"/>
+	<!-- end to enable individual permissions use the following examples -->
+	
 
     <!-- Customize your app and platform with the preference element. -->
     <preference name="phonegap-version"           value="3.6.3" />          <!-- all: current version of PhoneGap -->

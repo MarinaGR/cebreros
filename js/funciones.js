@@ -4,6 +4,9 @@ var extern_url='http://w3.cebreros.es/';
 var coord_image=new Array();
 var array_coord_image=new Array();
 
+var first_click=true;
+var scale=1;
+
 function onBodyLoad(type, container)
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -43,7 +46,7 @@ function onMenuKeyDown()
 function onOnline()
 {
 	/*setTimeout(function(){
-		$("#contenido").attr("src",º_siteurl);
+		$("#contenido").attr("src",siteurl);
 	},250);
 	
 	/*var networkState = navigator.connection.type;
@@ -63,7 +66,7 @@ function onOnline()
 }
 function onOffline()
 {
-	$(body).prepend("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
+	//$(".contenedor").prepend("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
 	/*setTimeout(function(){
 		$("#contenido").attr("src","offline.html");
 	},250);*/
@@ -72,15 +75,33 @@ function onOffline()
 
 function ajax_recover_data(type, id, container) {
 
-	$.ajax({
-	  url: api_url+type+id,
-	  type: 'GET',
-	  dataType: 'json',
-	  crossDomain: true, 
-	  success: f_success,
-	  error: f_error,
-	  async:false,
-	});
+	if(type=="routes" || type=="route")
+	{
+		$.ajax({
+		  url: "./resources/json/"+type+id+".json",
+		  type: 'GET',
+		  dataType: 'json',
+		  crossDomain: true, 
+		  success: f_success,
+		  error: f_error,
+		  async:false,
+		});
+	
+	}
+	else 
+	{
+		$.ajax({
+		  url: api_url+type+id,
+		  type: 'GET',
+		  dataType: 'json',
+		  crossDomain: true, 
+		  success: f_success,
+		  error: f_error,
+		  async:false,
+		});
+	
+	}
+	
 	function f_success(data) {
 	
 		//data = $.parseJSON(data);
@@ -228,11 +249,18 @@ function ajax_recover_data(type, id, container) {
 					
 					$.each(data.Result.Items, function(index, d){   
 						var fecha=new Date(d.DatePublish);
-						var imagen=d.Image; 
+						
 						cadena+="<div class='buttons_routes' onclick='window.location.href=\"mapa.html?id="+d.ID+"\"'>";
 						
+						var imagen=d.Image; 
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:100px;background:url("+imagen+") no-repeat center;background-size:cover;'></div>";
+						{
+							//Sacar ruta local para la imagen	
+							var array_ruta_imagen=imagen.split("/public/images/");
+							var imagen_local="./resources/images/mapas/"+array_ruta_imagen[1];	
+						
+							cadena+="<div style='width:100%;height:100px;background:url("+imagen_local+") no-repeat center;background-size:cover;'></div>";
+						}
 							
 						cadena+="<h5>"+d.Title+"</h5>";
 						cadena+="</div>";
@@ -245,40 +273,55 @@ function ajax_recover_data(type, id, container) {
 					
 			case "route": 
 					var cadena="";
-					var src_image="./resources/images/mapas/mapa_prueba.jpg";
+					var src_image="";
 					
 					switch(id)
 					{
 						case "/1": src_image='./resources/images/mapas/mapa_prueba.jpg';  
 								  coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
 								  break;
-						case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  break;
+								  
+						case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  
+								   break;
+						default: src_image='./resources/images/mapas/mapa_prueba.jpg';  
+								 break;
 					}
 				
 					var d=data.Result;
 
-					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
 					
+					var imagen=d.Image; 
 					if(imagen!=null) 
-						cadena+="<img src='"+imagen+"' alt='Imagen de la ruta' />";
+					{
+						//Sacar ruta local para la imagen	
+						var array_ruta_imagen=imagen.split("/public/images/");
+						var imagen_local="./resources/images/mapas/"+array_ruta_imagen[1];	
 					
+						cadena+="<img src='"+imagen_local+"' alt='Imagen de la ruta' />";
+					}
+
 					cadena+=d.Page;
 					
-					cadena+="<p>DATOS DE LA RUTA</p>";
-					cadena+="<p>Altitud maxima: "+d.MaxAltitude+"</p>"+
-							"<p>Altitud minima: "+d.MinAltitude+"</p>"+
-							"<p>Dificultad:  "+d.Difficulty+"</p>"+
-							"<p>Distancia:  "+d.Distance+"</p>"+
-							"<p>Ruta circular Monumentos: "+d.Monuments+"</p>"+
-							"<p>Panoramicas:  "+d.Panoramics+"</p>";
+					cadena+="<div class='data_route'>";
+					cadena+="<p class='title_01'>DATOS DE LA RUTA</p>";
+					cadena+="<p><b>Altitud m&aacute;xima:</b> "+d.MaxAltitude+"</p>"+
+							"<p><b>Altitud m&iacute;nima:</b> "+d.MinAltitude+"</p>"+
+							"<p><b>Dificultad:</b>  "+d.Difficulty+"</p>"+
+							"<p><b>Distancia:</b>  "+d.Distance+"</p>"+
+							"<p><b>Ruta circular monumentos:</b> "+d.Monuments+"</p>"+
+							"<p><b>Panor&aacute;micas:</b>  "+d.Panoramics+"</p>";
+							"<p><b>Realizable en bici:</b>  "+d.CycleReady+"</p>";
+					cadena+="</div>";		
+
+					cadena+="<p><br><a class='vermas' href='"+d.WikilocLink+"'>Ver ruta en Wikiloc</a></p>";					
 										
-					var imagenes=d.Items;
+					/*var imagenes=d.Items;
 					if(d.Total>0) 
 					{
 						for(i=0;i<d.Total;i++)
-							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen noticia' />";
-					}
+							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
+					}*/
 					
 					draw_route(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
 					
@@ -349,7 +392,7 @@ function draw_route(container,src_image, src_gpx)
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid #AAA";
 		
-		/*canvas.addEventListener('click', function zoom(event)
+		canvas.addEventListener('click', function zoom(event)
 		{
 		
 			var mousex = event.clientX - canvas.offsetLeft;
@@ -421,7 +464,7 @@ function draw_route(container,src_image, src_gpx)
 				first_click=true;
 			}
 		}
-		, false);*/
+		, false);
 
 		
 		$.get(src_gpx, function(xml) { 
@@ -501,7 +544,7 @@ function show_geoloc()
 	}
 	else
 	{
-		$("#contenido").append("Tu dispositivo no permite la geolocalización dinámica.");			
+		$(".section_02").prepend("Tu dispositivo no permite la geolocalización dinámica.");			
 	}
 }
 
@@ -536,12 +579,12 @@ function draw_geoloc(position)
 	trabajo.fill();
 	trabajo.closePath();
 	
-	$("#contenido").append("<p>Tu posicion: "+lat+", "+lon+"</p>");	
+	$(".section_02").prepend("<p>Tu posicion: "+lat+", "+lon+"</p>");	
 		
 }
 function error_geoloc(error)
 {
-	$("#contenido").append("La geolocalización ha fallado.");	
+	$(".section_02").prepend("La geolocalización ha fallado.");	
 }
 
 
