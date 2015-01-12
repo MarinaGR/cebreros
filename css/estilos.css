@@ -61,7 +61,7 @@ ul {
 }
 
 ul li b {
-	width: 1450px;
+	width: 140px;
 	display: inline-block;
 	padding: 6px 0;
 }
@@ -143,7 +143,6 @@ ul li b {
 	color: #fff;
 	background-color: #00405D;
 	padding: 5px 20px;
-	font-size: 1.1em;
 }
 .buttons_routes {
 	float: left;

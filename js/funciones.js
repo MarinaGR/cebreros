@@ -548,7 +548,7 @@ function show_geoloc()
 	}
 	else
 	{
-		$(".section_02").prepend("Tu dispositivo no permite la geolocalización dinámica.");			
+		$(".section_02").prepend("Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.");			
 	}
 }
 
@@ -583,12 +583,12 @@ function draw_geoloc(position)
 	trabajo.fill();
 	trabajo.closePath();
 	
-	$(".section_02").prepend("<p>Tu posicion: "+lat+", "+lon+"</p>");	
+	$(".section_02").prepend("<p>Tu posici&oacute;n: "+lat+", "+lon+"</p>");	
 		
 }
 function error_geoloc(error)
 {
-	$(".section_02").prepend("La geolocalización ha fallado.");	
+	$(".section_02").prepend("La geolocalizaci&oacute;n ha fallado.");	
 }
 
 
