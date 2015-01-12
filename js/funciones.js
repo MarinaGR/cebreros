@@ -417,33 +417,33 @@ function draw_route(container,src_image, src_gpx)
 			{			
 				src_image_new='';			
 			
-				if(mousey<cuadrantes[1]) 
+				if(mousey<height/2) 
 				{
-					if(mousex<=cuadrantes[0]) {
+					if(mousex<=width/2) {
 						console.log("cuadrante 1");
-						//Para cada ruta 6 archivos de corrdenadas (uno por imagen ampliada)
-						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 
-						coord_image=[["top-left", "40.4667", "-4.4745"],["bottom-left", "40.4472", "-4.4745"], ["top-right","40.4667", "-4.4189"]];
+						//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
+						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
+						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];
 					}
-					else if(mousex<=cuadrantes[0]*2) {
+					else if(mousex<=width) {
 						console.log("cuadrante 2");
-						
-					} else if(mousex<=cuadrantes[0]*3) {
-						console.log("cuadrante 3");
 						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-						coord_image=[["top-left", "40.4661", "-4.4194"],["bottom-left", "40.4466", "-4.4194"], ["top-right","40.4661", "-4.3637"]];
-					}
+						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
+						
+					} 
 				}
-				else if(mousey<cuadrantes[1]*2) 
+				else if(mousey<height) 
 				{
-					if(mousex<=cuadrantes[0]) {
+					if(mousex<=width/2) {
+						console.log("cuadrante 3");
+						src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
+						coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
+					}
+					else if(mousex<=width) {
 						console.log("cuadrante 4");
-					}
-					else if(mousex<=cuadrantes[0]*2) {
-						console.log("cuadrante 5");
-					} else if(mousex<=cuadrantes[0]*3) {
-						console.log("cuadrante 6");
-					}
+						src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
+						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];;
+					} 
 				}
 				
 				var altura=(coord_image[0][1]-coord_image[1][1]);
@@ -579,7 +579,7 @@ function draw_route(container,src_image, src_gpx)
 				var trabajo = canvas.getContext("2d");
 				trabajo.drawImage(img, 0, 0, width, height);
 				
-				trabajo.lineWidth = 3;
+				trabajo.lineWidth = 2;
 				trabajo.fillStyle = "blue";		
 				trabajo.strokeStyle = "orange";		
 				trabajo.font = '12px "Tahoma"';		
