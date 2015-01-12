@@ -87,9 +87,11 @@ function ajax_recover_data(type, id, container) {
 		  async:false,
 		});*/
 		
-		var objajax=$.get("./resources/json/"+type+id+".json");
-		objajax.error(f_error);
-		objajax.success(f_success);
+		var objajax=$.getJSON("./resources/json/"+type+id+".json", f_success)
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			alert('Error: '+textStatus+" - "+errorThrown);	
+			$("#"+container).html("No se han cargado los datos del archivo");
+		});
 	
 	}
 	else 
