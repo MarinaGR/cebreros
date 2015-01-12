@@ -73,9 +73,9 @@ function onOffline()
 
 }
 
-function ajax_recover_data(type, id, container) {
+function ajax_recover_data(type, id, container, local) {
 
-	if(type=="routes" || type=="route")
+	if(local==true)
 	{
 		/*$.ajax({
 		  url: "./resources/json/"+type+id+".json",
