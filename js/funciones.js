@@ -77,7 +77,7 @@ function ajax_recover_data(type, id, container) {
 
 	if(type=="routes" || type=="route")
 	{
-		$.ajax({
+		/*$.ajax({
 		  url: "./resources/json/"+type+id+".json",
 		  type: 'GET',
 		  dataType: 'json',
@@ -85,7 +85,11 @@ function ajax_recover_data(type, id, container) {
 		  success: f_success,
 		  error: f_error,
 		  async:false,
-		});
+		});*/
+		
+		var objajax=$.get("./resources/json/"+type+id+".json");
+		objajax.error(f_error);
+		objajax.success(f_success);
 	
 	}
 	else 
@@ -330,9 +334,7 @@ function ajax_recover_data(type, id, container) {
 					break;
 
 		}
-
-		
-				
+	
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
 		alert('Error: '+textStatus+" - "+errorThrown);	
@@ -387,7 +389,7 @@ function draw_route(container,src_image, src_gpx)
 		width=$(this).width();
 		height=$(this).height();
 		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas><p id="text_geo"> </p>');
 		
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid #AAA";
