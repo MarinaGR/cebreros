@@ -29,7 +29,7 @@ function onBodyLoad(type, container)
 		//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+	window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 
 }
 function onDeviceReady()
@@ -693,7 +693,7 @@ function draw_canvas(container,src_image, src_gpx)
 					k++;
 				});
 
-				contexto.clearRect(0,0,width, height);	
+				contexto.clearRect(0, 0, height, width);	
 
 				var img = new Image();
 				img.src = src_image_new;
@@ -734,7 +734,7 @@ function draw_canvas(container,src_image, src_gpx)
 					k++;
 				});
 				
-				contexto.clearRect(0,0,width, height);
+				contexto.clearRect(0, 0, height, width);	
 				
 				var img = new Image();
 				img.src = src_image;
