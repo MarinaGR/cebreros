@@ -8,12 +8,17 @@ var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
 var first_click=true;
-var scale=1;
+var scale=2;
+var frame;
+var now=new Date(2014,0,1).getTime(); 
+
+var DATADIR;
 
 function onBodyLoad(type, container)
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
+	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
 	
 	/*var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
@@ -45,6 +50,11 @@ function onBackKeyDown()
 function onMenuKeyDown()
 {
 	window.location.href='index.html';
+}
+function onOutKeyDown()
+{
+	navigator.app.exitApp();
+	return false;
 }
 function onOnline()
 {
@@ -117,7 +127,9 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						if(imagen!=null) 
 							cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
-						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+						if(isLocal!=true && isLocal!="true")
+							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+							
 						cadena+="<h3>"+d.Title+"</h3>";
 						
 						if(isLocal)
@@ -139,7 +151,9 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 					var fecha=new Date(d.DatePublish);
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
-					cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+					
+					if(isLocal!=true && isLocal!="true")
+						cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
 					if(imagen!=null) 
 						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
@@ -234,7 +248,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 					var fecha=new Date(d.DatePublish);
 					var imagen=d.Image; 
 					cadena+="<h2>"+d.Title+"</h2>";
-					cadena+=fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"<br>";
 					
 					cadena+=d.Description;
 					
@@ -597,7 +610,7 @@ function draw_route(container,src_image, src_gpx)
 
 function draw_canvas(container,src_image, src_gpx) 
 {	
-	//$("#"+container).append('<img src="'+src_image+'" width="100%" height="100%" id="imagen_mapa" style="opacity:0" />');
+	//$("#"+container).append('<img src="'+src_image+'" width="100%" id="imagen_mapa" style="opacity:0" />');
 	
 	//Tendría que ser proporcional al tamaño de la imagen que vamos a cargar
 			
@@ -608,7 +621,9 @@ function draw_canvas(container,src_image, src_gpx)
 		
 		var cuadrantes=[[width/3],[height/2]];
 		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0; /*transform:rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-webkit-transform: rotate(90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);*/" ></canvas>');
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0;" ></canvas>');
+		
+		/*transform:rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-webkit-transform: rotate(90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);*/
 		
 		var canvas = document.getElementById("canvas");						
 		
