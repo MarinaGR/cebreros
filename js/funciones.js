@@ -26,8 +26,10 @@ function onBodyLoad(type, container)
 		var nueva_fecha=now;  
 		setLocalStorage("fecha", nueva_fecha);
 		//Primera ejecución, descargamos contenidos si está online
-		window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+		//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
+	
+	window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 
 }
 function onDeviceReady()
@@ -938,6 +940,8 @@ function onFileSystemError()
 }
 function onFileSystemSuccess(fileSystem) 
 {
+
+	alert("File System Sucess");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
@@ -950,6 +954,7 @@ function onFileSystemSuccess(fileSystem)
 }
 function gotDir(d) {
 
+	alert("Got dir "+d);
 	DATADIR = d;
 	var reader = DATADIR.createReader();
 	$("body").prepend("<div id='descarga'></div>");
