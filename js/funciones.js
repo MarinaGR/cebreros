@@ -1,5 +1,6 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
+var local_url='./resources/json/';
 
 var coord_image_ppal=new Array();
 var coord_image=new Array();
@@ -75,23 +76,13 @@ function onOffline()
 
 }
 
-function ajax_recover_data(type, id, container, local) {
+function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 
-	if(local==true)
-	{
-		/*$.ajax({
-		  url: "./resources/json/"+type+id+".json",
-		  type: 'GET',
-		  dataType: 'json',
-		  crossDomain: true, 
-		  success: f_success,
-		  error: f_error,
-		  async:false,
-		});*/
-		
-		var objajax=$.getJSON("./resources/json/"+type+id+".json", f_success)
+	if(isLocal==true || isLocal=="true")
+	{		
+		var objajax=$.getJSON(local_url+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {
-			alert('Error: '+textStatus+" - "+errorThrown);	
+			alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
 			$("#"+container).html("No se han cargado los datos del archivo");
 		});
 	
@@ -128,7 +119,11 @@ function ajax_recover_data(type, id, container, local) {
 							
 						cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 						cadena+="<h3>"+d.Title+"</h3>";
-						cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>VER</a>"
+						
+						if(isLocal)
+							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
+						else
+							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>VER</a>";
 
 					});
 
@@ -218,7 +213,11 @@ function ajax_recover_data(type, id, container, local) {
 							cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<h3>"+d.Title+"</h3>";
-						cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a></div>";
+						
+						if(isLocal)
+							cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"&local=true'>VER</a></div>";
+						else
+							cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a></div>";
 
 					});
 					
@@ -281,24 +280,32 @@ function ajax_recover_data(type, id, container, local) {
 					
 			case "route": 
 					var cadena="";
-					var src_image="";
 					
-					switch(id)
+					if(haveCanvas==true)
 					{
-						case "/1": //src_image='./resources/images/mapas/mapa_prueba.jpg';  
-								  //coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
-								  
-								  src_image='./resources/images/mapas/mapa_01.jpg';  
-								  coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
-								  
-								  break;
-								  
-						case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  
-								   break;
-						default: src_image='./resources/images/mapas/mapa_prueba.jpg';  
-								 break;
-					}
+						var src_image="";
 				
+						switch(id)
+						{
+							case "/1": //src_image='./resources/images/mapas/mapa_prueba.jpg';  
+									  //coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
+									  
+									  src_image='./resources/images/mapas/mapa_01.jpg';  
+									  coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
+									  
+									  break;
+									  
+							case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  
+									   break;
+							default: src_image='./resources/images/mapas/mapa_prueba.jpg';  
+									 break;
+						}
+						var d=data.Result;
+						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
+						
+						break;
+					}
+					
 					var d=data.Result;
 
 					cadena+="<h2>"+d.Title+"</h2>";
@@ -326,8 +333,6 @@ function ajax_recover_data(type, id, container, local) {
 							"<p><b>Realizable en bici:</b>  "+d.CycleReady+"</p>";
 					cadena+="</div>";		
 
-					cadena+="<p><br><a class='vermas' href='"+d.WikilocLink+"'>Ver ruta en Wikiloc</a></p>";					
-										
 					/*var imagenes=d.Items;
 					if(d.Total>0) 
 					{
@@ -335,7 +340,9 @@ function ajax_recover_data(type, id, container, local) {
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
 					}*/
 					
-					draw_route(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
+					cadena+="<p><br><br><a class='vermas' href='"+d.WikilocLink+"'>Ver ruta en Wikiloc</a></p>";	
+					
+					cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 					
 					$("#"+container).append(cadena);
 					
@@ -399,7 +406,7 @@ function draw_route(container,src_image, src_gpx)
 		
 		var cuadrantes=[[width/3],[height/2]];
 		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas><p id="text_geo"> </p>');
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
 		
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid #AAA";
@@ -473,8 +480,8 @@ function draw_route(container,src_image, src_gpx)
 				img.onload = function(){
 					trabajo.drawImage(img, 0, 0, width, height);
 				   
-					trabajo.lineWidth = 3;
-					trabajo.fillStyle = "blue";		
+					trabajo.lineWidth = 4;
+					trabajo.fillStyle = "orange";		
 					trabajo.strokeStyle = "orange";		
 					trabajo.font = '12px "Tahoma"';		
 				
@@ -514,8 +521,210 @@ function draw_route(container,src_image, src_gpx)
 				img.onload = function(){
 					trabajo.drawImage(img, 0, 0, width, height);
 				   
-					trabajo.lineWidth = 3;
-					trabajo.fillStyle = "blue";		
+					trabajo.lineWidth = 4;
+					trabajo.fillStyle = "orange";		
+					trabajo.strokeStyle = "orange";		
+					trabajo.font = '12px "Tahoma"';		
+				
+					draw_points(trabajo);
+				}
+				
+				first_click=true;
+			}
+		}
+		, false);
+
+		
+		$.get(src_gpx, function(xml) { 
+		}).done(function(xml_Doc) {
+		
+			coord_image=coord_image_ppal;
+		
+			var altura=(coord_image[0][1]-coord_image[1][1]);
+			var anchura=(coord_image[0][2]-coord_image[2][2]);
+			
+			var k=0;
+			$(xml_Doc).find("rtept").each(function() {
+				var lat=$(this).attr("lat");
+				var lon=$(this).attr("lon");
+				
+				array_coord_image_ppal[k]=lat+","+lon;
+				k++;
+				
+			});
+			
+			k=0;
+			array_coord_image_ppal.forEach(function(latlon) {
+			
+				var latlon_split=latlon.split(",");
+				lat=latlon_split[0];
+				lon=latlon_split[1];
+			
+				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
+				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+
+				lat_canvas=lat_canvas.toFixed(3);
+				lon_canvas=lon_canvas.toFixed(3);
+				
+				array_coord_image[k]=lat_canvas+","+lon_canvas;
+				k++;
+			});
+
+			
+			var img = new Image();
+			img.src = src_image;
+			img.onload = function(){
+			
+				var trabajo = canvas.getContext("2d");
+				trabajo.drawImage(img, 0, 0, width, height);
+				
+				trabajo.lineWidth = 3;
+				trabajo.fillStyle = "orange";		
+				trabajo.strokeStyle = "orange";		
+				trabajo.font = '12px "Tahoma"';		
+
+				draw_points(trabajo);
+			
+			}
+			
+		}).fail(function(){
+			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
+		});
+			
+	});
+
+}
+
+function draw_canvas(container,src_image, src_gpx) 
+{	
+	//$("#"+container).append('<img src="'+src_image+'" width="100%" height="100%" id="imagen_mapa" style="opacity:0" />');
+	
+	//Tendría que ser proporcional al tamaño de la imagen que vamos a cargar
+			
+	// $("#imagen_mapa").load(function() {
+		
+		width=$(window).width(); 
+		height=$(window).height();
+		
+		var cuadrantes=[[width/3],[height/2]];
+		
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0; /*transform:rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-webkit-transform: rotate(90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);*/" ></canvas>');
+		
+		var canvas = document.getElementById("canvas");						
+		
+		canvas.addEventListener('click', function zoom(event)
+		{
+		
+			var mousex = event.offsetX;
+			var mousey = event.offsetY;
+
+			var trabajo = canvas.getContext("2d");
+
+				
+			if(first_click)
+			{			
+				src_image_new='';			
+			
+				if(mousey<height/2) 
+				{
+					if(mousex<=width/2) {
+						console.log("cuadrante 1");
+						//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
+						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
+						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];
+					}
+					else if(mousex<=width) {
+						console.log("cuadrante 2");
+						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
+						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
+						
+					} 
+				}
+				else if(mousey<height) 
+				{
+					if(mousex<=width/2) {
+						console.log("cuadrante 3");
+						src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
+						coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
+					}
+					else if(mousex<=width) {
+						console.log("cuadrante 4");
+						src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
+						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];;
+					} 
+				}
+				
+				
+				var altura=(coord_image[0][1]-coord_image[1][1]);
+				var anchura=(coord_image[0][2]-coord_image[2][2]);
+				
+				k=0;
+				array_coord_image_ppal.forEach(function(latlon) {
+				
+					var latlon_split=latlon.split(",");
+					lat=latlon_split[0];
+					lon=latlon_split[1];
+				
+					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
+					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+
+					lat_canvas=lat_canvas.toFixed(3);
+					lon_canvas=lon_canvas.toFixed(3);
+					
+					array_coord_image[k]=lat_canvas+","+lon_canvas;
+					k++;
+				});
+
+				trabajo.clearRect(0,0,width, height);	
+
+				var img = new Image();
+				img.src = src_image_new;
+				img.onload = function(){
+					trabajo.drawImage(img, 0, 0, width, height);
+				   
+					trabajo.lineWidth = 4;
+					trabajo.fillStyle = "orange";		
+					trabajo.strokeStyle = "orange";		
+					trabajo.font = '12px "Tahoma"';		
+				
+					draw_points(trabajo);
+				}
+				
+				first_click=false;
+			}
+			else
+			{
+				coord_image=coord_image_ppal;
+				
+				var altura=(coord_image[0][1]-coord_image[1][1]);
+				var anchura=(coord_image[0][2]-coord_image[2][2]);
+				
+				k=0;
+				array_coord_image_ppal.forEach(function(latlon) {
+			
+					var latlon_split=latlon.split(",");
+					lat=latlon_split[0];
+					lon=latlon_split[1];
+				
+					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
+					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+
+					lat_canvas=lat_canvas.toFixed(3);
+					lon_canvas=lon_canvas.toFixed(3);
+					
+					array_coord_image[k]=lat_canvas+","+lon_canvas;
+					k++;
+				});
+				
+				trabajo.clearRect(0,0,width, height);
+				
+				var img = new Image();
+				img.src = src_image;
+				img.onload = function(){
+					trabajo.drawImage(img, 0, 0, width, height);
+				   
+					trabajo.lineWidth = 4;
+					trabajo.fillStyle = "orange";		
 					trabajo.strokeStyle = "orange";		
 					trabajo.font = '12px "Tahoma"';		
 				
@@ -577,10 +786,15 @@ function draw_route(container,src_image, src_gpx)
 			img.onload = function(){
 			
 				var trabajo = canvas.getContext("2d");
+				
+				//trabajo.translate(0,0);		
+				//trabajo.rotate(0.5 * Math.PI);				
+				//trabajo.translate(width,height);		
+				
 				trabajo.drawImage(img, 0, 0, width, height);
 				
-				trabajo.lineWidth = 2;
-				trabajo.fillStyle = "blue";		
+				trabajo.lineWidth = 3;
+				trabajo.fillStyle = "orange";		
 				trabajo.strokeStyle = "orange";		
 				trabajo.font = '12px "Tahoma"';		
 
@@ -592,7 +806,7 @@ function draw_route(container,src_image, src_gpx)
 			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
 		});
 			
-	});
+	//});
 
 }
 
@@ -604,11 +818,11 @@ function draw_points(trabajo)
 		var lat_canvas=array_points[0];
 		var lon_canvas=array_points[1];
 
-		trabajo.lineTo(lon_canvas,lat_canvas);								
-		trabajo.stroke();
+		//trabajo.lineTo(lon_canvas,lat_canvas);								
+		//trabajo.stroke();
 		
 		trabajo.beginPath();
-		trabajo.arc(lon_canvas,lat_canvas, 1, 0, 2 * Math.PI, true);
+		trabajo.arc(lon_canvas,lat_canvas, 3, 0, 2 * Math.PI, true);
 		trabajo.fill();
 		trabajo.closePath();
 			
@@ -622,7 +836,15 @@ function show_geoloc()
 {
 	if (navigator.geolocation)
 	{
-		navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
+		//navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
+		
+		options = {
+		  enableHighAccuracy: true,
+		  timeout: 1000,
+		  maximumAge: 30000
+		};
+
+		id = navigator.geolocation.watchPosition(draw_geoloc, error_geoloc, options);
 	}
 	else
 	{
@@ -635,13 +857,13 @@ function draw_geoloc(position)
 	//var lat = position.coords.latitude;
   	//var lon = position.coords.longitude;
 	
-	var lat=40.46;
-	var lon=-4.46;
+	var lat=40.455;
+	var lon=-4.465;
 
 	var canvas = document.getElementById("canvas");						
 	var trabajo = canvas.getContext("2d");
-	trabajo.fillStyle = "blue";		
-	trabajo.strokeStyle = "blue";		
+	trabajo.fillStyle = "#00405D";		
+	trabajo.strokeStyle = "#00405D";		
 	trabajo.font = '12px "Tahoma"';		
 
 	var width=canvas.width;
@@ -657,7 +879,7 @@ function draw_geoloc(position)
 	lon_canvas=Math.round(lon_canvas * 100)/100;
 	
 	trabajo.beginPath();
-	trabajo.arc(lon_canvas,lat_canvas, 6, 0, 2 * Math.PI, true);
+	trabajo.arc(lon_canvas,lat_canvas, 7, 0, 2 * Math.PI, true);
 	trabajo.fill();
 	trabajo.closePath();
 	

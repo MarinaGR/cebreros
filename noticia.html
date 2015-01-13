@@ -17,7 +17,8 @@
 		<script>
 			$(document).ready(function() {
 				var id=get_var_url("id");
-				ajax_recover_data('page', '/'+id, 'contenido');
+				var local=get_var_url("local"); 
+				ajax_recover_data('page', '/'+id, 'contenido', local);
 			});
 		</script>
 	</head>
@@ -28,11 +29,10 @@
 			<div class="header_02">
 				<h1><span class="h1_mini">Ayuntamiento de</span><br> CEBREROS</h1>
 				<div class="nav_02" id="boton_menu"> </div>
-				<div id="boton_menu"></div>
+				<div id="boton_salir"></div>
 			</div>
 			
 			<div class="section_02">
-				<h2>NOTICIA</h2>
 				<div class="article_01" id="contenido"> </div>
 			</div>	
 			
