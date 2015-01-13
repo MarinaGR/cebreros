@@ -20,13 +20,15 @@ function onBodyLoad(type, container)
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
 	
-	/*var fecha=getLocalStorage("fecha"); 
+	var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
 	{	
-		var nueva_fecha=now; //new Date(2014,0,1).getTime(); 
+		var nueva_fecha=now;  
 		setLocalStorage("fecha", nueva_fecha);
-	}	*/	
-		
+		//Primera ejecución, descargamos contenidos si está online
+		window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+	}
+
 }
 function onDeviceReady()
 {
@@ -927,6 +929,80 @@ function get_var_url(variable){
 		return false;
 	
 }
+
+
+
+function onFileSystemError() 
+{
+	alert("Error File System");
+}
+function onFileSystemSuccess(fileSystem) 
+{
+	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
+	
+	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
+
+	fs=fileSystem;
+	
+    fileSystem.root.getDirectory("com.ovnyline.cebreros",{create:true},gotDir,onError);
+    
+  //  fs.root.getDirectory("com.ovnyline.cebreros/",{create:true},null,onError);
+}
+function gotDir(d) {
+
+	DATADIR = d;
+	var reader = DATADIR.createReader();
+	$("body").prepend("<div id='descarga'></div>");
+	reader.readEntries(function(d){
+		
+		$("#descarga").append("Descargando archivos... ");
+		$.get(local_url+"routes.json", {}, function(res) {
+		
+			if (res.Sucess==1) {
+				$("#descarga").append("RUTA: "+api_url+"routes</br>");
+
+				var ft = new FileTransfer();
+				var dlPath = DATADIR.fullPath + "/routes.json";
+				console.log("Descargando a " + dlPath);
+				ft.download(api_url+"routes" , dlPath, function() {
+					alert("Exito");
+				}, onError);
+			}
+
+		}, "json");
+		
+	},onError);
+	
+	$("#descarga").html("");
+}
+function gotFS(fileSystem) 
+{
+	//var fichero="./resources/json/routes.json";
+    //fileSystem.root.getFile(fichero, {create: false}, success_getFile, fail_getFile);
+   
+    var reader = fileSystem.root.createReader();
+    reader.readEntries(gotList, fail_getFile);   
+}
+function gotList(entries) {
+    var i;
+    for (i=0; i<entries.length; i++) {
+        if (entries[i].name.indexOf(".json") != -1) {
+            console.log(entries[i].name);
+        }
+    }
+}
+function success_getFile(parent) {
+    console.log("Nombre del padre: " + parent.name);
+}
+function fail_getFile(error) {
+    alert("Ocurrió un error recuperando el fichero: " + error.code);
+}
+function onError(e){
+	alert("ERROR");
+	alert(JSON.stringify(e));
+}
+
+
 
 function setLocalStorage(keyinput,valinput) 
 {

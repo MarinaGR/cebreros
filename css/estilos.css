@@ -184,7 +184,7 @@ ul li b {
 .buttons_galleries {
 	float: left;
 	width: 28%;
-	height: 170px;
+	height: 190px;
 	max-width: 250px;
 	min-width: 110px;
 	padding: 1%;
@@ -219,6 +219,17 @@ ul li b {
 		padding: 2%;
 		color: #fff;
 		background-color: #00405D;
+		margin: 10px 1%;
+	}
+	.buttons_galleries {
+		float: left;
+		width: 94%;
+		height: 170px;
+		max-width: 100%;
+		min-width: 110px;
+		padding: 2%;
+		color: #00405D;
+		background-color: #fff;
 		margin: 10px 1%;
 	}
 }
