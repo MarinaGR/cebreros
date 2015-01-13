@@ -946,6 +946,10 @@ function onFileSystemSuccess(fileSystem)
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
 
+	navigator.webkitPersistentStorage.requestQuota (1024*1024*1024, function() {
+		  console.log ('requestQuota: ', arguments);
+		}, onError);
+
 	fs=fileSystem;
 	
     fileSystem.root.getDirectory("com.ovnyline.cebreros",{create:true},gotDir,onError);
@@ -1000,7 +1004,7 @@ function success_getFile(parent) {
     console.log("Nombre del padre: " + parent.name);
 }
 function fail_getFile(error) {
-    alert("Ocurrió un error recuperando el fichero: " + error.code);
+    alert("Ocurrió un error recuperando el fichero: " + error.message);
 }
 function onError(e){
 	alert("ERROR");
