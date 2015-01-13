@@ -29,7 +29,7 @@ function onBodyLoad(type, container)
 		//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+	//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 
 }
 function onDeviceReady()
@@ -434,7 +434,7 @@ function draw_route(container,src_image, src_gpx)
 			var mousex = event.offsetX;
 			var mousey = event.offsetY;
 
-			var trabajo = canvas.getContext("2d");
+			var contexto = canvas.getContext("2d");
 
 				
 			if(first_click)
@@ -490,19 +490,19 @@ function draw_route(container,src_image, src_gpx)
 					k++;
 				});
 
-				trabajo.clearRect(0,0,width, height);
+				contexto.clearRect(0,0,width, height);
 
 				var img = new Image();
 				img.src = src_image_new;
 				img.onload = function(){
-					trabajo.drawImage(img, 0, 0, width, height);
+					contexto.drawImage(img, 0, 0, width, height);
 				   
-					trabajo.lineWidth = 4;
-					trabajo.fillStyle = "orange";		
-					trabajo.strokeStyle = "orange";		
-					trabajo.font = '12px "Tahoma"';		
+					contexto.lineWidth = 4;
+					contexto.fillStyle = "orange";		
+					contexto.strokeStyle = "orange";		
+					contexto.font = '12px "Tahoma"';		
 				
-					draw_points(trabajo);
+					draw_points(contexto);
 				}
 				
 				first_click=false;
@@ -531,19 +531,19 @@ function draw_route(container,src_image, src_gpx)
 					k++;
 				});
 				
-				trabajo.clearRect(0,0,width, height);
+				contexto.clearRect(0,0,width, height);
 				
 				var img = new Image();
 				img.src = src_image;
 				img.onload = function(){
-					trabajo.drawImage(img, 0, 0, width, height);
+					contexto.drawImage(img, 0, 0, width, height);
 				   
-					trabajo.lineWidth = 4;
-					trabajo.fillStyle = "orange";		
-					trabajo.strokeStyle = "orange";		
-					trabajo.font = '12px "Tahoma"';		
+					contexto.lineWidth = 4;
+					contexto.fillStyle = "orange";		
+					contexto.strokeStyle = "orange";		
+					contexto.font = '12px "Tahoma"';		
 				
-					draw_points(trabajo);
+					draw_points(contexto);
 				}
 				
 				first_click=true;
@@ -592,15 +592,15 @@ function draw_route(container,src_image, src_gpx)
 			img.src = src_image;
 			img.onload = function(){
 			
-				var trabajo = canvas.getContext("2d");
-				trabajo.drawImage(img, 0, 0, width, height);
+				var contexto = canvas.getContext("2d");
+				contexto.drawImage(img, 0, 0, width, height);
 				
-				trabajo.lineWidth = 3;
-				trabajo.fillStyle = "orange";		
-				trabajo.strokeStyle = "orange";		
-				trabajo.font = '12px "Tahoma"';		
+				contexto.lineWidth = 3;
+				contexto.fillStyle = "orange";		
+				contexto.strokeStyle = "orange";		
+				contexto.font = '12px "Tahoma"';		
 
-				draw_points(trabajo);
+				draw_points(contexto);
 			
 			}
 			
@@ -637,29 +637,15 @@ function draw_canvas(container,src_image, src_gpx)
 			var mousex = event.offsetX;
 			var mousey = event.offsetY;
 
-			var trabajo = canvas.getContext("2d");
+			var contexto = canvas.getContext("2d");
 
 				
 			if(first_click)
 			{			
 				src_image_new='';			
 			
+				//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
 				if(mousey<height/2) 
-				{
-					if(mousex<=width/2) {
-						console.log("cuadrante 1");
-						//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
-						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
-						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];
-					}
-					else if(mousex<=width) {
-						console.log("cuadrante 2");
-						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
-						
-					} 
-				}
-				else if(mousey<height) 
 				{
 					if(mousex<=width/2) {
 						console.log("cuadrante 3");
@@ -667,9 +653,22 @@ function draw_canvas(container,src_image, src_gpx)
 						coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
 					}
 					else if(mousex<=width) {
+						console.log("cuadrante 1");
+						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
+						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];						
+					} 
+				}
+				else if(mousey<height) 
+				{
+					if(mousex<=width/2) {
 						console.log("cuadrante 4");
 						src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
-						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];;
+						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];
+					}
+					else if(mousex<=width) {
+						console.log("cuadrante 2");
+						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
+						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
 					} 
 				}
 				
@@ -684,8 +683,8 @@ function draw_canvas(container,src_image, src_gpx)
 					lat=latlon_split[0];
 					lon=latlon_split[1];
 				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
 
 					lat_canvas=lat_canvas.toFixed(3);
 					lon_canvas=lon_canvas.toFixed(3);
@@ -694,19 +693,19 @@ function draw_canvas(container,src_image, src_gpx)
 					k++;
 				});
 
-				trabajo.clearRect(0,0,width, height);	
+				contexto.clearRect(0,0,width, height);	
 
 				var img = new Image();
 				img.src = src_image_new;
 				img.onload = function(){
-					trabajo.drawImage(img, 0, 0, width, height);
+					contexto.drawImage(img, 0, 0, height, width);
 				   
-					trabajo.lineWidth = 4;
-					trabajo.fillStyle = "orange";		
-					trabajo.strokeStyle = "orange";		
-					trabajo.font = '12px "Tahoma"';		
+					contexto.lineWidth = 4;
+					contexto.fillStyle = "orange";		
+					contexto.strokeStyle = "orange";		
+					contexto.font = '12px "Tahoma"';		
 				
-					draw_points(trabajo);
+					draw_points(contexto);
 				}
 				
 				first_click=false;
@@ -725,8 +724,8 @@ function draw_canvas(container,src_image, src_gpx)
 					lat=latlon_split[0];
 					lon=latlon_split[1];
 				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
 
 					lat_canvas=lat_canvas.toFixed(3);
 					lon_canvas=lon_canvas.toFixed(3);
@@ -735,19 +734,20 @@ function draw_canvas(container,src_image, src_gpx)
 					k++;
 				});
 				
-				trabajo.clearRect(0,0,width, height);
+				contexto.clearRect(0,0,width, height);
 				
 				var img = new Image();
 				img.src = src_image;
 				img.onload = function(){
-					trabajo.drawImage(img, 0, 0, width, height);
-				   
-					trabajo.lineWidth = 4;
-					trabajo.fillStyle = "orange";		
-					trabajo.strokeStyle = "orange";		
-					trabajo.font = '12px "Tahoma"';		
 				
-					draw_points(trabajo);
+					contexto.drawImage(img, 0, 0, height, width);
+				   
+					contexto.lineWidth = 4;
+					contexto.fillStyle = "orange";		
+					contexto.strokeStyle = "orange";		
+					contexto.font = '12px "Tahoma"';		
+				
+					draw_points(contexto);
 				}
 				
 				first_click=true;
@@ -769,14 +769,6 @@ function draw_canvas(container,src_image, src_gpx)
 				var lat=$(this).attr("lat");
 				var lon=$(this).attr("lon");
 				
-				/*var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
-
-				lat_canvas=lat_canvas.toFixed(3);
-				lon_canvas=lon_canvas.toFixed(3);
-				
-				array_coord_image[k]=lat_canvas+","+lon_canvas;*/
-				
 				array_coord_image_ppal[k]=lat+","+lon;
 				k++;
 				
@@ -789,8 +781,8 @@ function draw_canvas(container,src_image, src_gpx)
 				lat=latlon_split[0];
 				lon=latlon_split[1];
 			
-				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
 
 				lat_canvas=lat_canvas.toFixed(3);
 				lon_canvas=lon_canvas.toFixed(3);
@@ -804,20 +796,23 @@ function draw_canvas(container,src_image, src_gpx)
 			img.src = src_image;
 			img.onload = function(){
 			
-				var trabajo = canvas.getContext("2d");
+				var contexto = canvas.getContext("2d");
 				
-				//trabajo.translate(0,0);		
-				//trabajo.rotate(0.5 * Math.PI);				
-				//trabajo.translate(width,height);		
+				contexto.lineWidth = 3;
+				contexto.fillStyle = "orange";		
+				contexto.strokeStyle = "orange";		
+				contexto.font = '12px "Tahoma"';	
 				
-				trabajo.drawImage(img, 0, 0, width, height);
+				contexto.save();
+				// Translate 
+				contexto.translate(width, 0);
+				// Rotate it
+				contexto.rotate(90*Math.PI/180);
+				//contexto.restore();		
 				
-				trabajo.lineWidth = 3;
-				trabajo.fillStyle = "orange";		
-				trabajo.strokeStyle = "orange";		
-				trabajo.font = '12px "Tahoma"';		
+				contexto.drawImage(img, 0, 0, height, width);
 
-				draw_points(trabajo);
+				draw_points(contexto);
 			
 			}
 			
@@ -829,23 +824,24 @@ function draw_canvas(container,src_image, src_gpx)
 
 }
 
-function draw_points(trabajo)
+function draw_points(contexto)
 {
+				
 	for(i=0;i<array_coord_image.length;i++)
 	{
 		var array_points=array_coord_image[i].split(",");
 		var lat_canvas=array_points[0];
 		var lon_canvas=array_points[1];
 
-		//trabajo.lineTo(lon_canvas,lat_canvas);								
-		//trabajo.stroke();
+		//contexto.lineTo(lon_canvas,lat_canvas);								
+		//contexto.stroke();
 		
-		trabajo.beginPath();
-		trabajo.arc(lon_canvas,lat_canvas, 3, 0, 2 * Math.PI, true);
-		trabajo.fill();
-		trabajo.closePath();
+		contexto.beginPath();
+		contexto.arc(lon_canvas,lat_canvas, 3, 0, 2 * Math.PI, true);
+		contexto.fill();
+		contexto.closePath();
 			
-		//trabajo.fillText(i,lon_canvas,lat_canvas);
+		//contexto.fillText(i,lon_canvas,lat_canvas);
 	}
 	
 	show_geoloc();
@@ -880,10 +876,10 @@ function draw_geoloc(position)
 	var lon=-4.465;
 
 	var canvas = document.getElementById("canvas");						
-	var trabajo = canvas.getContext("2d");
-	trabajo.fillStyle = "#00405D";		
-	trabajo.strokeStyle = "#00405D";		
-	trabajo.font = '12px "Tahoma"';		
+	var contexto = canvas.getContext("2d");
+	contexto.fillStyle = "#00405D";		
+	contexto.strokeStyle = "#00405D";		
+	contexto.font = '12px "Tahoma"';		
 
 	var width=canvas.width;
 	var height=canvas.height;
@@ -891,16 +887,16 @@ function draw_geoloc(position)
 	var altura=(coord_image[0][1]-coord_image[1][1]);
 	var anchura=(coord_image[0][2]-coord_image[2][2]);
 							
-	var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-	var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
+	var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+	var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
 								
 	lat_canvas=Math.round(lat_canvas * 100)/100;
 	lon_canvas=Math.round(lon_canvas * 100)/100;
 	
-	trabajo.beginPath();
-	trabajo.arc(lon_canvas,lat_canvas, 7, 0, 2 * Math.PI, true);
-	trabajo.fill();
-	trabajo.closePath();
+	contexto.beginPath();
+	contexto.arc(lon_canvas,lat_canvas, 7, 0, 2 * Math.PI, true);
+	contexto.fill();
+	contexto.closePath();
 	
 	//$(".section_02").prepend("<p>Tu posici&oacute;n: "+lat+", "+lon+"</p>");	
 		
@@ -950,6 +946,7 @@ function onFileSystemSuccess(fileSystem)
 		  console.log ('requestQuota: ', arguments);
 		}, onError);
 
+		
 	fs=fileSystem;
 	
     fileSystem.root.getDirectory("com.ovnyline.cebreros",{create:true},gotDir,onError);
@@ -958,7 +955,7 @@ function onFileSystemSuccess(fileSystem)
 }
 function gotDir(d) {
 
-	alert("Got dir "+d);
+	console.log(d);
 	DATADIR = d;
 	var reader = DATADIR.createReader();
 	$("body").prepend("<div id='descarga'></div>");
