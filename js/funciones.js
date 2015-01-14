@@ -26,10 +26,10 @@ function onBodyLoad(type, container)
 		var nueva_fecha=now;  
 		setLocalStorage("fecha", nueva_fecha);
 		//Primera ejecución, descargamos contenidos si está online
-		//window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	window.webkitRequestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+	window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 
 }
 function onDeviceReady()
