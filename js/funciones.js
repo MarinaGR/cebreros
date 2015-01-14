@@ -20,6 +20,16 @@ function onBodyLoad(type, container)
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
 	document.getElementById("boton_atras").addEventListener("click", onBackKeyDown, false);	
+}
+function onDeviceReady()
+{
+	document.addEventListener("offline", onOffline, false);
+	document.addEventListener("online", onOnline, false);
+
+	cordova.plugins.backgroundMode.enable(); 	
+	
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 	var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
@@ -31,17 +41,6 @@ function onBodyLoad(type, container)
 	}
 	
 	window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
-
-}
-function onDeviceReady()
-{
-	document.addEventListener("offline", onOffline, false);
-	document.addEventListener("online", onOnline, false);
-
-	cordova.plugins.backgroundMode.enable(); 	
-	
-	document.addEventListener("backbutton", onBackKeyDown, false);
-	document.addEventListener("menubutton", onMenuKeyDown, false);
 }    
 function onBackKeyDown()
 {
@@ -309,17 +308,15 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 				
 						switch(id)
 						{
-							case "/1": //src_image='./resources/images/mapas/mapa_prueba.jpg';  
-									  //coord_image=[["top-left", "40.474924", "-4.476232"],["bottom-left", "40.438524", "-4.476232"], ["top-right","40.478924", "-4.376584"]];
-									  
-									  src_image='./resources/images/mapas/mapa_01.jpg';  
+							case "/1":src_image='./resources/images/mapas/mapa_01.jpg';  
 									  coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
-									  
 									  break;
 									  
-							case "/2": src_image='./resources/images/mapas/mapa_prueba.jpg';  
+							case "/2": src_image='./resources/images/mapas/mapa_02.jpg';  
+									   coord_image_ppal=[["top-left", "40.6769", "-4.7371"],["bottom-left", "40.6379", "-4.7371"], ["top-right","40.6769", "-4.6257"]];
 									   break;
-							default: src_image='./resources/images/mapas/mapa_prueba.jpg';  
+									   
+							default: src_image='';  
 									 break;
 						}
 						var d=data.Result;
@@ -917,8 +914,8 @@ function show_geoloc()
 		id = navigator.geolocation.watchPosition(draw_geoloc, error_geoloc, options);
 	}
 	else
-	{
-		$(".section_02").prepend("Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.");			
+	{	
+		$("#datos_geo_position").prepend("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
 	}
 }
 
@@ -961,7 +958,7 @@ function draw_geoloc(position)
 }
 function error_geoloc(error)
 {
-	$(".section_02").prepend("La geolocalizaci&oacute;n ha fallado.");	
+	$("#datos_geo_position").prepend("<p>La geolocalizaci&oacute;n ha fallado.</p>");	
 }
 
 
