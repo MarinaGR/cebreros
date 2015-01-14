@@ -360,15 +360,17 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						
 						$("#datos_geo").append("<div id='datos_geo_position'></div>");
 						
+						$("#datos_geo").append("<span class='vermas' onclick='show_geoloc()'>ACTUALIZAR</span>");
+						
 						$("#datos_geo").append("<div class='data_route'>"+
 												  "<p class='title_01'>DATOS DE LA RUTA</p>"+
-												  "<p><b>Altitud m&aacute;xima:</b> "+d.MaxAltitude+"</p>"+
-												  "<p><b>Altitud m&iacute;nima:</b> "+d.MinAltitude+"</p>"+
-												  "<p><b>Dificultad:</b>  "+d.Difficulty+"</p>"+
-												  "<p><b>Distancia:</b>  "+d.Distance+"</p>"+
-												  "<p><b>Ruta circular monumentos:</b> "+d.Monuments+"</p>"+
-												  "<p><b>Panor&aacute;micas:</b>  "+d.Panoramics+"</p>"+
-												  "<p><b>Realizable en bici:</b>  "+d.CycleReady+"</p></div>");
+												  "<b>Altitud m&aacute;xima:</b> "+d.MaxAltitude+"<br>"+
+												  "<b>Altitud m&iacute;nima:</b> "+d.MinAltitude+"<br>"+
+												  "<b>Dificultad:</b>  "+d.Difficulty+"<br>"+
+												  "<b>Distancia:</b>  "+d.Distance+"<br>"+
+												  "<b>Ruta circular monumentos:</b> "+d.Monuments+"<br>"+
+												  "<b>Panor&aacute;micas:</b>  "+d.Panoramics+"<br>"+
+												  "<b>Realizable en bici:</b>  "+d.CycleReady+"<br><br></div>");
 						
 						break;
 					}
@@ -941,7 +943,7 @@ function show_geoloc()
 		
 		options = {
 		  enableHighAccuracy: true,
-		  timeout: 1000,
+		  timeout: 15000,
 		  maximumAge: 30000
 		};
 
@@ -949,7 +951,7 @@ function show_geoloc()
 	}
 	else
 	{	
-		$("#datos_geo_position").prepend("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
+		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
 	}
 }
 
@@ -992,7 +994,15 @@ function draw_geoloc(position)
 }
 function error_geoloc(error)
 {
-	$("#datos_geo_position").prepend("<p>La geolocalizaci&oacute;n ha fallado.</p>");	
+	if(error.code == 1) {
+		$("#datos_geo_position").html("<p>La geolocalizaci&oacute;n ha fallado. Acceso denegado.</p>");	
+	} 
+	else if( error.code == 2) {
+		$("#datos_geo_position").html("<p>La geolocalizaci&oacute;n ha fallado. Posición no disponible.</p>");	
+	}
+	else {
+		$("#datos_geo_position").html("<p>La geolocalizaci&oacute;n ha fallado.</p>");	
+	}
 }
 
 
