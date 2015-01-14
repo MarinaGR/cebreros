@@ -362,16 +362,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						
 						$("#datos_geo").append("<span class='vermas' onclick='show_geoloc()'>ACTUALIZAR</span>");
 						
-						$("#datos_geo").append("<div class='data_route'>"+
-												  "<p class='title_01'>DATOS DE LA RUTA</p>"+
-												  "<b>Altitud m&aacute;xima:</b> "+d.MaxAltitude+"<br>"+
-												  "<b>Altitud m&iacute;nima:</b> "+d.MinAltitude+"<br>"+
-												  "<b>Dificultad:</b>  "+d.Difficulty+"<br>"+
-												  "<b>Distancia:</b>  "+d.Distance+"<br>"+
-												  "<b>Ruta circular monumentos:</b> "+d.Monuments+"<br>"+
-												  "<b>Panor&aacute;micas:</b>  "+d.Panoramics+"<br>"+
-												  "<b>Realizable en bici:</b>  "+d.CycleReady+"<br><br></div>");
-						
 						break;
 					}
 					
@@ -678,9 +668,7 @@ function draw_canvas(container,src_image, src_gpx, id)
 		var cuadrantes=[[width/3],[height/2]];
 		
 		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0;" ></canvas>');
-		
-		/*transform:rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-webkit-transform: rotate(90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);*/
-		
+				
 		var canvas = document.getElementById("canvas");						
 		
 		canvas.addEventListener('click', function zoom(event)
@@ -986,8 +974,16 @@ function draw_geoloc(position)
 	contexto.fill();
 	contexto.closePath();
 	
-	$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p><p>Precisi&oacute;n: "+position.coords.accuracy+"<br>Velocidad: "+position.coords.speed+"<br>Altitud: "+position.coords.altitude+"<br></p>");
+	//$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p><p>Precisi&oacute;n: "+position.coords.accuracy+"<br>Velocidad: "+position.coords.speed+"<br>Altitud: "+position.coords.altitude+"<br></p>");
 	
+	$("#datos_geo_position").html("<div class='data_route'>"+
+									  "<p class='title_01'>GEOLOCALIZACI&Oacute;N</p>"+
+									  "<b>Tu posici&oacute;n:</b> "+lat+", "+lon+"<br>"+
+									  "<b>Precisi&oacute;n:</b> "+position.coords.accuracy+"<br>"+
+									  "<b>Velocidad:</b> "+position.coords.speed+"<br>"+
+									  "<b>Altitud:</b>  "+position.coords.altitude+"<br><br>"+
+								  "</div><br>");
+								  
 	if(lat>=coord_image[0][1] || lat<=coord_image[1][1] || lon<=coord_image[0][2] || lon>=coord_image[2][2])
 		$("#datos_geo_position").html("<p>Tu posici&oacute;n ("+lat+", "+lon+") est&aacute; fuera de este mapa</p>");	
 		
