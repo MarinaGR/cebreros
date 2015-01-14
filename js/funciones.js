@@ -921,11 +921,11 @@ function show_geoloc()
 
 function draw_geoloc(position)
 {
-	//var lat = position.coords.latitude;
-  	//var lon = position.coords.longitude;
+	var lat = position.coords.latitude;
+  	var lon = position.coords.longitude;
 	
-	var lat=40.455;
-	var lon=-4.465;
+	//var lat=40.455;
+	//var lon=-4.465;
 
 	var canvas = document.getElementById("canvas");						
 	var contexto = canvas.getContext("2d");
