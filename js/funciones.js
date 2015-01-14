@@ -357,8 +357,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
 					}*/
 					
-					cadena+="<p><br><br><a class='vermas' href='"+d.WikilocLink+"'>Ver ruta en Wikiloc</a></p>";	
-					
+					cadena+="<p><br><br><a class='vermas' href='#' href='window.open(\'"+d.WikilocLink+"\', \'_blank\', \'location=no\');'>Ver ruta en Wikiloc</a></p>";	
+										
 					cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 					
 					$("#"+container).append(cadena);
