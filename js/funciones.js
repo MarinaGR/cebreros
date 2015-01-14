@@ -133,7 +133,18 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						var imagen=d.Image; 
 
 						if(imagen!=null) 
-							cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
+						{						
+							if(imagen.indexOf("http")<0)
+							{
+								if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
+									cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
+								else
+									cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/images/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+							}
+							else
+								cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							
+						}
 							
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
@@ -164,7 +175,19 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
 					if(imagen!=null) 
-						cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
+					{						
+						if(imagen.indexOf("http")<0)
+						{
+							if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
+								cadena+="<img src='"+extern_url+imagen+"' alt='Imagen principal' />";
+							else
+								cadena+="<img src='"+extern_url+"public/images/"+imagen+"' alt='Imagen principal' />";
+						
+						}
+						else
+							cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
+						
+					}
 					
 					cadena+=d.Page;
 					
@@ -202,7 +225,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						if(data.Result.TotalLinks>0) 
 						{
 							for(i=0;i<data.Result.TotalLinks;i++)
-								cadena+="<br><a href='"+enlaces[i].Link+"' target='_blank' >"+enlaces[i].Description+"</a>";
+								cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+enlaces[i].Link+"\', \'_system\', \'location=yes\');'>"+enlaces[i].Description+"</a>";	
 							
 							cadena+="<br>";
 						}
@@ -210,7 +233,18 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						if(data.Result.TotalVideos>0) 
 						{
 							for(i=0;i<data.Result.TotalVideos;i++)
-								cadena+="<br>"+videos[i].Embed;
+							{
+								var src_video=$(videos[i].Embed).attr('src');
+								
+								if(src_video.substring(0, 2)=="//")
+								{
+									var new_src_video="http:"+src_video;
+									cadena+="<br>"+videos[i].Embed.replace(src_video, new_src_video);
+								}
+									
+								if(src_video.substring(0, 4)=="http")
+									cadena+="<br>"+videos[i].Embed;			
+							}
 							
 							cadena+="<br>";
 						}
@@ -373,7 +407,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
 					}*/
 					
-					cadena+="<p><br><br><a class='vermas' href='#' href='window.open(\'"+d.WikilocLink+"\', \'_blank\', \'location=no\');'>Ver ruta en Wikiloc</a></p>";	
+					cadena+="<p><br><br><a class='vermas' href='#' onclick='window.open(\'"+d.WikilocLink+"\', \'_system\', \'location=yes\');'>Ver ruta en Wikiloc</a></p>";	
 										
 					cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 					
