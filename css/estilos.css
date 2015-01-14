@@ -191,6 +191,14 @@ ul li b {
 	background-color: #00405D;
 	padding: 5px 20px;
 }
+#datos_geo
+{
+	transform-origin:left;
+	transform:translate(50%) rotate(90deg);
+	-webkit-transform-origin:left;
+	-webkit-transform:translate(50%) rotate(90deg);
+	padding-right: 10px;
+}
 .buttons_routes {
 	float: left;
 	width: 27%;

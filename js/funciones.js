@@ -323,13 +323,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 									 break;
 						}
 						var d=data.Result;
-						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
+						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX,id); 
 						
 						$("#"+container).css("height",height);
-						$("#datos_geo").css("transform-origin","left");
-						$("#datos_geo").css("transform","translate(50%) rotate(90deg)");
-						$("#datos_geo").css("-webkit-transform-origin","left");
-						$("#datos_geo").css("-webkit-transform","translate(50%) rotate(90deg)");
+						
 						$("#datos_geo").append("<div id='datos_geo_position'></div>");
 						
 						$("#datos_geo").append("<div class='data_route'>"+
@@ -634,7 +631,7 @@ function draw_route(container,src_image, src_gpx)
 
 }
 
-function draw_canvas(container,src_image, src_gpx) 
+function draw_canvas(container,src_image, src_gpx, id) 
 {	
 	//$("#"+container).append('<img src="'+src_image+'" width="100%" id="imagen_mapa" style="opacity:0" />');
 	
@@ -667,31 +664,67 @@ function draw_canvas(container,src_image, src_gpx)
 				src_image_new='';			
 			
 				//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
-				if(mousey<height/2) 
+				//Guardar en ficheros y recuperar de ahí las coordenadas!
+				
+				switch(id)
 				{
-					if(mousex<=width/2) {
-						console.log("cuadrante 3");
-						src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
-						coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
-					}
-					else if(mousex<=width) {
-						console.log("cuadrante 1");
-						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
-						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];						
-					} 
-				}
-				else if(mousey<height) 
-				{
-					if(mousex<=width/2) {
-						console.log("cuadrante 4");
-						src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
-						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];
-					}
-					else if(mousex<=width) {
-						console.log("cuadrante 2");
-						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
-					} 
+					case "/1": 
+								if(mousey<height/2) 
+								{
+									if(mousex<=width/2) {
+										console.log("cuadrante 3");
+										src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
+										coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
+									}
+									else if(mousex<=width) {
+										console.log("cuadrante 1");
+										src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
+										coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];						
+									} 
+								}
+								else if(mousey<height) 
+								{
+									if(mousex<=width/2) {
+										console.log("cuadrante 4");
+										src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
+										coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];
+									}
+									else if(mousex<=width) {
+										console.log("cuadrante 2");
+										src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
+										coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
+									} 
+								}
+								break;	
+					case "/2": 								
+					default:
+								if(mousey<height/2) 
+								{
+									if(mousex<=width/2) {
+										console.log("cuadrante 3");
+										src_image_new='./resources/images/mapas/mapa_02_3.jpg'; 
+										coord_image=[["top-left", "40.6573", "-4.7372"],["bottom-left", "40.6379", "-4.7372"], ["top-right","40.6573", "-4.6815"]];
+									}
+									else if(mousex<=width) {
+										console.log("cuadrante 1");
+										src_image_new='./resources/images/mapas/mapa_02_1.jpg'; 					
+										coord_image=[["top-left", "40.6769", "-4.7370"],["bottom-left", "40.6574", "-4.7370"], ["top-right","40.6769", "-4.6813"]];								
+									} 
+								}
+								else if(mousey<height) 
+								{
+									if(mousex<=width/2) {
+										console.log("cuadrante 4");
+										src_image_new='./resources/images/mapas/mapa_02_4.jpg'; 
+										coord_image=[["top-left", "40.6570", "-4.6813"],["bottom-left", "40.63756", "-4.6813"], ["top-right","40.6570", "-4.6256"]];
+									}
+									else if(mousex<=width) {
+										console.log("cuadrante 2");
+										src_image_new='./resources/images/mapas/mapa_02_2.jpg'; 
+										coord_image=[["top-left", "40.6769", "-4.6813"],["bottom-left", "40.6575", "-4.6813"], ["top-right","40.6769", "-4.6256"]];
+									} 
+								}
+								break;
 				}
 				
 				
