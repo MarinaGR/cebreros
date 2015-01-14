@@ -19,6 +19,7 @@ function onBodyLoad(type, container)
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
+	document.getElementById("boton_atras").addEventListener("click", onBackKeyDown, false);	
 	
 	var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
@@ -54,6 +55,10 @@ function onBackKeyDown()
 function onMenuKeyDown()
 {
 	window.location.href='index.html';
+}
+function onBackKeyDown()
+{
+	window.history.back();
 }
 function onOutKeyDown()
 {
@@ -319,6 +324,23 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						}
 						var d=data.Result;
 						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX); 
+						
+						$("#"+container).css("height",height);
+						$("#datos_geo").css("transform-origin","left");
+						$("#datos_geo").css("transform","translate(50%) rotate(90deg)");
+						$("#datos_geo").css("-webkit-transform-origin","left");
+						$("#datos_geo").css("-webkit-transform","translate(50%) rotate(90deg)");
+						$("#datos_geo").append("<div id='datos_geo_position'></div>");
+						
+						$("#datos_geo").append("<div class='data_route'>"+
+												  "<p class='title_01'>DATOS DE LA RUTA</p>"+
+												  "<p><b>Altitud m&aacute;xima:</b> "+d.MaxAltitude+"</p>"+
+												  "<p><b>Altitud m&iacute;nima:</b> "+d.MinAltitude+"</p>"+
+												  "<p><b>Dificultad:</b>  "+d.Difficulty+"</p>"+
+												  "<p><b>Distancia:</b>  "+d.Distance+"</p>"+
+												  "<p><b>Ruta circular monumentos:</b> "+d.Monuments+"</p>"+
+												  "<p><b>Panor&aacute;micas:</b>  "+d.Panoramics+"</p>"+
+												  "<p><b>Realizable en bici:</b>  "+d.CycleReady+"</p></div>");
 						
 						break;
 					}
@@ -898,7 +920,10 @@ function draw_geoloc(position)
 	contexto.fill();
 	contexto.closePath();
 	
-	//$(".section_02").prepend("<p>Tu posici&oacute;n: "+lat+", "+lon+"</p>");	
+	$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p>");	
+	
+	if(lat>=coord_image[0][1] || lat<=coord_image[1][1] || lon<=coord_image[0][2] || lon>=coord_image[2][2])
+		$("#datos_geo_position").html("<p>Tu posici&oacute;n ("+lat+", "+lon+") est&aacute; fuera de este mapa</p>");	
 		
 }
 function error_geoloc(error)
