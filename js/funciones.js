@@ -453,7 +453,7 @@ function ajax_recover_data_jsonp(type, container) {
 	  crossDomain: true, 
 	  success: 'successCallback',
 	  error:function(jqXHR, textStatus, errorThrown){
-			alert('Error de conexión. No se han podido recuperar los datos. Por favor inténtalo de nuevo.');	
+			alert('Error de conexi&oacute;n. No se han podido recuperar los datos. Por favor int&eacute;ntalo de nuevo.');	
 			console.log(jqXHR);
 			console.log(textStatus+" "+errorThrown);
 	  },
@@ -942,7 +942,7 @@ function show_geoloc()
 		//navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
 		
 		options = {
-		  enableHighAccuracy: true,
+		  enableHighAccuracy: false,
 		  timeout: 15000,
 		  maximumAge: 30000
 		};
@@ -986,7 +986,7 @@ function draw_geoloc(position)
 	contexto.fill();
 	contexto.closePath();
 	
-	$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p>");	
+	$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p><p>Precisi&oacute;n: "+position.coords.accuracy+"<br>Velocidad: "+position.coords.speed+"<br>Altitud: "+position.coords.altitude+"<br></p>");
 	
 	if(lat>=coord_image[0][1] || lat<=coord_image[1][1] || lon<=coord_image[0][2] || lon>=coord_image[2][2])
 		$("#datos_geo_position").html("<p>Tu posici&oacute;n ("+lat+", "+lon+") est&aacute; fuera de este mapa</p>");	
