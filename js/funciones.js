@@ -470,7 +470,7 @@ function draw_route(container,src_image, src_gpx)
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid #AAA";
 		
-		canvas.addEventListener('click', function zoom(event)
+		/*canvas.addEventListener('click', function zoom(event)
 		{
 		
 			var mousex = event.offsetX;
@@ -591,7 +591,7 @@ function draw_route(container,src_image, src_gpx)
 				first_click=true;
 			}
 		}
-		, false);
+		, false);*/
 
 		
 		$.get(src_gpx, function(xml) { 
