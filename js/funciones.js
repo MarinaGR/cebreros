@@ -12,6 +12,8 @@ var scale=2;
 var frame;
 var now=new Date(2014,0,1).getTime(); 
 
+var destination;
+
 var DATADIR;
 
 function onBodyLoad(type, container)
@@ -139,7 +141,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 								if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
 									cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
 								else
-									cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/images/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+									cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/thumbnails/"+imagen+") no-repeat center;background-size:cover;'></div>";							
 							}
 							else
 								cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
@@ -179,13 +181,13 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						if(imagen.indexOf("http")<0)
 						{
 							if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
-								cadena+="<img src='"+extern_url+imagen+"' alt='Imagen principal' />";
+								cadena+="<img src='"+extern_url+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
 							else
-								cadena+="<img src='"+extern_url+"public/images/"+imagen+"' alt='Imagen principal' />";
+								cadena+="<img src='"+extern_url+"public/thumbnails/"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
 						
 						}
 						else
-							cadena+="<img src='"+imagen+"' alt='Imagen principal' />";
+							cadena+="<img src='"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
 						
 					}
 					
@@ -201,7 +203,12 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 							var geo_lon=geolocation2[2];
 							var my_zoom=parseInt(geolocation2[3]);
 							
-							cadena+="<br><iframe width='100%' style='height:300px;border:none;'  src='http://maps.google.es/maps?q=loc:"+geo_lat+","+geo_lon+"&z="+my_zoom+"&output=embed' ></iframe>";
+							//cadena+="<br><iframe width='100%' style='height:300px;border:none;'  src='http://maps.google.es/maps?q=loc:"+geo_lat+","+geo_lon+"&z="+my_zoom+"&output=embed' ></iframe>";
+							
+							destination=geo_lat+","+geo_lon;
+							get_geo_route_map();
+							
+							cadena+="<br><iframe width='100%' style='height:400px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";			
 							
 						}
 						
@@ -209,7 +216,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						if(data.Result.TotalImages>0) 
 						{
 							for(i=0;i<data.Result.TotalImages;i++)
-								cadena+="<br><img src='"+(extern_url+"public/images/"+imagenes[i].Image)+"' alt='Imagen' />";
+								cadena+="<br><img src='"+(extern_url+"public/thumbnails/"+imagenes[i].Image)+"' style='display:block;margin:auto;' alt='Imagen' />";
 								
 							cadena+="<br>";
 						}
@@ -470,7 +477,7 @@ function draw_route(container,src_image, src_gpx)
 		var canvas = document.getElementById("canvas");						
 		canvas.style.border="1px solid #AAA";
 		
-		/*canvas.addEventListener('click', function zoom(event)
+		canvas.addEventListener('click', function zoom(event)
 		{
 		
 			var mousex = event.offsetX;
@@ -591,7 +598,7 @@ function draw_route(container,src_image, src_gpx)
 				first_click=true;
 			}
 		}
-		, false);*/
+		, false);
 
 		
 		$.get(src_gpx, function(xml) { 
@@ -930,7 +937,7 @@ function show_geoloc()
 		//navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
 		
 		options = {
-		  enableHighAccuracy: false,
+		  enableHighAccuracy: true,
 		  timeout: 15000,
 		  maximumAge: 30000
 		};
@@ -999,6 +1006,32 @@ function error_geoloc(error)
 	else {
 		$("#datos_geo_position").html("<p>La geolocalizaci&oacute;n ha fallado.</p>");	
 	}
+}
+
+function get_geo_route_map()
+{
+	if (navigator.geolocation)
+	{
+		options = {enableHighAccuracy:true, maximumAge:90000, timeout:50000};
+		navigator.geolocation.getCurrentPosition(return_user_geoloc,error_user_geoloc,options);
+	}
+	else
+	{	
+		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
+	}
+}
+function return_user_geoloc(position)
+{
+	var lat = position.coords.latitude;
+  	var lon = position.coords.longitude;
+	
+	var latlon_user=lat+","+lon;
+	$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
+
+}
+function error_user_geoloc(position)
+{
+	$("#datos_geo_position").html("<p>Error en la geolocalizaci&oacute;n</p>");
 }
 
 
