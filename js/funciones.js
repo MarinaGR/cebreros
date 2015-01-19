@@ -17,6 +17,9 @@ var destination;
 var fs;
 var DATADIR;
 
+var archivos={category:'1.json',page:'1.json',page:'2.json','':'routes.json',route:'1.json'};
+
+
 function onBodyLoad(type, container)
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -1119,27 +1122,22 @@ function downloadToDir(d) {
 
 	$("#descarga").append("Descargando archivos... ");
 	
-	//fs.getFile("routes.json",{create: true,exclusive:false},function gotFileEntry(fileEntry){
-	
-		//var path = fileEntry.fullPath.replace("routes.json","");
-       // fileEntry.remove();
 
-		$("#descarga").append("RUTA: "+api_url+"routes</br>");
-		
-		var ft = new FileTransfer();		
-		
-		var dlPath = fs.toURL()+file_path+"/routes.json"; 
-		
-		console.log("Descargando a " + dlPath);
-		
-		ft.download(api_url+"routes" , dlPath, function() {
-			console.log("Exito");
-			}, 
-			function(error){
-				console.log("File Transfer failed" + error.code);
-			});
-				
-	// },onError);
+	$("#descarga").append("RUTA: "+api_url+"routes</br>");
+	
+	var ft = new FileTransfer();		
+	
+	var dlPath = fs.toURL()+file_path+"/routes.json"; 
+	
+	console.log("Descargando a " + dlPath);
+	
+	ft.download(api_url+"routes" , dlPath, function() {
+		console.log("Exito");
+		}, 
+		function(error){
+			console.log("File Transfer failed" + error.code);
+		});
+
 		
 	$("#descarga").html("");
 }
