@@ -682,7 +682,7 @@ function draw_canvas(container,src_image, src_gpx, id)
 		
 		var cuadrantes=[[width/3],[height/2]];
 		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:relative;top:0;left:0;" ></canvas>');
+		$("#mapa_canvas").append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:relative;top:0;left:0;" ></canvas>');
 				
 		var canvas = document.getElementById("canvas");						
 		
@@ -801,7 +801,8 @@ function draw_canvas(container,src_image, src_gpx, id)
 				
 				first_click=false;
 			}
-			/*else
+			/*
+			else
 			{
 				coord_image=coord_image_ppal;
 				
@@ -842,6 +843,7 @@ function draw_canvas(container,src_image, src_gpx, id)
 				}
 				
 				first_click=true;
+				
 			}*/
 			
 		}
