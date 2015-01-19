@@ -1111,7 +1111,7 @@ function setFilePath() {
 
 function downloadToDir(d) {
 
-	console.log('created directory'+d.name);
+	console.log('created directory '+d.name);
 
 	DATADIR = d;  //file_path
 
@@ -1124,7 +1124,7 @@ function downloadToDir(d) {
 		//if (res.Sucess==1) 
 		{
 			$("#descarga").append("RUTA: "+api_url+"routes</br>");
-
+			
 			var ft = new FileTransfer();
 			var dlPath = DATADIR.fullPath + "/routes.json";
 			console.log("Descargando a " + dlPath);
