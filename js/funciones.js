@@ -1088,48 +1088,52 @@ function onFileSystemSuccess(fileSystem)
 	
 	setFilePath();		
 	
-	console.log(fs+" "+file_path);
+	console.log(fs)
+	console.log(file_path);
 	
     fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
     
 }
 
 function setFilePath() {
-    if(detectAndroid()) {   
-        file_path = "com.ovnyline.cebreros/resources";
-        //Android
-    } else {
-        file_path = "resources";
-        //IOS
-    }
+    var ua = navigator.userAgent.toLowerCase();
+	var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+	if(isAndroid) {
+		file_path = "com.ovnyline.cebreros/resources";
+		//Android
+	}
+	else {
+		file_path = "resources";
+		//IOS
+	}
+
 }
 
 function downloadToDir(d) {
 
 	console.log('created directory'+d.name);
 
-	DATADIR = d;
-	//var reader = DATADIR.createReader();
+	DATADIR = d;  //file_path
+
 	$("body").prepend("<div id='descarga'></div>");
-	//reader.readEntries(function(d){
 
-		$("#descarga").append("Descargando archivos... ");
-		$.get(api_url+"category/1", {}, function(res) {
-		
-			if (res.Sucess==1) {
-				$("#descarga").append("RUTA: "+api_url+"routes</br>");
+	$("#descarga").append("Descargando archivos... ");
+	
+	//$.get(api_url+"category/1", {}, function(res) {
+	
+		//if (res.Sucess==1) 
+		{
+			$("#descarga").append("RUTA: "+api_url+"routes</br>");
 
-				var ft = new FileTransfer();
-				var dlPath = DATADIR.fullPath + "/routes.json";
-				console.log("Descargando a " + dlPath);
-				ft.download(api_url+"routes" , dlPath, function() {
-					alert("Exito");
-				}, onError);
-			}
+			var ft = new FileTransfer();
+			var dlPath = DATADIR.fullPath + "/routes.json";
+			console.log("Descargando a " + dlPath);
+			ft.download(api_url+"routes" , dlPath, function() {
+				alert("Exito");
+			}, onError);
+		}
 
-		}, "json");
-		
-	//},onError);
+	//}, "json");
 
 	$("#descarga").html("");
 }
