@@ -43,9 +43,7 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	setTimeout(function(){
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-	},500);
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 	 
 }    
 function onBackKeyDown()
@@ -1069,14 +1067,14 @@ function get_var_url(variable){
 
 
 
-function onFileSystemError() 
+function onFileSystemError(error) 
 {
-	alert("Error File System");
+	console.log("Error File System");
 }
 function onFileSystemSuccess(fileSystem) 
 {
 
-	alert("File System Sucess");
+	console.log("File System Sucess");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
@@ -1086,26 +1084,30 @@ function onFileSystemSuccess(fileSystem)
 		}, onError);*/
 
 		
-	var fs=fileSystem;
+	var fs=fileSystem.root;
 	
-    fileSystem.root.getDirectory("com.ovnyline.cebreros/resources",{create:true, exclusive:false},downloadToDir,onError);
+	setFilePath();		
+	
+	console.log(fs+" "+file_path);
+	
+    fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
     
-  //  fs.root.getDirectory("com.ovnyline.cebreros/",{create:true},null,onError);
 }
 
 function setFilePath() {
     if(detectAndroid()) {   
-        file_path = "file:///android_asset/www/res/db/";
+        file_path = "com.ovnyline.cebreros/resources";
         //Android
     } else {
-        file_path = "res//db//";
+        file_path = "resources";
         //IOS
     }
 }
 
 function downloadToDir(d) {
 
-	console.log(d);
+	console.log('created directory'+d.name);
+
 	DATADIR = d;
 	//var reader = DATADIR.createReader();
 	$("body").prepend("<div id='descarga'></div>");
@@ -1156,7 +1158,7 @@ function fail_getFile(error) {
 }
 function onError(e){
 	alert("ERROR");
-	alert(JSON.stringify(e));
+	console.log(JSON.stringify(e));
 }
 
 
