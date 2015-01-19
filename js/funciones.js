@@ -29,7 +29,7 @@ function onDeviceReady()
 	document.addEventListener("offline", onOffline, false);
 	document.addEventListener("online", onOnline, false);
 
-	cordova.plugins.backgroundMode.enable(); 	
+	//cordova.plugins.backgroundMode.enable(); 	
 	
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
@@ -1113,30 +1113,34 @@ function downloadToDir(d) {
 
 	console.log('created directory '+d.name);
 
-	DATADIR = d;  //file_path
+	DATADIR = d;  
 
 	$("body").prepend("<div id='descarga'></div>");
 
 	$("#descarga").append("Descargando archivos... ");
 	
-	//$.get(api_url+"category/1", {}, function(res) {
+	//fs.getFile("routes.json",{create: true,exclusive:false},function gotFileEntry(fileEntry){
 	
-		//if (res.Sucess==1) 
-		{
-			$("#descarga").append("RUTA: "+api_url+"routes</br>");
-			
-			var ft = new FileTransfer();
+		//var path = fileEntry.fullPath.replace("routes.json","");
+       // fileEntry.remove();
 
-			var dlPath = fs.root.fullPath+"/routes.json"; //DATADIR.fullPath + "/routes.json";
-			
-			console.log("Descargando a " + dlPath);
-			ft.download(api_url+"routes" , dlPath, function() {
-				alert("Exito");
-			}, onError);
-		}
-
-	//}, "json");
-
+		$("#descarga").append("RUTA: "+api_url+"routes</br>");
+		
+		var ft = new FileTransfer();		
+		
+		var dlPath = fs.toURL()+file_path+"/routes.json"; 
+		
+		console.log("Descargando a " + dlPath);
+		
+		ft.download(api_url+"routes" , dlPath, function() {
+			console.log("Exito");
+			}, 
+			function(error){
+				console.log("File Transfer failed" + error.code);
+			});
+				
+	// },onError);
+		
 	$("#descarga").html("");
 }
 function gotFS(fileSystem) 
@@ -1163,7 +1167,7 @@ function fail_getFile(error) {
     alert("Ocurrió un error recuperando el fichero: " + error.message);
 }
 function onError(e){
-	alert("ERROR "+e.message);
+	alert("ERROR "+e.code+" - "+e.source+" - "+e.target);
 }
 
 
