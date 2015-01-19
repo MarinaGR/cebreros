@@ -14,7 +14,7 @@ var frame;
 var now=new Date(2014,0,1).getTime(); 
 
 var destination;
-
+var fs;
 var DATADIR;
 
 function onBodyLoad(type, container)
@@ -1084,7 +1084,7 @@ function onFileSystemSuccess(fileSystem)
 		}, onError);*/
 
 		
-	var fs=fileSystem.root;
+	fs=fileSystem.root;
 	
 	setFilePath();		
 	
@@ -1097,13 +1097,13 @@ function onFileSystemSuccess(fileSystem)
 
 function setFilePath() {
     var ua = navigator.userAgent.toLowerCase();
-	var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+	var isAndroid = ua.indexOf("android") > -1; 
 	if(isAndroid) {
-		file_path = "com.ovnyline.cebreros/resources";
+		file_path = "cebreros_resources";
 		//Android
 	}
 	else {
-		file_path = "resources";
+		file_path = "cebreros_resources";
 		//IOS
 	}
 
@@ -1126,7 +1126,9 @@ function downloadToDir(d) {
 			$("#descarga").append("RUTA: "+api_url+"routes</br>");
 			
 			var ft = new FileTransfer();
-			var dlPath = DATADIR.fullPath + "/routes.json";
+
+			var dlPath = fs.root.fullPath+"/routes.json"; //DATADIR.fullPath + "/routes.json";
+			
 			console.log("Descargando a " + dlPath);
 			ft.download(api_url+"routes" , dlPath, function() {
 				alert("Exito");
