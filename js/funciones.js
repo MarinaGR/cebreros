@@ -1,6 +1,7 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 var local_url='./resources/json/';
+var file_path;
 
 var coord_image_ppal=new Array();
 var coord_image=new Array();
@@ -42,7 +43,10 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+	setTimeout(function(){
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+	},500);
+	 
 }    
 function onBackKeyDown()
 {
@@ -367,7 +371,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 						
 						$("#datos_geo").append("<div id='datos_geo_position'></div>");
 						
-						$("#datos_geo").append("<span class='vermas' onclick='show_geoloc()'>ACTUALIZAR</span>");
+						$("#datos_geo").append("<div class='vermas' onclick='show_geoloc()'>ACTUALIZAR</div>");
 						
 						break;
 					}
@@ -663,7 +667,8 @@ function draw_route(container,src_image, src_gpx)
 
 function draw_canvas(container,src_image, src_gpx, id) 
 {	
-	//$("#"+container).append('<img src="'+src_image+'" width="100%" id="imagen_mapa" style="opacity:0" />');
+	$("#"+container).append('<div id="mapa_canvas" style="overflow:hidden; width=100%; opacity:1"></div>');
+	//$("#mapa_canvas").append('<img src="'+src_image+'" width="100%" id="imagen_mapa" />');	
 	
 	//Tendría que ser proporcional al tamaño de la imagen que vamos a cargar
 			
@@ -672,9 +677,12 @@ function draw_canvas(container,src_image, src_gpx, id)
 		width=$(window).width(); 
 		height=$(window).height();
 		
+		$("#mapa_canvas").css("width",width);
+		$("#mapa_canvas").css("height",height);
+		
 		var cuadrantes=[[width/3],[height/2]];
 		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0;" ></canvas>');
+		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:relative;top:0;left:0;" ></canvas>');
 				
 		var canvas = document.getElementById("canvas");						
 		
@@ -685,16 +693,16 @@ function draw_canvas(container,src_image, src_gpx, id)
 			var mousey = event.offsetY;
 
 			var contexto = canvas.getContext("2d");
-
+			$("#canvas").draggable();
 				
 			if(first_click)
 			{			
-				src_image_new='';			
+				src_image_new=src_image;//'';			
 			
 				//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
 				//Guardar en ficheros y recuperar de ahí las coordenadas!
 				
-				switch(id)
+				/*switch(id)
 				{
 					case "/1": 
 								if(mousey<height/2) 
@@ -753,7 +761,7 @@ function draw_canvas(container,src_image, src_gpx, id)
 									} 
 								}
 								break;
-				}
+				}*/
 				
 				
 				var altura=(coord_image[0][1]-coord_image[1][1]);
@@ -793,7 +801,7 @@ function draw_canvas(container,src_image, src_gpx, id)
 				
 				first_click=false;
 			}
-			else
+			/*else
 			{
 				coord_image=coord_image_ppal;
 				
@@ -834,7 +842,8 @@ function draw_canvas(container,src_image, src_gpx, id)
 				}
 				
 				first_click=true;
-			}
+			}*/
+			
 		}
 		, false);
 
@@ -960,8 +969,8 @@ function draw_geoloc(position)
 
 	var canvas = document.getElementById("canvas");						
 	var contexto = canvas.getContext("2d");
-	contexto.fillStyle = "#00405D";		
-	contexto.strokeStyle = "#00405D";		
+	contexto.fillStyle = "#BE0000";		
+	contexto.strokeStyle = "#BE0000";		
 	contexto.font = '12px "Tahoma"';		
 
 	var width=canvas.width;
@@ -1070,27 +1079,38 @@ function onFileSystemSuccess(fileSystem)
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
 
-	navigator.webkitPersistentStorage.requestQuota (1024*1024*1024, function() {
+	/*navigator.webkitPersistentStorage.requestQuota (1024*1024*1024, function() {
 		  console.log ('requestQuota: ', arguments);
-		}, onError);
+		}, onError);*/
 
 		
-	fs=fileSystem;
+	var fs=fileSystem;
 	
-    fileSystem.root.getDirectory("com.ovnyline.cebreros",{create:true},gotDir,onError);
+    fileSystem.root.getDirectory("com.ovnyline.cebreros/resources",{create:true, exclusive:false},downloadToDir,onError);
     
   //  fs.root.getDirectory("com.ovnyline.cebreros/",{create:true},null,onError);
 }
-function gotDir(d) {
+
+function setFilePath() {
+    if(detectAndroid()) {   
+        file_path = "file:///android_asset/www/res/db/";
+        //Android
+    } else {
+        file_path = "res//db//";
+        //IOS
+    }
+}
+
+function downloadToDir(d) {
 
 	console.log(d);
 	DATADIR = d;
-	var reader = DATADIR.createReader();
+	//var reader = DATADIR.createReader();
 	$("body").prepend("<div id='descarga'></div>");
-	reader.readEntries(function(d){
-		
+	//reader.readEntries(function(d){
+
 		$("#descarga").append("Descargando archivos... ");
-		$.get(local_url+"routes.json", {}, function(res) {
+		$.get(api_url+"category/1", {}, function(res) {
 		
 			if (res.Sucess==1) {
 				$("#descarga").append("RUTA: "+api_url+"routes</br>");
@@ -1105,8 +1125,8 @@ function gotDir(d) {
 
 		}, "json");
 		
-	},onError);
-	
+	//},onError);
+
 	$("#descarga").html("");
 }
 function gotFS(fileSystem) 
@@ -1115,7 +1135,8 @@ function gotFS(fileSystem)
     //fileSystem.root.getFile(fichero, {create: false}, success_getFile, fail_getFile);
    
     var reader = fileSystem.root.createReader();
-    reader.readEntries(gotList, fail_getFile);   
+    reader.readEntries(gotList, fail_getFile);  
+
 }
 function gotList(entries) {
     var i;
