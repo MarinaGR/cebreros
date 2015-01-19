@@ -1161,8 +1161,7 @@ function fail_getFile(error) {
     alert("Ocurrió un error recuperando el fichero: " + error.message);
 }
 function onError(e){
-	alert("ERROR");
-	console.log(JSON.stringify(e));
+	alert("ERROR "+e.message);
 }
 
 
