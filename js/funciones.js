@@ -1167,7 +1167,7 @@ function onFileSystemError(error)
 function onFileSystemSuccess(fileSystem) 
 {
 
-	console.log("File System Sucess");
+	alert("File System OK");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
