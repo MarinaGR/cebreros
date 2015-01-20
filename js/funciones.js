@@ -12,6 +12,7 @@ var first_click=true;
 var scale=2;
 var frame;
 var now=new Date(2014,0,1).getTime(); 
+var first_time=false;
 
 var destination;
 var fs;
@@ -46,7 +47,8 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+	if(!first_time) 
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 	 
 }    
 function onBackKeyDown()
@@ -793,8 +795,8 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 						lat=latlon_split[0];
 						lon=latlon_split[1];
 					
-						var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
-						var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
+						var lat_canvas=parseFloat(((coord_image[0][1]-lat)*img.height)/altura);
+						var lon_canvas=parseFloat(((coord_image[0][2]-lon)*img.width)/anchura);
 
 						lat_canvas=lat_canvas.toFixed(3);
 						lon_canvas=lon_canvas.toFixed(3);
@@ -999,7 +1001,7 @@ function onFileSystemError(error)
 function onFileSystemSuccess(fileSystem) 
 {
 
-	console.log("File System Sucess");
+	alert("File System OK");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
@@ -1015,6 +1017,8 @@ function onFileSystemSuccess(fileSystem)
 	
 	console.log(fs)
 	console.log(file_path);
+	
+	first_time=true;
 	
     fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
     
