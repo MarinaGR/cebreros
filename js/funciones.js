@@ -668,7 +668,69 @@ function ajax_recover_data_jsonp(type, container) {
 			
 	});
 
-}*/
+}
+*/
+
+var canvasOffset;
+var offsetX;
+var offsetY;
+
+var ctx;
+
+var startX;
+var startY;
+var isDown = false;
+
+var imageX = 0;
+var imageY = 0;
+var img_global;
+var draggingImage = false;
+var startX;
+var startY;
+
+
+function handleMouseDown(e) {
+    startX = parseInt(e.clientX - offsetX);
+    startY = parseInt(e.clientY - offsetY);
+
+	draggingImage = true;
+}
+
+function handleMouseUp(e) {
+    draggingImage = false;
+    //Pintar la ruta y la geolocalización teniendo en cuenta la nueva posición 'x' e 'y' de la imagen
+	draw_points2(ctx);
+}
+
+function handleMouseOut(e) {
+    handleMouseUp(e);
+}
+
+function handleMouseMove(e) {
+  
+	if(draggingImage) {
+
+        imageClick = false;
+
+        mouseX = parseInt(e.clientX - offsetX);
+        mouseY = parseInt(e.clientY - offsetY);
+
+        // move the image by the amount of the latest drag
+        var dx = mouseX - startX;
+        var dy = mouseY - startY;
+        imageX += dx;
+        imageY += dy;
+        // reset the startXY for next time
+        startX = mouseX;
+        startY = mouseY;
+
+        // redraw the image 	
+		ctx.clearRect(0, 0, canvas.height, canvas.width);
+		ctx.drawImage(img_global, 0, 0, img_global.width, img_global.height, imageY, imageX, img_global.width, img_global.height);
+
+    }
+
+}
 
 function draw_canvas(container,src_image, src_gpx, id, canvas_number) 
 {	
@@ -758,6 +820,9 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 			var img = new Image();
 			img.src = src_image;
 			img.onload = function(){
+			
+				img_global=img;
+				
 				$("#mapa_canvas").css("width",width);
 				$("#mapa_canvas").css("height",height);
 				
@@ -766,7 +831,25 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 				$("#canvas").width(img.height);
 				$("#canvas").height(img.width);			
 				
-				$("#canvas").draggable();
+				//$("#canvas").draggable();
+				
+				canvasOffset = $("#canvas").offset();
+				offsetX = canvasOffset.left;
+				offsetY = canvasOffset.top;
+				
+				
+				$("#canvas").mousedown(function (e) {
+					handleMouseDown(e);
+				});
+				$("#canvas").mousemove(function (e) {
+					handleMouseMove(e);
+				});
+				$("#canvas").mouseup(function (e) {
+					handleMouseUp(e);
+				});
+				$("#canvas").mouseout(function (e) {
+					handleMouseOut(e);
+				});
 				
 				var canvas = document.getElementById("canvas");			
 				
@@ -807,6 +890,7 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 
 					{
 						var contexto = canvas.getContext("2d");
+						ctx=contexto;
 						
 						contexto.lineWidth = 3;
 						contexto.fillStyle = "orange";		
@@ -824,7 +908,6 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 
 						draw_points(contexto);
 					}
-					
 								
 				}).fail(function(){
 					$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
@@ -832,9 +915,7 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 			}
 			
 		}
-		
 }
-
 
 function draw_points(contexto)
 {
@@ -859,7 +940,54 @@ function draw_points(contexto)
 	show_geoloc();
 }
 
-function show_geoloc()
+function draw_points2(contexto)
+{
+
+	var altura=(coord_image[0][1]-coord_image[1][1]);
+	var anchura=(coord_image[0][2]-coord_image[2][2]);
+					
+	k=0;
+	array_coord_image_ppal.forEach(function(latlon) {
+	
+		var latlon_split=latlon.split(",");
+		lat=latlon_split[0];
+		lon=latlon_split[1];
+	
+		var lat_canvas=parseFloat(((coord_image[0][1]-lat)*img_global.height)/altura)+imageX;
+		var lon_canvas=parseFloat(((coord_image[0][2]-lon)*img_global.width)/anchura)+imageY;
+
+		lat_canvas=lat_canvas.toFixed(3);
+		lon_canvas=lon_canvas.toFixed(3);
+		
+		array_coord_image[k]=lat_canvas+","+lon_canvas;
+		k++;
+	});
+	
+	contexto.fillStyle = "orange";		
+	contexto.strokeStyle = "orange";		
+				
+	for(i=0;i<array_coord_image.length;i++)
+	{
+		var array_points=array_coord_image[i].split(",");
+		var lat_canvas=array_points[0];
+		var lon_canvas=array_points[1];
+
+		//contexto.lineTo(lon_canvas,lat_canvas);								
+		//contexto.stroke();
+		
+		contexto.beginPath();
+		contexto.arc(lon_canvas,lat_canvas, 3, 0, 2 * Math.PI, true);
+		contexto.fill();
+		contexto.closePath();
+			
+		//contexto.fillText(i,lon_canvas,lat_canvas);
+	}
+	
+	show_geoloc(true);
+}
+
+
+function show_geoloc(redraw)
 {
 	if (navigator.geolocation)
 	{
@@ -872,7 +1000,11 @@ function show_geoloc()
 		};
 		
 		$("#cargando").show('fade', function() {
-			navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,options);
+			if(redraw)
+				navigator.geolocation.getCurrentPosition(draw_geoloc2,error_geoloc,options);
+			else
+				navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,options);
+			
 		});
 	}
 	else
@@ -901,7 +1033,7 @@ function draw_geoloc(position)
 							
 	var altura=(coord_image[0][1]-coord_image[1][1]);
 	var anchura=(coord_image[0][2]-coord_image[2][2]);
-							
+	
 	var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
 	var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
 								
@@ -929,6 +1061,40 @@ function draw_geoloc(position)
 								  
 	if(lat>=coord_image[0][1] || lat<=coord_image[1][1] || lon<=coord_image[0][2] || lon>=coord_image[2][2])
 		$("#datos_geo_position").html("<p>Tu posici&oacute;n ("+lat+", "+lon+") est&aacute; fuera de este mapa</p>");	
+		
+}
+function draw_geoloc2(position)
+{
+	var lat = position.coords.latitude;
+  	var lon = position.coords.longitude;
+	
+	//var lat=40.455;
+	//var lon=-4.465;
+
+	var canvas = document.getElementById("canvas");						
+	var contexto = canvas.getContext("2d");
+	contexto.fillStyle = "#BE0000";		
+	contexto.strokeStyle = "#BE0000";		
+	contexto.font = '12px "Tahoma"';		
+
+	var width=canvas.width;
+	var height=canvas.height;
+							
+	var altura=(coord_image[0][1]-coord_image[1][1]);
+	var anchura=(coord_image[0][2]-coord_image[2][2]);
+							
+	var lat_canvas=parseFloat(((coord_image[0][1]-lat)*img_global.height)/altura)+imageX;
+	var lon_canvas=parseFloat(((coord_image[0][2]-lon)*img_global.width)/anchura)+imageY;
+								
+	lat_canvas=Math.round(lat_canvas * 100)/100;
+	lon_canvas=Math.round(lon_canvas * 100)/100;
+	
+	contexto.beginPath();
+	contexto.arc(lon_canvas,lat_canvas, 7, 0, 2 * Math.PI, true);
+	contexto.fill();
+	contexto.closePath();
+	
+	$("#cargando").hide();
 		
 }
 function error_geoloc(error)
@@ -1001,7 +1167,7 @@ function onFileSystemError(error)
 function onFileSystemSuccess(fileSystem) 
 {
 
-	alert("File System OK");
+	console.log("File System Sucess");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
