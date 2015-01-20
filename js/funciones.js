@@ -953,6 +953,9 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 						contexto.font = '12px "Tahoma"';	
 						
 						contexto.save();
+						
+						contexto.scale(1.2, 1.2);
+						
 						// Translate 
 						contexto.translate(width, 0);
 						// Rotate it
@@ -1222,7 +1225,7 @@ function onFileSystemError(error)
 function onFileSystemSuccess(fileSystem) 
 {
 
-	alert("File System OK");
+	console.log("File System OK");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
 	
 	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
