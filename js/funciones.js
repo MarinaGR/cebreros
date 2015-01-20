@@ -363,13 +363,31 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							case "/2": src_image='./resources/images/mapas/mapa_02.jpg';  
 									   coord_image_ppal=[["top-left", "40.6769", "-4.7371"],["bottom-left", "40.6379", "-4.7371"], ["top-right","40.6769", "-4.6257"]];
 									   break;
-									  
+									   
 							case "/3": src_image='./resources/images/mapas/mapa_03.jpg';
-									   coord_image_ppal=[["top-left", "40.5029", "-4.5515"],["bottom-left", "40.4443", "-4.5515"], ["top-right","40.5029", "-4.4937"]];
+									   coord_image_ppal=[["top-left", "40.5029", "-4.5515"],["bottom-left", "40.4443", "-4.5515"], ["top-right","40.5029", "-4.4357"]];
+									   break;
+									   
+							case "/4": src_image='./resources/images/mapas/mapa_04.jpg';  
+									   coord_image_ppal=[["top-left", "40.4736", "-4.4936"],["bottom-left", "40.4149", "-4.4936"], ["top-right","40.4736", "-4.3778"]];
+									   break;
+									   
+							case "/5": src_image='./resources/images/mapas/mapa_05.jpg';  
+									   coord_image_ppal=[["top-left", "40.4840", "-4.5260"],["bottom-left", "40.4253", "-4.5260"], ["top-right","40.4840", "-4.4102"]];
+									   break;
+									
+							case "/6": src_image='./resources/images/mapas/mapa_06.jpg';  
+									   coord_image_ppal=[["top-left", "40.5063", "-4.5182"],["bottom-left", "40.4476", "-4.5182"], ["top-right","40.5063", "-4.4024"]];
+									   break;
+									   
+							case "/7": src_image='./resources/images/mapas/mapa_07.jpg';  
+									   coord_image_ppal=[["top-left", "40.4977", "-4.4984"],["bottom-left", "40.4391", "-4.4984"], ["top-right","40.4977", "-4.3826"]];
+									   break;
 									   
 							default: src_image='';  
 									 break;
 						}
+						
 						var d=data.Result;
 						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX,id,canvas_number); 
 						
