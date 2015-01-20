@@ -46,7 +46,7 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+	//window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 	 
 }    
 function onBackKeyDown()
@@ -759,79 +759,80 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 				$("#mapa_canvas").css("width",width);
 				$("#mapa_canvas").css("height",height);
 				
+				$("#mapa_canvas").append('<canvas id="canvas" width="'+img.height+'" height="'+img.width+'" style="position:relative;top:0;left:0;" ></canvas>');
+				
 				$("#canvas").width(img.height);
-				$("#canvas").height(img.width);
+				$("#canvas").height(img.width);			
+				
+				$("#canvas").draggable();
+				
+				var canvas = document.getElementById("canvas");			
+				
+				$.get(src_gpx, function(xml) { 
+				}).done(function(xml_Doc) {
+				
+					coord_image=coord_image_ppal;
+				
+					var altura=(coord_image[0][1]-coord_image[1][1]);
+					var anchura=(coord_image[0][2]-coord_image[2][2]);
+					
+					var k=0;
+					$(xml_Doc).find("rtept").each(function() {
+						var lat=$(this).attr("lat");
+						var lon=$(this).attr("lon");
+						
+						array_coord_image_ppal[k]=lat+","+lon;
+						k++;
+						
+					});
+					
+					k=0;
+					array_coord_image_ppal.forEach(function(latlon) {
+					
+						var latlon_split=latlon.split(",");
+						lat=latlon_split[0];
+						lon=latlon_split[1];
+					
+						var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+						var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
+
+						lat_canvas=lat_canvas.toFixed(3);
+						lon_canvas=lon_canvas.toFixed(3);
+						
+						array_coord_image[k]=lat_canvas+","+lon_canvas;
+						k++;
+					});
+
+					{
+						var contexto = canvas.getContext("2d");
+						
+						contexto.lineWidth = 3;
+						contexto.fillStyle = "orange";		
+						contexto.strokeStyle = "orange";		
+						contexto.font = '12px "Tahoma"';	
+						
+						contexto.save();
+						// Translate 
+						contexto.translate(width, 0);
+						// Rotate it
+						contexto.rotate(90*Math.PI/180);
+						//contexto.restore();		
+						
+						contexto.drawImage(img, 0, 0, img.width, img.height);
+
+						draw_points(contexto);
+					}
+					
+								
+				}).fail(function(){
+					$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
+				});
 			}
-
-			$("#mapa_canvas").append('<canvas id="canvas" width="'+img.height+'" height="'+img.width+'" style="position:relative;top:0;left:0;" ></canvas>');
-			$("#canvas").draggable();
-			
-			var canvas = document.getElementById("canvas");			
-			
-			$.get(src_gpx, function(xml) { 
-			}).done(function(xml_Doc) {
-			
-				coord_image=coord_image_ppal;
-			
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				var k=0;
-				$(xml_Doc).find("rtept").each(function() {
-					var lat=$(this).attr("lat");
-					var lon=$(this).attr("lon");
-					
-					array_coord_image_ppal[k]=lat+","+lon;
-					k++;
-					
-				});
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
-				
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
-
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-
-				//img.onload = function(){
-				
-					var contexto = canvas.getContext("2d");
-					
-					contexto.lineWidth = 3;
-					contexto.fillStyle = "orange";		
-					contexto.strokeStyle = "orange";		
-					contexto.font = '12px "Tahoma"';	
-					
-					contexto.save();
-					// Translate 
-					contexto.translate(width, 0);
-					// Rotate it
-					contexto.rotate(90*Math.PI/180);
-					//contexto.restore();		
-					
-					contexto.drawImage(img, 0, 0, img.width, img.height);
-
-					draw_points(contexto);
-				
-				//}
-				
-			}).fail(function(){
-				$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
-			});
 			
 		}
 		
 }
+
 
 function draw_points(contexto)
 {
