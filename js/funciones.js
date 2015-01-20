@@ -18,7 +18,7 @@ var destination;
 var fs;
 var DATADIR;
 
-var archivos={category:'1.json',page:'1.json',page:'2.json','':'routes.json',route:'1.json'};
+var archivos={category:'/1',page:'/1',page:'/2','':'routes',route:'/1'};
 
 
 function onBodyLoad(type, container)
@@ -1244,7 +1244,10 @@ function onFileSystemSuccess(fileSystem)
 	
 	first_time=true;
 	
-    fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
+	fs.getDirectory("Cebreros",{create:true, exclusive:false},function() {
+		fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
+	},onError);
+    
     
 }
 
@@ -1252,11 +1255,11 @@ function setFilePath() {
     var ua = navigator.userAgent.toLowerCase();
 	var isAndroid = ua.indexOf("android") > -1; 
 	if(isAndroid) {
-		file_path = "cebreros_resources";
+		file_path = "Cebreros/resources";
 		//Android
 	}
 	else {
-		file_path = "cebreros_resources";
+		file_path = "Cebreros/resources";
 		//IOS
 	}
 
@@ -1297,7 +1300,6 @@ function downloadToDir(d) {
 			alert("Get Directory "+folder+" fail" + error.code);
 		});
 	});
-		
 	$("#descarga").html("");
 }
 function gotFS(fileSystem) 
