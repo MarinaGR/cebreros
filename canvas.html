@@ -3,7 +3,7 @@
 	<head>
 		<title>AYUNTAMIENTO DE CEBREROS</title>
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, maximum-scale=2.0, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
 		<meta name="robots" content="INDEX,FOLLOW">
 		<meta name="description" content="Ayuntamiento de Cebreros.">
 		<meta name="keywords" content="Ayuntamiento de Cebreros, noticias, eventos, turismo, rutas">  
@@ -19,7 +19,11 @@
 		<script>		
 			$(document).ready(function() {
 				var id=get_var_url("id");
-				ajax_recover_data('route', id, 'contenido', true, true);
+				ajax_recover_data('route', id, 'contenido', true, true, 1);
+				document.getElementById("zoom_in").addEventListener("click", function zoomin() {
+					window.location.href="canvas2.html?id="+get_var_url("id");
+				}, false);	
+								
 			});
 
 		</script>
@@ -36,6 +40,11 @@
 			<div class="nav_02" id="boton_menu"> </div>
 			<div id="boton_salir"></div>
 			<div id="boton_atras"></div>
+			<div class="boton_zoom" id="zoom_in" ></div>
+			<div id="boton_refresh" onclick="show_geoloc()" ></div>
+			<div class="boton_zoom" id="cargando" style="display:none">
+				<img src="./resources/images/general/loading.gif" />
+			</div>
 				
 		</div>			
 		

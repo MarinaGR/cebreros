@@ -101,7 +101,7 @@ function onOffline()
 
 }
 
-function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
+function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
 	if(isLocal==true || isLocal=="true")
 	{		
@@ -366,13 +366,15 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 									 break;
 						}
 						var d=data.Result;
-						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX,id); 
+						draw_canvas(container,src_image,'./resources/rutas/'+data.Result.DownloadGPX,id,canvas_number); 
 						
-						$("#"+container).css("height",height);
+						if(canvas_number==1)
+						{
+							$("#"+container).css("height",height);
+							$("#datos_geo").append("<div id='datos_geo_position'></div>");
+						}
 						
-						$("#datos_geo").append("<div id='datos_geo_position'></div>");
-						
-						$("#datos_geo").append("<div class='vermas' onclick='show_geoloc()'>ACTUALIZAR</div>");
+						//$("#datos_geo").append("<div class='vermas' onclick='show_geoloc()'>ACTUALIZAR</div>");
 						
 						break;
 					}
@@ -411,7 +413,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas) {
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
 					}*/
 					
-					cadena+="<p><br><br><a class='vermas' href='#' onclick='window.open(\'"+d.WikilocLink+"\', \'_system\', \'location=yes\');'>Ver ruta en Wikiloc</a></p>";	
+					cadena+='<p><br><br><a class="vermas" onclick="window.open(\''+d.WikilocLink+'\', \'_system\', \'location=yes\');" href="#" >Ver ruta en Wikiloc</a></p>';	
 										
 					cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 					
@@ -466,7 +468,7 @@ function ajax_recover_data_jsonp(type, container) {
 	
 }
 
-function draw_route(container,src_image, src_gpx) 
+/*function draw_route(container,src_image, src_gpx) 
 {	
 	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" style="opacity:0" />');
 			
@@ -664,155 +666,47 @@ function draw_route(container,src_image, src_gpx)
 			
 	});
 
-}
+}*/
 
-function draw_canvas(container,src_image, src_gpx, id) 
+function draw_canvas(container,src_image, src_gpx, id, canvas_number) 
 {	
+	
 	$("#"+container).append('<div id="mapa_canvas" style="overflow:hidden; width=100%; opacity:1"></div>');
-	//$("#mapa_canvas").append('<img src="'+src_image+'" width="100%" id="imagen_mapa" />');	
 	
 	//Tendría que ser proporcional al tamaño de la imagen que vamos a cargar
-			
-	// $("#imagen_mapa").load(function() {
 		
 		width=$(window).width(); 
 		height=$(window).height();
 		
-		$("#mapa_canvas").css("width",width);
-		$("#mapa_canvas").css("height",height);
-		
-		var cuadrantes=[[width/3],[height/2]];
-		
-		$("#mapa_canvas").append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:relative;top:0;left:0;" ></canvas>');
-				
-		var canvas = document.getElementById("canvas");						
-		
-		canvas.addEventListener('click', function zoom(event)
+		if(canvas_number==1)
 		{
-		
-			var mousex = event.offsetX;
-			var mousey = event.offsetY;
-
-			var contexto = canvas.getContext("2d");
-			$("#canvas").draggable();
-				
-			if(first_click)
-			{			
-				src_image_new=src_image;//'';			
+			$("#mapa_canvas").css("width",width);
+			$("#mapa_canvas").css("height",height);
+			$("#mapa_canvas").append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:relative;top:0;left:0;" ></canvas>');
 			
-				//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
-				//Guardar en ficheros y recuperar de ahí las coordenadas!
-				
-				/*switch(id)
-				{
-					case "/1": 
-								if(mousey<height/2) 
-								{
-									if(mousex<=width/2) {
-										console.log("cuadrante 3");
-										src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
-										coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
-									}
-									else if(mousex<=width) {
-										console.log("cuadrante 1");
-										src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
-										coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];						
-									} 
-								}
-								else if(mousey<height) 
-								{
-									if(mousex<=width/2) {
-										console.log("cuadrante 4");
-										src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
-										coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];
-									}
-									else if(mousex<=width) {
-										console.log("cuadrante 2");
-										src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-										coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
-									} 
-								}
-								break;	
-					case "/2": 								
-					default:
-								if(mousey<height/2) 
-								{
-									if(mousex<=width/2) {
-										console.log("cuadrante 3");
-										src_image_new='./resources/images/mapas/mapa_02_3.jpg'; 
-										coord_image=[["top-left", "40.6573", "-4.7372"],["bottom-left", "40.6379", "-4.7372"], ["top-right","40.6573", "-4.6815"]];
-									}
-									else if(mousex<=width) {
-										console.log("cuadrante 1");
-										src_image_new='./resources/images/mapas/mapa_02_1.jpg'; 					
-										coord_image=[["top-left", "40.6769", "-4.7370"],["bottom-left", "40.6574", "-4.7370"], ["top-right","40.6769", "-4.6813"]];								
-									} 
-								}
-								else if(mousey<height) 
-								{
-									if(mousex<=width/2) {
-										console.log("cuadrante 4");
-										src_image_new='./resources/images/mapas/mapa_02_4.jpg'; 
-										coord_image=[["top-left", "40.6570", "-4.6813"],["bottom-left", "40.63756", "-4.6813"], ["top-right","40.6570", "-4.6256"]];
-									}
-									else if(mousex<=width) {
-										console.log("cuadrante 2");
-										src_image_new='./resources/images/mapas/mapa_02_2.jpg'; 
-										coord_image=[["top-left", "40.6769", "-4.6813"],["bottom-left", "40.6575", "-4.6813"], ["top-right","40.6769", "-4.6256"]];
-									} 
-								}
-								break;
-				}*/
-				
-				
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
-				
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
-
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-
-				contexto.clearRect(0, 0, height, width);	
-
-				var img = new Image();
-				img.src = src_image_new;
-				img.onload = function(){
-					contexto.drawImage(img, 0, 0, height, width);
-				   
-					contexto.lineWidth = 4;
-					contexto.fillStyle = "orange";		
-					contexto.strokeStyle = "orange";		
-					contexto.font = '12px "Tahoma"';		
-				
-					draw_points(contexto);
-				}
-				
-				first_click=false;
-			}
-			/*
-			else
-			{
+			var canvas = document.getElementById("canvas");			
+			
+			$.get(src_gpx, function(xml) { 
+			}).done(function(xml_Doc) {
+			
 				coord_image=coord_image_ppal;
-				
+			
 				var altura=(coord_image[0][1]-coord_image[1][1]);
 				var anchura=(coord_image[0][2]-coord_image[2][2]);
 				
+				var k=0;
+				$(xml_Doc).find("rtept").each(function() {
+					var lat=$(this).attr("lat");
+					var lon=$(this).attr("lon");
+					
+					array_coord_image_ppal[k]=lat+","+lon;
+					k++;
+					
+				});
+				
 				k=0;
 				array_coord_image_ppal.forEach(function(latlon) {
-			
+				
 					var latlon_split=latlon.split(",");
 					lat=latlon_split[0];
 					lon=latlon_split[1];
@@ -826,97 +720,117 @@ function draw_canvas(container,src_image, src_gpx, id)
 					array_coord_image[k]=lat_canvas+","+lon_canvas;
 					k++;
 				});
-				
-				contexto.clearRect(0, 0, height, width);	
+
 				
 				var img = new Image();
 				img.src = src_image;
 				img.onload = function(){
 				
-					contexto.drawImage(img, 0, 0, height, width);
-				   
-					contexto.lineWidth = 4;
+					var contexto = canvas.getContext("2d");
+					
+					contexto.lineWidth = 3;
 					contexto.fillStyle = "orange";		
 					contexto.strokeStyle = "orange";		
-					contexto.font = '12px "Tahoma"';		
-				
+					contexto.font = '12px "Tahoma"';	
+					
+					contexto.save();
+					// Translate 
+					contexto.translate(width, 0);
+					// Rotate it
+					contexto.rotate(90*Math.PI/180);
+					//contexto.restore();		
+					
+					contexto.drawImage(img, 0, 0, height, width);
+
 					draw_points(contexto);
+				
 				}
 				
-				first_click=true;
-				
-			}*/
+			}).fail(function(){
+				$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
+			});
 			
 		}
-		, false);
-
-		
-		$.get(src_gpx, function(xml) { 
-		}).done(function(xml_Doc) {
-		
-			coord_image=coord_image_ppal;
-		
-			var altura=(coord_image[0][1]-coord_image[1][1]);
-			var anchura=(coord_image[0][2]-coord_image[2][2]);
-			
-			var k=0;
-			$(xml_Doc).find("rtept").each(function() {
-				var lat=$(this).attr("lat");
-				var lon=$(this).attr("lon");
-				
-				array_coord_image_ppal[k]=lat+","+lon;
-				k++;
-				
-			});
-			
-			k=0;
-			array_coord_image_ppal.forEach(function(latlon) {
-			
-				var latlon_split=latlon.split(",");
-				lat=latlon_split[0];
-				lon=latlon_split[1];
-			
-				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
-				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
-
-				lat_canvas=lat_canvas.toFixed(3);
-				lon_canvas=lon_canvas.toFixed(3);
-				
-				array_coord_image[k]=lat_canvas+","+lon_canvas;
-				k++;
-			});
-
-			
+		if(canvas_number==2)
+		{
 			var img = new Image();
 			img.src = src_image;
 			img.onload = function(){
-			
-				var contexto = canvas.getContext("2d");
+				$("#mapa_canvas").css("width",width);
+				$("#mapa_canvas").css("height",height);
 				
-				contexto.lineWidth = 3;
-				contexto.fillStyle = "orange";		
-				contexto.strokeStyle = "orange";		
-				contexto.font = '12px "Tahoma"';	
-				
-				contexto.save();
-				// Translate 
-				contexto.translate(width, 0);
-				// Rotate it
-				contexto.rotate(90*Math.PI/180);
-				//contexto.restore();		
-				
-				contexto.drawImage(img, 0, 0, height, width);
-
-				draw_points(contexto);
-			
+				$("#canvas").width(img.height);
+				$("#canvas").height(img.width);
 			}
-			
-		}).fail(function(){
-			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
-		});
-			
-	//});
 
+			$("#mapa_canvas").append('<canvas id="canvas" width="'+img.height+'" height="'+img.width+'" style="position:relative;top:0;left:0;" ></canvas>');
+			$("#canvas").draggable();
+			
+			var canvas = document.getElementById("canvas");			
+			
+			$.get(src_gpx, function(xml) { 
+			}).done(function(xml_Doc) {
+			
+				coord_image=coord_image_ppal;
+			
+				var altura=(coord_image[0][1]-coord_image[1][1]);
+				var anchura=(coord_image[0][2]-coord_image[2][2]);
+				
+				var k=0;
+				$(xml_Doc).find("rtept").each(function() {
+					var lat=$(this).attr("lat");
+					var lon=$(this).attr("lon");
+					
+					array_coord_image_ppal[k]=lat+","+lon;
+					k++;
+					
+				});
+				
+				k=0;
+				array_coord_image_ppal.forEach(function(latlon) {
+				
+					var latlon_split=latlon.split(",");
+					lat=latlon_split[0];
+					lon=latlon_split[1];
+				
+					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*width)/altura);
+					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*height)/anchura);
+
+					lat_canvas=lat_canvas.toFixed(3);
+					lon_canvas=lon_canvas.toFixed(3);
+					
+					array_coord_image[k]=lat_canvas+","+lon_canvas;
+					k++;
+				});
+
+				//img.onload = function(){
+				
+					var contexto = canvas.getContext("2d");
+					
+					contexto.lineWidth = 3;
+					contexto.fillStyle = "orange";		
+					contexto.strokeStyle = "orange";		
+					contexto.font = '12px "Tahoma"';	
+					
+					contexto.save();
+					// Translate 
+					contexto.translate(width, 0);
+					// Rotate it
+					contexto.rotate(90*Math.PI/180);
+					//contexto.restore();		
+					
+					contexto.drawImage(img, 0, 0, img.width, img.height);
+
+					draw_points(contexto);
+				
+				//}
+				
+			}).fail(function(){
+				$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
+			});
+			
+		}
+		
 }
 
 function draw_points(contexto)
@@ -946,19 +860,22 @@ function show_geoloc()
 {
 	if (navigator.geolocation)
 	{
-		//navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,{enableHighAccuracy:true, maximumAge:30000, timeout:30000});
+		//navigator.geolocation.watchPosition(draw_geoloc, error_geoloc, options);
 		
 		options = {
 		  enableHighAccuracy: true,
 		  timeout: 15000,
 		  maximumAge: 30000
 		};
-
-		id = navigator.geolocation.watchPosition(draw_geoloc, error_geoloc, options);
+		
+		$("#cargando").show('fade', function() {
+			navigator.geolocation.getCurrentPosition(draw_geoloc,error_geoloc,options);
+		});
 	}
 	else
 	{	
 		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
+		$("#cargando").hide();
 	}
 }
 
@@ -995,9 +912,13 @@ function draw_geoloc(position)
 	
 	//$("#datos_geo_position").html("<p>Est&aacute;s en la posici&oacute;n: "+lat+", "+lon+"</p><p>Precisi&oacute;n: "+position.coords.accuracy+"<br>Velocidad: "+position.coords.speed+"<br>Altitud: "+position.coords.altitude+"<br></p>");
 	
+	$("#cargando").hide();
+	
 	$("#datos_geo_position").html("<div class='data_route'>"+
 									  "<p class='title_01'>GEOLOCALIZACI&Oacute;N</p>"+
-									  "<b>Tu posici&oacute;n:</b> "+lat+", "+lon+"<br>"+
+									  "<b>TU POSICI&Oacute;N</b><br>"+
+									  "<b>Latitud: </b>:" +lat+"<br>"+
+									  "<b>Longitud: </b>: "+lon+"<br>"+
 									  "<b>Precisi&oacute;n:</b> "+position.coords.accuracy+"<br>"+
 									  "<b>Velocidad:</b> "+position.coords.speed+"<br>"+
 									  "<b>Altitud:</b>  "+position.coords.altitude+"<br><br>"+
@@ -1024,7 +945,7 @@ function get_geo_route_map()
 {
 	if (navigator.geolocation)
 	{
-		options = {enableHighAccuracy:true, maximumAge:90000, timeout:50000};
+		options = {enableHighAccuracy:true, timeout:15000, maximumAge:30000};
 		navigator.geolocation.getCurrentPosition(return_user_geoloc,error_user_geoloc,options);
 	}
 	else
