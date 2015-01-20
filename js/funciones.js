@@ -677,22 +677,25 @@ var offsetY;
 
 var ctx;
 
-var startX;
-var startY;
-var isDown = false;
-
 var imageX = 0;
 var imageY = 0;
 var img_global;
+
 var draggingImage = false;
-var startX;
-var startY;
+var isDown = false;
+var startX=0;
+var startY=0;
 
 
 function handleMouseDown(e) {
     startX = parseInt(e.clientX - offsetX);
     startY = parseInt(e.clientY - offsetY);
 
+	draggingImage = true;
+}
+function handleTouchStart(e) {
+    startX = parseInt(e.changedTouches[0].clientX - offsetX);
+    startY = parseInt(e.changedTouches[0].clientY - offsetY);
 	draggingImage = true;
 }
 
@@ -706,14 +709,41 @@ function handleMouseOut(e) {
     handleMouseUp(e);
 }
 
-function handleMouseMove(e) {
   
+function handleMouseMove(e) {
 	if(draggingImage) {
-
+	
         imageClick = false;
 
         mouseX = parseInt(e.clientX - offsetX);
         mouseY = parseInt(e.clientY - offsetY);
+
+        // move the image by the amount of the latest drag
+        var dx = mouseX - startX;
+        var dy = mouseY - startY;
+        imageX += dx;
+        imageY += dy;
+        // reset the startXY for next time
+        startX = mouseX;
+        startY = mouseY;
+
+        // redraw the image 	
+		ctx.clearRect(0, 0, canvas.height, canvas.width);
+		ctx.drawImage(img_global, 0, 0, img_global.width, img_global.height, imageY, imageX, img_global.width, img_global.height);
+
+    }
+
+}
+function handleTouchMove(e) {
+  
+	if(draggingImage) {
+	
+        imageClick = false;
+
+		mouseX = parseInt(e.touches[0].clientX - offsetX);
+        mouseY = parseInt(e.touches[0].clientY - offsetY);
+		
+		console.log(e.touches[0].clientX+" - "+imageX+" - "+startX);
 
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
@@ -837,7 +867,6 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 				offsetX = canvasOffset.left;
 				offsetY = canvasOffset.top;
 				
-				
 				$("#canvas").mousedown(function (e) {
 					handleMouseDown(e);
 				});
@@ -852,6 +881,11 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 				});
 				
 				var canvas = document.getElementById("canvas");			
+				
+				canvas.addEventListener("touchstart", handleTouchStart);
+				canvas.addEventListener("touchmove", handleTouchMove);
+				canvas.addEventListener("touchend", handleMouseUp);
+				
 				
 				$.get(src_gpx, function(xml) { 
 				}).done(function(xml_Doc) {
@@ -942,7 +976,6 @@ function draw_points(contexto)
 
 function draw_points2(contexto)
 {
-
 	var altura=(coord_image[0][1]-coord_image[1][1]);
 	var anchura=(coord_image[0][2]-coord_image[2][2]);
 					
@@ -1108,6 +1141,7 @@ function error_geoloc(error)
 	else {
 		$("#datos_geo_position").html("<p>La geolocalizaci&oacute;n ha fallado.</p>");	
 	}
+	$("#cargando").hide();
 }
 
 function get_geo_route_map()
