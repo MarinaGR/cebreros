@@ -1281,25 +1281,26 @@ function downloadToDir(d) {
 		
 		fs.getDirectory(folder,{create:true, exclusive:false},function() {
 			
-			$("#descarga").append("<br>RUTA: "+api_url+folder+filename+"<br>");
+			console.log("RUTA: "+api_url+folder+filename+"<br>");
 			
 			var ft = new FileTransfer();		
 			
-			var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 
-			
-			console.log("Descargando a " + dlPath);
+			var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
+
+			$("#descarga").append("<br>Descargando a " + dlPath);
 			
 			ft.download(api_url+folder+filename , dlPath, function() {
-					console.log("Exito");
+					$("#descarga").append(" .......... OK");
 				}, 
 				function(error){
-					alert("File Transfer failed" + error.code);
+					$("#descarga").append(" .......... KO");
 				});
 		}
 		,function(error){
 			alert("Get Directory "+folder+" fail" + error.code);
 		});
 	});
+	
 	$("#descarga").html("");
 }
 function gotFS(fileSystem) 
