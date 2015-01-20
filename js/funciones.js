@@ -1272,22 +1272,31 @@ function downloadToDir(d) {
 
 	$("#descarga").append("Descargando archivos... ");
 	
-
-	$("#descarga").append("RUTA: "+api_url+"routes</br>");
-	
-	var ft = new FileTransfer();		
-	
-	var dlPath = fs.toURL()+file_path+"/routes.json"; 
-	
-	console.log("Descargando a " + dlPath);
-	
-	ft.download(api_url+"routes" , dlPath, function() {
-		console.log("Exito");
-		}, 
-		function(error){
-			console.log("File Transfer failed" + error.code);
+	$.each(archivos, function(folder, filename)  
+	{	
+		console.log(folder+": "+filename);
+		
+		fs.getDirectory(folder,{create:true, exclusive:false},function() {
+			
+			$("#descarga").append("<br>RUTA: "+api_url+folder+filename+"<br>");
+			
+			var ft = new FileTransfer();		
+			
+			var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 
+			
+			console.log("Descargando a " + dlPath);
+			
+			ft.download(api_url+folder+filename , dlPath, function() {
+					console.log("Exito");
+				}, 
+				function(error){
+					alert("File Transfer failed" + error.code);
+				});
+		}
+		,function(error){
+			alert("Get Directory "+folder+" fail" + error.code);
 		});
-
+	});
 		
 	$("#descarga").html("");
 }
