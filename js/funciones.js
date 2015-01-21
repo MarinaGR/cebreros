@@ -19,14 +19,13 @@ var fs;
 var DATADIR;
 
 var archivos={
-				  category:'/5', category:'/14', category:'/17', category:'/18',
-				  page:'/42', page:'/43', page:'/44', page:'/45', page:'/46', page:'/47', page:'/48',
-				  page:'/49', page:'/50', page:'/51', page:'/52', page:'/53', page:'/54',
-				  '':'routes',
-				  route:'/1', route:'/2', route:'/3', route:'/4', route:'/5', route:'/6', route:'/7'
-			 };
-
-
+			  "":['routes'],		
+			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
+			  category:['/5', '/14', '/17', '/18'],
+			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
+				  '/49', '/50', '/51', '/52', '/53', '/54']
+			};
+			 
 function onBodyLoad(type, container)
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -465,7 +464,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}	
 }
 
-function ajax_recover_data_jsonp(type, container) {
+/*function ajax_recover_data_jsonp(type, container) {
 	
 	function successCallback(data) {
 		console.log(data);
@@ -501,7 +500,7 @@ function ajax_recover_data_jsonp(type, container) {
 	  async:false,
 	});
 	
-}
+}*/
 
 /*function draw_route(container,src_image, src_gpx) 
 {	
@@ -1307,32 +1306,100 @@ function downloadToDir(d) {
 	$("body").prepend("<div id='descarga'></div>");
 	$("#descarga").append("Descargando archivos a "+d.name+"...<br>");
 	
-	$.each(archivos, function(folder, filename)  
+	$.each(archivos, function(folder,files)  
 	{	
-		console.log(folder+": "+filename);
-		
-		fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
+		$.each(files, function(index,filename)  
+		{	
 			
-			console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
-			console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
-			
-			var ft = new FileTransfer();		
-			
-			var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
+			fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
+				
+				console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
+				console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
+				
+				var ft = new FileTransfer();		
+				
+				var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
 
-			$("#descarga").append(dlPath);
-			
-			ft.download(api_url+folder+filename , dlPath, function() {
-					$("#descarga").append(" .......... OK<br>");
-				}, 
-				function(error){
-					$("#descarga").append(" .......... KO<br>");
-				});
-		}
-		,function(error){
-			$("#descarga").append("Get Directory "+folder+" fail " + error.code+"<br>");
-//			alert("Get Directory "+folder+" fail " + error.code);
+				$("#descarga").append(dlPath);
+				
+				ft.download(api_url+folder+filename , dlPath, function() {
+						$("#descarga").append(" .......... OK<br>");
+					}, 
+					function(error){
+						$("#descarga").append(" .......... KO<br>");
+					});
+			}
+			,function(error){
+				$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
+				//alert("Get Directory "+folder+" fail " + error.code);
+			});
 		});
+	});
+	
+	//Descarga imagenes
+	fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
+	
+		//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
+		var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
+		
+			var cadena="";
+					
+			$.each(data1.Result.Items, function(index, gal){   
+
+				//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
+				var objajax2=$.getJSON(api_url+"gallery/"+gal.ID+".json", function donwload_images(data2) {
+					
+					var d=data2.Result;
+										
+					//if(online)
+					{
+						if(d.Total>0) 
+						{
+							var imagenes=d.Items;
+							for(i=0;i<d.Total;i++)
+							{
+								fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
+				
+									var imagen_local=(imagenes[i].Image).split("/public/images/");
+	
+									console.log("RUTA: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
+									
+									var ft = new FileTransfer();		
+									
+									var dlPath = file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 			
+
+									$("#descarga").append(dlPath);
+									
+									ft.download(imagenes[i].Image , dlPath, function() {
+											$("#descarga").append(" .......... OK<br>");
+										}, 
+										function(error){
+											$("#descarga").append(" .......... KO<br>");
+										});
+								}
+								,function(error){
+									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
+									//alert("Get Directory "+folder+" fail " + error.code);
+								});
+							}
+						}
+						
+					}
+
+			
+				}).fail(function(jqXHR, textStatus, errorThrown) {							
+					console.log("Error al recoger la galeria");				
+				});
+
+			});
+
+		}).fail(function(jqXHR, textStatus, errorThrown) {					
+			console.log("Error al recoger galleries.json");			
+		});
+			
+	},function(error){
+		$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
+		//alert("Get Directory "+folder+" fail " + error.code);
 	});
 	
 	setLocalStorage("first_time", true);
