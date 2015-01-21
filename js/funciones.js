@@ -1,6 +1,7 @@
 var api_url='http://w3.cebreros.es/api/v1/';
 var extern_url='http://w3.cebreros.es/';
 var local_url='./resources/json/';
+var storage_url='Cebreros/resources/';
 var file_path;
 
 var coord_image_ppal=new Array();
@@ -9,16 +10,21 @@ var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
 var first_click=true;
-var scale=2;
-var frame;
+var zoom=1.2;
+
 var now=new Date(2014,0,1).getTime(); 
-var first_time=false;
 
 var destination;
 var fs;
 var DATADIR;
 
-var archivos={category:'/1',page:'/1',page:'/2','':'routes',route:'/1'};
+var archivos={
+				  category:'/5', category:'/14', category:'/17', category:'/18',
+				  page:'/42', page:'/43', page:'/44', page:'/45', page:'/46', page:'/47', page:'/48',
+				  page:'/49', page:'/50', page:'/51', page:'/52', page:'/53', page:'/54',
+				  '':'routes',
+				  route:'/1', route:'/2', route:'/3', route:'/4', route:'/5', route:'/6', route:'/7'
+			 };
 
 
 function onBodyLoad(type, container)
@@ -38,16 +44,17 @@ function onDeviceReady()
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
+	//Primera ejecución, descargamos contenidos (comprobar si está online)
 	var fecha=getLocalStorage("fecha"); 
 	if(typeof fecha == "undefined"  || fecha==null)	
 	{	
 		var nueva_fecha=now;  
 		setLocalStorage("fecha", nueva_fecha);
-		//Primera ejecución, descargamos contenidos si está online
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	if(!first_time) 
+	var first_time=getLocalStorage("first_time"); 
+	if(typeof first_time == "undefined"  || first_time==null)	
 		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 	 
 }    
@@ -107,10 +114,15 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{		
-		var objajax=$.getJSON(local_url+type+id+".json", f_success)
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
-			$("#"+container).html("No se han cargado los datos del archivo");
+		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
+		.fail(function(jqXHR, textStatus, errorThrown) {		
+		
+			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				//alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
+				$("#"+container).html("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
+			});
+			
 		});
 	
 	}
@@ -976,7 +988,7 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 						
 						contexto.save();
 						
-						contexto.scale(1.2, 1.2);
+						contexto.scale(zoom, zoom);
 						
 						// Translate 
 						contexto.translate(width, 0);
@@ -1264,8 +1276,6 @@ function onFileSystemSuccess(fileSystem)
 	console.log(fs)
 	console.log(file_path);
 	
-	first_time=true;
-	
 	fs.getDirectory("Cebreros",{create:true, exclusive:false},function() {
 		fs.getDirectory(file_path,{create:true, exclusive:false},downloadToDir,onError);
 	},onError);
@@ -1293,17 +1303,18 @@ function downloadToDir(d) {
 
 	DATADIR = d;  
 
-	$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
-
-	$("#descarga").append("Descargando archivos...<br>");
+	//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
+	$("body").prepend("<div id='descarga'></div>");
+	$("#descarga").append("Descargando archivos a "+d.name+"...<br>");
 	
 	$.each(archivos, function(folder, filename)  
 	{	
 		console.log(folder+": "+filename);
 		
-		fs.getDirectory(folder,{create:true, exclusive:false},function() {
+		fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
 			
-			console.log("RUTA: "+api_url+folder+filename+"<br>");
+			console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
+			console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
 			
 			var ft = new FileTransfer();		
 			
@@ -1319,12 +1330,17 @@ function downloadToDir(d) {
 				});
 		}
 		,function(error){
-			alert("Get Directory "+folder+" fail" + error.code);
+			$("#descarga").append("Get Directory "+folder+" fail " + error.code+"<br>");
+//			alert("Get Directory "+folder+" fail " + error.code);
 		});
 	});
 	
-	$("#descarga").html("");
-	$("#descarga").hide();
+	setLocalStorage("first_time", true);
+	
+	setTimeout(function() {
+		$("#descarga").html("");
+		$("#descarga").hide();
+	}, 500);
 }
 function gotFS(fileSystem) 
 {
