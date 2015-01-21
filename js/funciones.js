@@ -52,7 +52,7 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	if((window.location.href).indexOf("index.html")>-1) ;
+	if((window.location.href).indexOf("index.html")!=-1) ;
 	{
 		//var first_time=getLocalStorage("first_time"); 
 		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
@@ -1378,7 +1378,7 @@ function downloadToDir(d) {
 									
 									var ft = new FileTransfer();		
 									
-									var dlPath = file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 			
+									var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 			
 
 									//$("#descarga").append(dlPath);
 									
