@@ -788,8 +788,6 @@ function handleMouseMove(e) {
 
 }
 function handleTouchMove(e) {
-
-	e.preventDefault();
   
 	if(draggingImage) {
 	
@@ -824,6 +822,8 @@ function handleTouchMove(e) {
 		ctx.drawImage(img_global, 0, 0, img_global.width, img_global.height, imageY, imageX, img_global.width, img_global.height);
 
     }
+	
+	e.preventDefault();
 
 }
 
