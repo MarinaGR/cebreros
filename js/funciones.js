@@ -52,10 +52,8 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	alert(window.location.href);
-	if(window.location.href=="index.html") 
+	//if(window.location.href=="index.html") 
 	{
-		alert("Probando descarga...");
 		//var first_time=getLocalStorage("first_time"); 
 		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
