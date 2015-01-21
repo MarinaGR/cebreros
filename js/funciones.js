@@ -52,7 +52,7 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	//if(window.location.href=="index.html") 
+	if((window.location.href).indexOf("index.html")>-1) ;
 	{
 		//var first_time=getLocalStorage("first_time"); 
 		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
@@ -62,7 +62,7 @@ function onDeviceReady()
 }    
 function onBackKeyDown()
 {
-	if(window.location.href=="index.html") 
+	if((window.location.href).indexOf("index.html")>-1) ;
 	{		
 		navigator.app.exitApp();
 		return false;
@@ -1331,13 +1331,13 @@ function downloadToDir(d) {
 				
 				var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
 
-				$("#descarga").append(dlPath);
+				//$("#descarga").append(dlPath+"<br>");
 				
 				ft.download(api_url+folder+filename , dlPath, function() {
-						$("#descarga").append(" .......... OK<br>");
+						$("#descarga").append(dlPath+" .... OK<br>");
 					}, 
 					function(error){
-						$("#descarga").append(" .......... KO<br>");
+						$("#descarga").append(dlPath+" .... KO<br>");
 					});
 			}
 			,function(error){
@@ -1347,15 +1347,13 @@ function downloadToDir(d) {
 		});
 	});
 	
-	$("#descarga").append("DESCARGANDO IM&Aacute;GENES...<br>");
-	
 	//Descarga imagenes
 	fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
 	
 		//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 		var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
 		
-			var cadena="";
+			$("#descarga").append("DESCARGANDO IM&Aacute;GENES...<br>");
 					
 			$.each(data1.Result.Items, function(index, gal){   
 
@@ -1385,10 +1383,10 @@ function downloadToDir(d) {
 									$("#descarga").append(dlPath);
 									
 									ft.download(imagenes[i].Image , dlPath, function() {
-											$("#descarga").append(" .......... OK<br>");
+											$("#descarga").append(dlPath+" .... OK<br>");
 										}, 
 										function(error){
-											$("#descarga").append(" .......... KO<br>");
+											$("#descarga").append(dlPath+" .... KO<br>");
 										});
 								}
 								,function(error){
