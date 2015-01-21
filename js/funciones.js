@@ -736,19 +736,31 @@ function handleMouseMove(e) {
 	
         imageClick = false;
 
-        mouseX = parseInt(e.clientX - offsetX);
+		mouseX = parseInt(e.clientX - offsetX);
         mouseY = parseInt(e.clientY - offsetY);
 
-        // move the image by the amount of the latest drag
+         // mover la imagen con la cantidad del ultimo drag
         var dx = mouseX - startX;
         var dy = mouseY - startY;
         imageX -= dx;
         imageY += dy;
-        // reset the startXY for next time
-        startX = mouseX;
-        startY = mouseY;
+        // reset startXY para la siguiente vez
+        startX = mouseX;       
+		startY = mouseY;
+		
+		
+		if(imageX > 0)
+			imageX=0;
+		if(imageY > 0)
+			imageY=0;
+			
+		if(imageX < -(img_global.height-$("#mapa_canvas").width()))
+			imageX= -(img_global.height-$("#mapa_canvas").width());		
+			
+		if(imageY < -(img_global.width-$("#mapa_canvas").height()))
+			imageY= -(img_global.width-$("#mapa_canvas").height());		
 
-        // redraw the image 	
+        // repintamos
 		ctx.clearRect(0, 0, canvas.height, canvas.width);
 		ctx.drawImage(img_global, 0, 0, img_global.width, img_global.height, imageY, imageX, img_global.width, img_global.height);
 
@@ -763,18 +775,29 @@ function handleTouchMove(e) {
 
 		mouseX = parseInt(e.changedTouches[0].clientX - offsetX);
         mouseY = parseInt(e.changedTouches[0].clientY - offsetY);
-	
 
-        // move the image by the amount of the latest drag
+        // mover la imagen con la cantidad del ultimo drag
         var dx = mouseX - startX;
         var dy = mouseY - startY;
-        imageX += dx;
+        imageX -= dx;
         imageY += dy;
-        // reset the startXY for next time
-        startX = mouseX;
-        startY = mouseY;
+        // reset startXY para la siguiente vez
+        startX = mouseX;       
+		startY = mouseY;
+		
+		
+		if(imageX > 0)
+			imageX=0;
+		if(imageY > 0)
+			imageY=0;
+			
+		if(imageX < -(img_global.height-$("#mapa_canvas").width()))
+			imageX= -(img_global.height-$("#mapa_canvas").width());		
+			
+		if(imageY < -(img_global.width-$("#mapa_canvas").height()))
+			imageY= -(img_global.width-$("#mapa_canvas").height());		
 
-        // redraw the image 	
+        // repintamos
 		ctx.clearRect(0, 0, canvas.height, canvas.width);
 		ctx.drawImage(img_global, 0, 0, img_global.width, img_global.height, imageY, imageX, img_global.width, img_global.height);
 
@@ -1270,9 +1293,9 @@ function downloadToDir(d) {
 
 	DATADIR = d;  
 
-	$("body").prepend("<div id='descarga'></div>");
+	$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
 
-	$("#descarga").append("Descargando archivos... ");
+	$("#descarga").append("Descargando archivos...<br>");
 	
 	$.each(archivos, function(folder, filename)  
 	{	
@@ -1286,13 +1309,13 @@ function downloadToDir(d) {
 			
 			var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
 
-			$("#descarga").append("<br>Descargando a " + dlPath);
+			$("#descarga").append(dlPath);
 			
 			ft.download(api_url+folder+filename , dlPath, function() {
-					$("#descarga").append(" .......... OK");
+					$("#descarga").append(" .......... OK<br>");
 				}, 
 				function(error){
-					$("#descarga").append(" .......... KO");
+					$("#descarga").append(" .......... KO<br>");
 				});
 		}
 		,function(error){
@@ -1301,6 +1324,7 @@ function downloadToDir(d) {
 	});
 	
 	$("#descarga").html("");
+	$("#descarga").hide();
 }
 function gotFS(fileSystem) 
 {
