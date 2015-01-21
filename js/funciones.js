@@ -324,7 +324,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						{
 							var imagenes=d.Items;
 							for(i=0;i<d.Total;i++)
-								cadena+="<br><img src='"+imagenes[i].Image+"' alt='Imagen' />";
+								cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+								//Cargar aquí la  imagen local
 						}
 						
 					}
@@ -722,7 +723,6 @@ var startY=0;
 function handleMouseDown(e) {
     startX = parseInt(e.clientX - offsetX);
     startY = parseInt(e.clientY - offsetY);
-
 	draggingImage = true;
 }
 function handleTouchStart(e) {
@@ -733,6 +733,7 @@ function handleTouchStart(e) {
 
 function handleMouseUp(e) {
     draggingImage = false;
+	e.preventDefault();
     //Pintar la ruta y la geolocalización teniendo en cuenta la nueva posición 'x' e 'y' de la imagen
 	draw_points2(ctx);
 }
@@ -753,8 +754,8 @@ function handleMouseMove(e) {
          // mover la imagen con la cantidad del ultimo drag
         var dx = mouseX - startX;
         var dy = mouseY - startY;
-        imageX -= dx;
-        imageY += dy;
+        imageX -= dx*2;
+        imageY += dy*2;
         // reset startXY para la siguiente vez
         startX = mouseX;       
 		startY = mouseY;
@@ -779,6 +780,8 @@ function handleMouseMove(e) {
 
 }
 function handleTouchMove(e) {
+
+	e.preventDefault();
   
 	if(draggingImage) {
 	
@@ -1302,9 +1305,9 @@ function downloadToDir(d) {
 
 	DATADIR = d;  
 
-	//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
-	$("body").prepend("<div id='descarga'></div>");
-	$("#descarga").append("Descargando archivos a "+d.name+"...<br>");
+	$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
+	//$("body").prepend("<div id='descarga'></div>");
+	$("#descarga").append("DESCARGANDO ARCHIVOS...<br>");
 	
 	$.each(archivos, function(folder,files)  
 	{	
@@ -1336,6 +1339,8 @@ function downloadToDir(d) {
 		});
 	});
 	
+	$("#descarga").append("DESCARGANDO IM&Aacute;GENES...<br>");
+	
 	//Descarga imagenes
 	fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
 	
@@ -1362,7 +1367,8 @@ function downloadToDir(d) {
 				
 									var imagen_local=(imagenes[i].Image).split("/public/images/");
 	
-									console.log("RUTA: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
+									console.log("RUTA WEB: "+imagenes[i].Image);
+									console.log("RUTA LOCAL: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
 									
 									var ft = new FileTransfer();		
 									
@@ -1404,10 +1410,10 @@ function downloadToDir(d) {
 	
 	setLocalStorage("first_time", true);
 	
-	setTimeout(function() {
+	/*setTimeout(function() {
 		$("#descarga").html("");
 		$("#descarga").hide();
-	}, 500);
+	}, 500);*/
 }
 function gotFS(fileSystem) 
 {
