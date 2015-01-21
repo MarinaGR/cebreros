@@ -742,7 +742,7 @@ function handleMouseMove(e) {
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
         var dy = mouseY - startY;
-        imageX += dx;
+        imageX -= dx;
         imageY += dy;
         // reset the startXY for next time
         startX = mouseX;
@@ -761,10 +761,9 @@ function handleTouchMove(e) {
 	
         imageClick = false;
 
-		mouseX = parseInt(e.touches[0].clientX - offsetX);
-        mouseY = parseInt(e.touches[0].clientY - offsetY);
-		
-		console.log(e.touches[0].clientX+" - "+imageX+" - "+startX);
+		mouseX = parseInt(e.changedTouches[0].clientX - offsetX);
+        mouseY = parseInt(e.changedTouches[0].clientY - offsetY);
+	
 
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
