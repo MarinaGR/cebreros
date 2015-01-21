@@ -460,8 +460,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
-		alert('Error: '+textStatus+" - "+errorThrown);	
-		$("#"+container).html("No se han cargado los datos");
+		//alert('Error: '+textStatus+" - "+errorThrown);	
+		$("#"+container).html("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
 	}	
 }
 
