@@ -325,7 +325,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						{
 							var imagenes=d.Items;
 							for(i=0;i<d.Total;i++)
-								cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen' />";
+								cadena+="<br><img src='"+imagenes[i].Image+"' alt='Imagen' />";
 						}
 						
 					}
