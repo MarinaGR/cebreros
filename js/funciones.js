@@ -1353,8 +1353,6 @@ function downloadToDir(d) {
 	
 		//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 		var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
-		
-			$("#descarga").append("DESCARGANDO IM&Aacute;GENES...<br>");
 					
 			$.each(data1.Result.Items, function(index, gal){   
 
@@ -1364,14 +1362,14 @@ function downloadToDir(d) {
 					var d=data2.Result;
 										
 					//if(online)
-					{
+					{ 
 						if(d.Total>0) 
 						{
-							var imagenes=d.Items;
-							for(i=0;i<d.Total;i++)
-							{
-								fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
-				
+							fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
+
+								var imagenes=d.Items;
+								for(i=0;i<d.Total;i++)
+								{				
 									var imagen_local=(imagenes[i].Image).split("/public/images/");
 	
 									console.log("RUTA WEB: "+imagenes[i].Image);
@@ -1383,18 +1381,20 @@ function downloadToDir(d) {
 
 									//$("#descarga").append(dlPath);
 									
-									ft.download(imagenes[i].Image , dlPath, function() {
-											$("#descarga").append(dlPath+" .... OK<br>");
-										}, 
-										function(error){
-											$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
-										});
+									setTimeout(function() {
+										ft.download(imagenes[i].Image , dlPath, function() {
+												$("#descarga").append(dlPath+" .... OK<br>");
+											}, 
+											function(error){
+												$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
+											});
+									}, 50);
 								}
-								,function(error){
-									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
-									//alert("Get Directory "+folder+" fail " + error.code);
-								});
-							}
+								
+							} ,function(error){
+								$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
+								//alert("Get Directory "+folder+" fail " + error.code);
+							});
 						}
 						
 					}
