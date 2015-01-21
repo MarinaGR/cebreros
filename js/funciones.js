@@ -52,7 +52,8 @@ function onDeviceReady()
 		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 	}
 	
-	if((window.location.href).indexOf("index.html")!=-1) ;
+	var current_url=window.location.href;
+	if(current_url.indexOf("index.html")!=-1) ;
 	{
 		//var first_time=getLocalStorage("first_time"); 
 		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
@@ -1337,7 +1338,7 @@ function downloadToDir(d) {
 						$("#descarga").append(dlPath+" .... OK<br>");
 					}, 
 					function(error){
-						$("#descarga").append(dlPath+" .... KO<br>");
+						$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
 					});
 			}
 			,function(error){
@@ -1386,7 +1387,7 @@ function downloadToDir(d) {
 											$("#descarga").append(dlPath+" .... OK<br>");
 										}, 
 										function(error){
-											$("#descarga").append(dlPath+" .... KO<br>");
+											$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
 										});
 								}
 								,function(error){

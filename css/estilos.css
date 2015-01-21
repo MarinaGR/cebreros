@@ -293,7 +293,7 @@ ul li b {
 	color: #333;
 	padding: 20px;
 	padding-top: 120px;
-	background: rgba(255,255,255,0.85) url(../resources/images/general/loading.gif) no-repeat center 10px;
+	background: rgba(255,255,255,0.9) url(../resources/images/general/loading.gif) no-repeat center 10px;
 }
 
 @media screen and (max-width: 480px)
