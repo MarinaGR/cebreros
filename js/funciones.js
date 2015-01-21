@@ -1380,7 +1380,7 @@ function downloadToDir(d) {
 									
 									var dlPath = file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 			
 
-									$("#descarga").append(dlPath);
+									//$("#descarga").append(dlPath);
 									
 									ft.download(imagenes[i].Image , dlPath, function() {
 											$("#descarga").append(dlPath+" .... OK<br>");
