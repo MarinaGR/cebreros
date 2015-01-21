@@ -9,7 +9,6 @@ var coord_image=new Array();
 var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
-var first_time=false;
 var first_click=true;
 var zoom=1.2;
 
@@ -55,8 +54,8 @@ function onDeviceReady()
 	
 	if(window.location.href=="index.html") 
 	{
-		//first_time=getLocalStorage("first_time"); 
-		if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+		//var first_time=getLocalStorage("first_time"); 
+		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 	}
 	 
@@ -737,6 +736,11 @@ function handleTouchStart(e) {
 
 function handleMouseUp(e) {
     draggingImage = false;
+    //Pintar la ruta y la geolocalización teniendo en cuenta la nueva posición 'x' e 'y' de la imagen
+	draw_points2(ctx);
+}
+function handleTouchEnd(e) {
+    draggingImage = false;
 	e.preventDefault();
     //Pintar la ruta y la geolocalización teniendo en cuenta la nueva posición 'x' e 'y' de la imagen
 	draw_points2(ctx);
@@ -945,7 +949,7 @@ function draw_canvas(container,src_image, src_gpx, id, canvas_number)
 				
 				canvas.addEventListener("touchstart", handleTouchStart);
 				canvas.addEventListener("touchmove", handleTouchMove);
-				canvas.addEventListener("touchend", handleMouseUp);
+				canvas.addEventListener("touchend", handleTouchEnd);
 				
 				
 				$.get(src_gpx, function(xml) { 
