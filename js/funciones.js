@@ -9,7 +9,7 @@ var coord_image=new Array();
 var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
-var total_img_gals, total_gals;
+var total_img_gals=0, total_gals=0;
 
 var first_click=true;
 var zoom=1.15;
@@ -394,7 +394,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							{
 								var imagenes=d.Items;
 								for(i=0;i<d.Total;i++)
-									cadena+="<br><img src='file:///mnt/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									cadena+="<br><img src='/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar aquí la  imagen local
 							}
 						
@@ -1199,8 +1199,6 @@ function downloadToDir(d) {
 		
 			var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 			//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
-						
-				total_gals=data1.Result.TotalItems;
 				
 				$.each(data1.Result.Items, function(index, gal){   
 
@@ -1216,7 +1214,7 @@ function downloadToDir(d) {
 								var imagenes=d.Items;
 								
 								i=0;
-								total_img_gals=d.Total;
+								total_img_gals+=d.Total;
 								downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
 								
 							} ,function(error){
@@ -1226,8 +1224,7 @@ function downloadToDir(d) {
 						}
 				
 					}).fail(function(jqXHR, textStatus, errorThrown) {							
-						console.log("Error al recoger la galeria");
-						total_gals--;												
+						console.log("Error al recoger la galeria");											
 					});
 
 				});
@@ -1258,21 +1255,18 @@ function downloadImages(imagenes, i, total, path) {
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
-			total_img_gals--;
+			total_gals++;
 			i++;			
 			if(i<total)
 				downloadImages(imagenes, i, total, path);
 		}, 
 		function(error){
-			total_img_gals--;
+			total_gals++;
 			$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
 		}
 	);
 	
-	if(total_img_gals==1)
-		total_gals--;
-		
-	if(total_gals==0)
+	if(total_img_gals==total_gals)
 	{
 		//$("#descarga").html("");
 		setLocalStorage("first_time", true);
@@ -1312,6 +1306,18 @@ function fail_getFile(error) {
 }
 function onError(e){
 	alert("ERROR "+e.code+" - "+e.source+" - "+e.target);
+}
+function readAsText(file) {
+  var reader = new FileReader();
+  //asnycrhonous task has finished, fire the event:
+  reader.onloadend = function(evt) {
+    console.log("Read as text");
+    console.log(evt.target.result);
+    //assign the data to the global var
+    jsonString = evt.target.result
+    //keep working with jsonString here
+  };
+  reader.readAsText(file);    
 }
 
 
