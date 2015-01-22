@@ -150,6 +150,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
+			alert("No se cargo el archivo "+fs.toURL()+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				//alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
@@ -174,6 +176,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}
 	
 	function f_success(data) {
+	
+	alert("CARGADO");
 	
 		//data = $.parseJSON(data);
 		
@@ -1207,7 +1211,6 @@ function downloadToDir(d) {
 								i=0;
 								total_img_gals=d.Total;
 								downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
-										
 								
 							} ,function(error){
 								$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
@@ -1243,8 +1246,10 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
+	$("#descarga").append(" "+total_img_gals+" ");	
+	
 	ft.download(imagenes[i].Image , dlPath, function() {
-			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
+			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
 			total_img_gals--;
 			i++;			
