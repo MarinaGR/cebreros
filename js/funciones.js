@@ -51,14 +51,14 @@ function check_internet(){
 
 	var networkState = navigator.connection.type;
 	var states = {};
-	states[Connection.UNKNOWN]  = 'Conexi&oacute;n desconocida';
-	states[Connection.ETHERNET] = 'Conexi&oacute;n Ethernet';
-	states[Connection.WIFI]     = 'Conexi&oacute;n WiFi';
-	states[Connection.CELL_2G]  = 'Conexi&oacute;n 2G';
-	states[Connection.CELL_3G]  = 'Conexi&oacute;n 3G';
-	states[Connection.CELL_4G]  = 'Conexi&oacute;n 4G';
-	states[Connection.CELL]     = 'Conexi&oacute;n gen&eacute;rica';
-	states[Connection.NONE]     = 'Sin Conexi&oacute;n';
+	states[Connection.UNKNOWN]  = 'Conexion desconocida';
+	states[Connection.ETHERNET] = 'Conexion Ethernet';
+	states[Connection.WIFI]     = 'Conexion WiFi';
+	states[Connection.CELL_2G]  = 'Conexion 2G';
+	states[Connection.CELL_3G]  = 'Conexion 3G';
+	states[Connection.CELL_4G]  = 'Conexion 4G';
+	states[Connection.CELL]     = 'Conexion generica';
+	states[Connection.NONE]     = 'Sin conexion';
 		
 	if(!isOffline) 
 	{			
@@ -1143,6 +1143,8 @@ function downloadToDir(d) {
 					function(error){
 						$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
 					});
+					
+				//downloadFiles(folder+filename, fs)
 			}
 			,function(error){
 				$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
@@ -1151,74 +1153,77 @@ function downloadToDir(d) {
 		});
 	});
 	
-	//Descarga imagenes
-	fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
-	
-		//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
-		var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
-					
-			$.each(data1.Result.Items, function(index, gal){   
-
-				//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
-				var objajax2=$.getJSON(api_url+"gallery/"+gal.ID+".json", function donwload_images(data2) {
-					
-					var d=data2.Result;
-										
-					//if(online)
-					{ 
-						if(d.Total>0) 
-						{
-							fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
-
-								var imagenes=d.Items;
-								//for(i=0;i<d.Total;i++)
-								{				
-									/*var imagen_local=(imagenes[i].Image).split("/public/images/");
-	
-									console.log("RUTA WEB: "+imagenes[i].Image);
-									console.log("RUTA LOCAL: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
-									
-									var ft = new FileTransfer();		
-									
-									var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 	*/		
-
-									//$("#descarga").append(dlPath);
-									i=0;
-									downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
-									
-									/*setTimeout(function() {
-										ft.download(imagenes[i].Image , dlPath, function() {
-												$("#descarga").append(dlPath+" .... OK<br>");
-											}, 
-											function(error){
-												$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
-											});
-									}, 50);*/
-								}
-								
-							} ,function(error){
-								$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
-								//alert("Get Directory "+folder+" fail " + error.code);
-							});
-						}
+	setTimeout(function() {
+		//Descarga imagenes
+		fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
+		
+			//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
+			var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
 						
-					}
+				$.each(data1.Result.Items, function(index, gal){   
 
-			
-				}).fail(function(jqXHR, textStatus, errorThrown) {							
-					console.log("Error al recoger la galeria");				
+					//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
+					var objajax2=$.getJSON(api_url+"gallery/"+gal.ID+".json", function donwload_images(data2) {
+						
+						var d=data2.Result;
+											
+						//if(online)
+						{ 
+							if(d.Total>0) 
+							{
+								fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
+
+									var imagenes=d.Items;
+									//for(i=0;i<d.Total;i++)
+									{				
+										/*var imagen_local=(imagenes[i].Image).split("/public/images/");
+		
+										console.log("RUTA WEB: "+imagenes[i].Image);
+										console.log("RUTA LOCAL: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
+										
+										var ft = new FileTransfer();		
+										
+										var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 	*/		
+
+										//$("#descarga").append(dlPath);
+										i=0;
+										downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
+										
+										/*setTimeout(function() {
+											ft.download(imagenes[i].Image , dlPath, function() {
+													$("#descarga").append(dlPath+" .... OK<br>");
+												}, 
+												function(error){
+													$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
+												});
+										}, 50);*/
+									}
+									
+								} ,function(error){
+									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
+									//alert("Get Directory "+folder+" fail " + error.code);
+								});
+							}
+							
+						}
+
+				
+					}).fail(function(jqXHR, textStatus, errorThrown) {							
+						console.log("Error al recoger la galeria");				
+					});
+
 				});
 
+			}).fail(function(jqXHR, textStatus, errorThrown) {					
+				console.log("Error al recoger galleries.json");			
 			});
-
-		}).fail(function(jqXHR, textStatus, errorThrown) {					
-			console.log("Error al recoger galleries.json");			
+				
+		},function(error){
+			$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
+			//alert("Get Directory "+folder+" fail " + error.code);
 		});
-			
-	},function(error){
-		$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
-		//alert("Get Directory "+folder+" fail " + error.code);
-	});
+		
+	}, 250);
 	
 	setLocalStorage("first_time", true);
 	
@@ -1228,6 +1233,26 @@ function downloadToDir(d) {
 	}, 500);*/
 }
 
+function downloadFiles(relative_path, fs) {
+	
+	var ft = new FileTransfer();		
+	
+	var dlPath = fs.toURL()+file_path+"/"+relative_path+".json"; 			
+
+	//$("#descarga").append(dlPath+"<br>");
+	
+	ft.download(api_url+folder+filename , dlPath, function() {
+			$("#descarga").append(relative_path+".json"+" .... OK<br>");
+			cargar_barra("barra_carga");
+			downloadFiles(relative_path, fs)
+		}, 
+		function(error){
+			$("#descarga").append(relative_path+".json"+" .... KO "+error.code+"<br>");
+		}
+	);
+
+}
+
 function downloadImages(imagenes, i, total, path) {
 
 	var imagen_local=(imagenes[i].Image).split("/public/images/");
@@ -1235,8 +1260,6 @@ function downloadImages(imagenes, i, total, path) {
 	var ft = new FileTransfer();		
 	
 	var dlPath = path+"/"+imagen_local[1]; 
-
-	alert(imagen_local[1]);
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
@@ -1249,7 +1272,6 @@ function downloadImages(imagenes, i, total, path) {
 			$("#descarga").append(imagen_local[1]+" .... KO "+error.code+"<br>");
 		}
 	);
-
 }
 function cargar_barra(id)
 {		
