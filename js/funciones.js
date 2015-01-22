@@ -51,16 +51,14 @@ function check_internet(){
 
 	var networkState = navigator.connection.type;
 	var states = {};
-	states[Connection.UNKNOWN]  = 'Conexión desconocida';
-	states[Connection.ETHERNET] = 'Conexión Ethernet';
-	states[Connection.WIFI]     = 'Conexión WiFi';
-	states[Connection.CELL_2G]  = 'Conexión 2G';
-	states[Connection.CELL_3G]  = 'Conexión 3G';
-	states[Connection.CELL_4G]  = 'Conexión 4G';
-	states[Connection.CELL]     = 'Conexión genérica';
-	states[Connection.NONE]     = 'Sin conexión';
-	
-	alert(states[networkState]);
+	states[Connection.UNKNOWN]  = 'Conexi&oacute;n desconocida';
+	states[Connection.ETHERNET] = 'Conexi&oacute;n Ethernet';
+	states[Connection.WIFI]     = 'Conexi&oacute;n WiFi';
+	states[Connection.CELL_2G]  = 'Conexi&oacute;n 2G';
+	states[Connection.CELL_3G]  = 'Conexi&oacute;n 3G';
+	states[Connection.CELL_4G]  = 'Conexi&oacute;n 4G';
+	states[Connection.CELL]     = 'Conexi&oacute;n gen&eacute;rica';
+	states[Connection.NONE]     = 'Sin Conexi&oacute;n';
 		
 	if(!isOffline) 
 	{			
@@ -76,6 +74,7 @@ function check_internet(){
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
+			alert(states[networkState]);
 			//var first_time=getLocalStorage("first_time"); 
 			//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
@@ -84,7 +83,9 @@ function check_internet(){
 	}
 	else
 	{
-		//alert(states[networkState]);
+		var current_url=window.location.href;
+		if(current_url.indexOf("index.html")!=-1) 
+			alert(states[networkState]);
 	}
 
 }
@@ -1233,7 +1234,9 @@ function downloadImages(imagenes, i, total, path) {
 
 	var ft = new FileTransfer();		
 	
-	var dlPath = path+"/"+imagen_local[1]; 	
+	var dlPath = path+"/"+imagen_local[1]; 
+
+	alert(imagen_local[1]);
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
@@ -1244,10 +1247,11 @@ function downloadImages(imagenes, i, total, path) {
 		}, 
 		function(error){
 			$("#descarga").append(imagen_local[1]+" .... KO "+error.code+"<br>");
-		});
+		}
+	);
 
 }
-function cargar_barra(id, val)
+function cargar_barra(id)
 {		
 	var barra_progreso=$("#"+id);
 	var value = barra_progreso.val();  
