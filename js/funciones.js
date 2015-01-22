@@ -1121,11 +1121,11 @@ function downloadToDir(d) {
 				//$("#descarga").append(dlPath+"<br>");
 				
 				ft.download(api_url+folder+filename , dlPath, function() {
-						$("#descarga").append(dlPath+" .... OK<br>");
+						$("#descarga").append(folder+filename+".json"+" .... OK<br>");
 						cargar_barra("barra_carga");
 					}, 
 					function(error){
-						$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
+						$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
 					});
 			}
 			,function(error){
@@ -1221,14 +1221,14 @@ function downloadImages(imagenes, i, total, fs) {
 	var dlPath = path+"/"+imagen_local[1]; 	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
-			$("#descarga").append(dlPath+" .... OK<br>");	
+			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
 			i++;			
 			if(i<total)
 				downloadImages(imagenes, i, total, fs);
 		}, 
 		function(error){
-			$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
+			$("#descarga").append(imagen_local[1]+" .... KO "+error.code+"<br>");
 		});
 
 }
