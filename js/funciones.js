@@ -292,7 +292,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							for(i=0;i<data.Result.TotalVideos;i++)
 							{
 								var src_video=$(videos[i].Embed).attr('src');
-								$(videos[i].Embed).css('max-width','100%'); 
+								$(videos[i].Embed).css('max-width','100%'); 								
 								
 								if(src_video.substring(0, 2)=="//")
 								{
@@ -989,7 +989,7 @@ function draw_geoloc(position)
 										"<p class='title_01'>GEOLOCALIZACI&Oacute;N</p>"+
 										"<b>TU POSICI&Oacute;N</b> est&aacute; fuera de este mapa<br>"+
 										"<b>Latitud: </b>:" +lat+"<br>"+
-										"<b>Longitud: </b>: "+lon+"<br>"+
+										"<b>Longitud: </b>: "+lon+"<br><br>"+
 								  "</div><br>");	
 		
 }
