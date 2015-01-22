@@ -18,10 +18,15 @@
 		
 		<script>		
 			$(document).ready(function() {
+				
 				var id=get_var_url("id");
 				ajax_recover_data('route', id, 'contenido', true, true, 1);
 				document.getElementById("zoom_in").addEventListener("click", function zoomin() {
 					window.location.href="canvas2.html?id="+get_var_url("id");
+				}, false);	
+				
+				document.getElementById("boton_atras").addEventListener("click", function() {
+					window.location.href="mapa.html?id="+ id.substring(1,2);
 				}, false);	
 								
 			});

@@ -4,8 +4,6 @@ var local_url='./resources/json/';
 var storage_url='Cebreros/resources/';
 var file_path;
 
-var online;
-
 var coord_image_ppal=new Array();
 var coord_image=new Array();
 var array_coord_image_ppal=new Array();
@@ -33,7 +31,6 @@ function onBodyLoad(type, container)
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
-	document.getElementById("boton_atras").addEventListener("click", onBackKeyDown, false);	
 }
 function onDeviceReady()
 {
@@ -45,24 +42,35 @@ function onDeviceReady()
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
-	//Primera ejecución, descargamos contenidos (comprobar si está online)
-	var fecha=getLocalStorage("fecha"); 
-	if(typeof fecha == "undefined"  || fecha==null)	
-	{	
-		var nueva_fecha=now;  
-		setLocalStorage("fecha", nueva_fecha);
-		//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
-	}
-	
-	var current_url=window.location.href;
-	if(current_url.indexOf("index.html")!=-1) ;
-	{
-		//var first_time=getLocalStorage("first_time"); 
-		//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
-			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-	}
+	check_internet();
 	 
 }    
+function check_internet(){
+
+	var isOffline = 'onLine' in navigator && !navigator.onLine;
+
+	if(!isOffline) 
+	{		
+		//Primera ejecución, descargamos contenidos si está online y en la página principal
+		/*var fecha=getLocalStorage("fecha"); 
+		if(typeof fecha == "undefined"  || fecha==null)	
+		{	
+			var nueva_fecha=now;  
+			setLocalStorage("fecha", nueva_fecha);
+			//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
+		}*/
+		
+		var current_url=window.location.href;
+		if(current_url.indexOf("index.html")!=-1) 
+		{
+			//var first_time=getLocalStorage("first_time"); 
+			//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+		}
+			
+	}
+
+}
 function onBackKeyDown()
 {
 	if((window.location.href).indexOf("index.html")>-1) ;
@@ -91,7 +99,7 @@ function onOnline()
 		$("#contenido").attr("src",siteurl);
 	},250);*/
 	
-	/*var networkState = navigator.connection.type;
+	var networkState = navigator.connection.type;
 
     var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
@@ -105,7 +113,7 @@ function onOnline()
 
 	online=true;
 	conexion_type=states;
-    alert('Conexión: ' + states[networkState]);*/
+   // alert('Conexión: ' + states[networkState]);
 
 }
 function onOffline()
@@ -160,7 +168,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
 
-						if(imagen!=null || imagen!="null") 
+						if(imagen!=null && imagen!="null" && imagen!="") 
 						{						
 							if(imagen.indexOf("http")<0)
 							{
@@ -177,7 +185,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 							
-						cadena+="<h3>"+d.Title+"</h3>";
+						cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
 						
 						if(isLocal)
 							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
@@ -202,7 +210,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					if(isLocal!=true && isLocal!="true")
 						cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
-					if(imagen!=null || imagen!="null") 
+					if(imagen!=null && imagen!="null" && imagen!="") 
 					{						
 						if(imagen.indexOf("http")<0)
 						{
@@ -222,7 +230,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					//if(online)
 					{
 						var geolocation2=d.Geolocation;
-						if(geolocation2!="" || geolocation2!=null)
+						if(geolocation2!="" && geolocation2!=null)
 						{
 							geolocation2=geolocation2.split(/[(,)]/);
 							var geo_lat=geolocation2[1];
@@ -298,7 +306,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var imagen=d.MinImage; 
 						
 						cadena+="<div class='buttons_galleries'>";
-						if(imagen!=null || imagen!="null") 
+						if(imagen!=null && imagen!="null" && imagen!="") 
 							cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<h3>"+d.Title+"</h3>";
@@ -349,7 +357,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						cadena+="<div class='buttons_routes' onclick='window.location.href=\"mapa.html?id="+d.ID+"\"'>";
 						
 						var imagen=d.Image; 
-						if(imagen!=null || imagen!="null") 
+						if(imagen!=null && imagen!="null" && imagen!="") 
 						{
 							//Sacar ruta local para la imagen	
 							var array_ruta_imagen=imagen.split("/public/images/");
@@ -377,6 +385,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						switch(id)
 						{
 							case "/1":src_image='./resources/images/mapas/mapa_01.jpg';  
+									  //coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
 									  coord_image_ppal=[["top-left", "40.4797", "-4.4814"],["bottom-left", "40.4210", "-4.4814"], ["top-right","40.4797", "-4.3656"]];
 									  break;
 									  
@@ -428,7 +437,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					cadena+="<h2>"+d.Title+"</h2>";
 					
 					var imagen=d.Image; 
-					if(imagen!=null || imagen!="null") 
+					if(imagen!=null && imagen!="null" && imagen!="") 
 					{
 						//Sacar ruta local para la imagen	
 						var array_ruta_imagen=imagen.split("/public/images/");
@@ -476,245 +485,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		$("#"+container).html("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
 	}	
 }
-
-/*function ajax_recover_data_jsonp(type, container) {
-	
-	function successCallback(data) {
-		console.log(data);
-		//data = $.parseJSON(data);
-		var cadena="";
-		
-		$.each(data.Result.Items, function(index, d){            
-			cadena+="ID : "+d.ID+", "+
-					"Title : "+d.Title+", "+
-					"DatePublish : "+d.DatePublish+"<br>";
-		});
-		
-		$("#"+container).html(cadena);
-				
-	}
-	function jsonpCallback(data){
-		successCallback(data);
-	}
-	
-	$.ajax({
-	  url: api_url+type,
-	  type: 'GET',
-	  dataType: 'jsonp',
-	  crossDomain: true, 
-	  success: 'successCallback',
-	  error:function(jqXHR, textStatus, errorThrown){
-			alert('Error de conexi&oacute;n. No se han podido recuperar los datos. Por favor int&eacute;ntalo de nuevo.');	
-			console.log(jqXHR);
-			console.log(textStatus+" "+errorThrown);
-	  },
-      jsonp: 'callback',
-      jsonpCallback: 'jsonpCallback',
-	  async:false,
-	});
-	
-}*/
-
-/*function draw_route(container,src_image, src_gpx) 
-{	
-	$("#"+container).append('<img src="'+src_image+'" width="768" id="imagen_mapa" style="opacity:0" />');
-			
-	 $("#imagen_mapa").load(function() {
-		
-		width=$(this).width();
-		height=$(this).height();
-		
-		var cuadrantes=[[width/3],[height/2]];
-		
-		$("#"+container).append('<canvas id="canvas" width="'+width+'" height="'+height+'" style="position:absolute;top:0;left:0" ></canvas>');
-		
-		var canvas = document.getElementById("canvas");						
-		canvas.style.border="1px solid #AAA";
-		
-		canvas.addEventListener('click', function zoom(event)
-		{
-		
-			var mousex = event.offsetX;
-			var mousey = event.offsetY;
-
-			var contexto = canvas.getContext("2d");
-
-				
-			if(first_click)
-			{			
-				src_image_new='';			
-			
-				if(mousey<height/2) 
-				{
-					if(mousex<=width/2) {
-						console.log("cuadrante 1");
-						//Para cada ruta una configuracion de coordenadas (una por imagen ampliada)
-						src_image_new='./resources/images/mapas/mapa_01_1.jpg'; 					
-						coord_image=[["top-left", "40.4753", "-4.4815"],["bottom-left", "40.4564", "-4.4815"], ["top-right","40.4753", "-4.4275"]];
-					}
-					else if(mousex<=width) {
-						console.log("cuadrante 2");
-						src_image_new='./resources/images/mapas/mapa_01_2.jpg'; 
-						coord_image=[["top-left", "40.4754", "-4.4237"],["bottom-left", "40.4565", "-4.4237"], ["top-right","40.4754", "-4.3697"]];
-						
-					} 
-				}
-				else if(mousey<height) 
-				{
-					if(mousex<=width/2) {
-						console.log("cuadrante 3");
-						src_image_new='./resources/images/mapas/mapa_01_3.jpg'; 
-						coord_image=[["top-left", "40.4565", "-4.4811"],["bottom-left", "40.4377", "-4.4811"], ["top-right","40.4565", "-4.4272"]];
-					}
-					else if(mousex<=width) {
-						console.log("cuadrante 4");
-						src_image_new='./resources/images/mapas/mapa_01_4.jpg'; 
-						coord_image=[["top-left", "40.4565", "-4.4237"],["bottom-left", "40.4376", "-4.4237"], ["top-right","40.4565", "-4.3698"]];;
-					} 
-				}
-				
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
-				
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
-
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-
-				contexto.clearRect(0,0,width, height);
-
-				var img = new Image();
-				img.src = src_image_new;
-				img.onload = function(){
-					contexto.drawImage(img, 0, 0, width, height);
-				   
-					contexto.lineWidth = 4;
-					contexto.fillStyle = "orange";		
-					contexto.strokeStyle = "orange";		
-					contexto.font = '12px "Tahoma"';		
-				
-					draw_points(contexto);
-				}
-				
-				first_click=false;
-			}
-			else
-			{
-				coord_image=coord_image_ppal;
-				
-				var altura=(coord_image[0][1]-coord_image[1][1]);
-				var anchura=(coord_image[0][2]-coord_image[2][2]);
-				
-				k=0;
-				array_coord_image_ppal.forEach(function(latlon) {
-			
-					var latlon_split=latlon.split(",");
-					lat=latlon_split[0];
-					lon=latlon_split[1];
-				
-					var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-					var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
-
-					lat_canvas=lat_canvas.toFixed(3);
-					lon_canvas=lon_canvas.toFixed(3);
-					
-					array_coord_image[k]=lat_canvas+","+lon_canvas;
-					k++;
-				});
-				
-				contexto.clearRect(0,0,width, height);
-				
-				var img = new Image();
-				img.src = src_image;
-				img.onload = function(){
-					contexto.drawImage(img, 0, 0, width, height);
-				   
-					contexto.lineWidth = 4;
-					contexto.fillStyle = "orange";		
-					contexto.strokeStyle = "orange";		
-					contexto.font = '12px "Tahoma"';		
-				
-					draw_points(contexto);
-				}
-				
-				first_click=true;
-			}
-		}
-		, false);
-
-		
-		$.get(src_gpx, function(xml) { 
-		}).done(function(xml_Doc) {
-		
-			coord_image=coord_image_ppal;
-		
-			var altura=(coord_image[0][1]-coord_image[1][1]);
-			var anchura=(coord_image[0][2]-coord_image[2][2]);
-			
-			var k=0;
-			$(xml_Doc).find("rtept").each(function() {
-				var lat=$(this).attr("lat");
-				var lon=$(this).attr("lon");
-				
-				array_coord_image_ppal[k]=lat+","+lon;
-				k++;
-				
-			});
-			
-			k=0;
-			array_coord_image_ppal.forEach(function(latlon) {
-			
-				var latlon_split=latlon.split(",");
-				lat=latlon_split[0];
-				lon=latlon_split[1];
-			
-				var lat_canvas=parseFloat(((coord_image[0][1]-lat)*height)/altura);
-				var lon_canvas=parseFloat(((coord_image[0][2]-lon)*width)/anchura);
-
-				lat_canvas=lat_canvas.toFixed(3);
-				lon_canvas=lon_canvas.toFixed(3);
-				
-				array_coord_image[k]=lat_canvas+","+lon_canvas;
-				k++;
-			});
-
-			
-			var img = new Image();
-			img.src = src_image;
-			img.onload = function(){
-			
-				var contexto = canvas.getContext("2d");
-				contexto.drawImage(img, 0, 0, width, height);
-				
-				contexto.lineWidth = 3;
-				contexto.fillStyle = "orange";		
-				contexto.strokeStyle = "orange";		
-				contexto.font = '12px "Tahoma"';		
-
-				draw_points(contexto);
-			
-			}
-			
-		}).fail(function(){
-			$("#"+container).append("<p>No se pudo cargar la ruta.</p>");
-		});
-			
-	});
-
-}
-*/
 
 var canvasOffset;
 var offsetX;
