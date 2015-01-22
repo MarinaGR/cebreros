@@ -1,8 +1,10 @@
-var api_url='http://w3.cebreros.es/api/v1/';
-var extern_url='http://w3.cebreros.es/';
+var api_url='http://cebreros.es/api/v1/';
+var extern_url='http://cebreros.es/';
 var local_url='./resources/json/';
 var storage_url='Cebreros/resources/';
 var file_path;
+
+var online;
 
 var coord_image_ppal=new Array();
 var coord_image=new Array();
@@ -10,7 +12,7 @@ var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
 var first_click=true;
-var zoom=1.2;
+var zoom=1.15;
 
 var now=new Date(2014,0,1).getTime(); 
 
@@ -23,7 +25,7 @@ var archivos={
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
-				  '/49', '/50', '/51', '/52', '/53', '/54']
+				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/61','/63']
 			};
 			 
 function onBodyLoad(type, container)
@@ -87,7 +89,7 @@ function onOnline()
 {
 	/*setTimeout(function(){
 		$("#contenido").attr("src",siteurl);
-	},250);
+	},250);*/
 	
 	/*var networkState = navigator.connection.type;
 
@@ -101,6 +103,8 @@ function onOnline()
     states[Connection.CELL]     = 'Cell generic connection';
     states[Connection.NONE]     = 'No network connection';
 
+	online=true;
+	conexion_type=states;
     alert('Conexión: ' + states[networkState]);*/
 
 }
@@ -156,7 +160,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var fecha=new Date(d.DatePublish);
 						var imagen=d.Image; 
 
-						if(imagen!=null) 
+						if(imagen!=null || imagen!="null") 
 						{						
 							if(imagen.indexOf("http")<0)
 							{
@@ -198,7 +202,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					if(isLocal!=true && isLocal!="true")
 						cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
-					if(imagen!=null) 
+					if(imagen!=null || imagen!="null") 
 					{						
 						if(imagen.indexOf("http")<0)
 						{
@@ -294,7 +298,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var imagen=d.MinImage; 
 						
 						cadena+="<div class='buttons_galleries'>";
-						if(imagen!=null) 
+						if(imagen!=null || imagen!="null") 
 							cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 							
 						cadena+="<h3>"+d.Title+"</h3>";
@@ -345,7 +349,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						cadena+="<div class='buttons_routes' onclick='window.location.href=\"mapa.html?id="+d.ID+"\"'>";
 						
 						var imagen=d.Image; 
-						if(imagen!=null) 
+						if(imagen!=null || imagen!="null") 
 						{
 							//Sacar ruta local para la imagen	
 							var array_ruta_imagen=imagen.split("/public/images/");
@@ -373,11 +377,12 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						switch(id)
 						{
 							case "/1":src_image='./resources/images/mapas/mapa_01.jpg';  
-									  coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
+									  coord_image_ppal=[["top-left", "40.4797", "-4.4814"],["bottom-left", "40.4210", "-4.4814"], ["top-right","40.4797", "-4.3656"]];
 									  break;
 									  
 							case "/2": src_image='./resources/images/mapas/mapa_02.jpg';  
 									   coord_image_ppal=[["top-left", "40.6769", "-4.7371"],["bottom-left", "40.6379", "-4.7371"], ["top-right","40.6769", "-4.6257"]];
+									   // coord_image_ppal=[["top-left", "40.4880", "-4.5537"],["bottom-left", "40.4294", "-4.5537"], ["top-right","40.4880", "-4.4379"]];
 									   break;
 									   
 							case "/3": src_image='./resources/images/mapas/mapa_03.jpg';
@@ -423,7 +428,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					cadena+="<h2>"+d.Title+"</h2>";
 					
 					var imagen=d.Image; 
-					if(imagen!=null) 
+					if(imagen!=null || imagen!="null") 
 					{
 						//Sacar ruta local para la imagen	
 						var array_ruta_imagen=imagen.split("/public/images/");
@@ -452,7 +457,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							cadena+="<br><img src='"+imagenes[i].MinImage+"' alt='Imagen ruta' />";
 					}*/
 					
-					cadena+='<p><br><br><a class="vermas" onclick="window.open(\''+d.WikilocLink+'\', \'_system\', \'location=yes\');" href="#" >Ver ruta en Wikiloc</a></p>';	
+					if(d.WikilocLink!="")
+					{
+						cadena+='<p><br><br><a class="vermas" onclick="window.open(\''+d.WikilocLink+'\', \'_system\', \'location=yes\');" href="#" >Ver ruta en Wikiloc</a></p>';
+					}						
 										
 					cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 					
@@ -1162,7 +1170,12 @@ function draw_geoloc(position)
 								  "</div><br>");
 								  
 	if(lat>=coord_image[0][1] || lat<=coord_image[1][1] || lon<=coord_image[0][2] || lon>=coord_image[2][2])
-		$("#datos_geo_position").html("<p>Tu posici&oacute;n ("+lat+", "+lon+") est&aacute; fuera de este mapa</p>");	
+		$("#datos_geo_position").html("<div class='data_route'>"+
+										"<p class='title_01'>GEOLOCALIZACI&Oacute;N</p>"+
+										"<b>TU POSICI&Oacute;N</b> est&aacute; fuera de este mapa<br>"+
+										"<b>Latitud: </b>:" +lat+"<br>"+
+										"<b>Longitud: </b>: "+lon+"<br>"+
+								  "</div><br>");	
 		
 }
 function draw_geoloc2(position)
@@ -1316,7 +1329,10 @@ function downloadToDir(d) {
 
 	$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
 	//$("body").prepend("<div id='descarga'></div>");
-	$("#descarga").append("DESCARGANDO ARCHIVOS...<br>");
+		
+	$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
+	
+	$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');
 	
 	$.each(archivos, function(folder,files)  
 	{	
@@ -1336,6 +1352,7 @@ function downloadToDir(d) {
 				
 				ft.download(api_url+folder+filename , dlPath, function() {
 						$("#descarga").append(dlPath+" .... OK<br>");
+						cargar_barra("barra_carga");
 					}, 
 					function(error){
 						$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
@@ -1368,27 +1385,29 @@ function downloadToDir(d) {
 							fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
 
 								var imagenes=d.Items;
-								for(i=0;i<d.Total;i++)
+								//for(i=0;i<d.Total;i++)
 								{				
-									var imagen_local=(imagenes[i].Image).split("/public/images/");
+									/*var imagen_local=(imagenes[i].Image).split("/public/images/");
 	
 									console.log("RUTA WEB: "+imagenes[i].Image);
 									console.log("RUTA LOCAL: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
 									
 									var ft = new FileTransfer();		
 									
-									var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 			
+									var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 	*/		
 
 									//$("#descarga").append(dlPath);
+									i=0;
+									downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
 									
-									setTimeout(function() {
+									/*setTimeout(function() {
 										ft.download(imagenes[i].Image , dlPath, function() {
 												$("#descarga").append(dlPath+" .... OK<br>");
 											}, 
 											function(error){
 												$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
 											});
-									}, 50);
+									}, 50);*/
 								}
 								
 							} ,function(error){
@@ -1422,6 +1441,35 @@ function downloadToDir(d) {
 		$("#descarga").hide();
 	}, 500);*/
 }
+
+function downloadImages(imagenes, i, total, fs) {
+
+	var imagen_local=(imagenes[i].Image).split("/public/images/");
+
+	var ft = new FileTransfer();		
+	
+	var dlPath = path+"/"+imagen_local[1]; 	
+	
+	ft.download(imagenes[i].Image , dlPath, function() {
+			$("#descarga").append(dlPath+" .... OK<br>");	
+			cargar_barra("barra_carga");
+			i++;			
+			if(i<total)
+				downloadImages(imagenes, i, total, fs);
+		}, 
+		function(error){
+			$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
+		});
+
+}
+function cargar_barra(id, val)
+{		
+	var barra_progreso=$("#"+id);
+	var value = barra_progreso.val();  
+	value+=0.9;
+    barra_progreso.val(value);  				
+}
+
 function gotFS(fileSystem) 
 {
 	//var fichero="./resources/json/routes.json";

@@ -19,6 +19,10 @@ h1,h2,h3,h4 {
 	color: #00405D;
 }
 
+iframe {
+	max-width: 100%;
+}
+
 .contenedor {
 	width: 100%;
 	max-width: 768px;
@@ -293,7 +297,7 @@ ul li b {
 	color: #333;
 	padding: 20px;
 	padding-top: 120px;
-	background: rgba(255,255,255,0.9) url(../resources/images/general/loading.gif) no-repeat center 10px;
+	background: rgba(255,255,255,0.95) url(../resources/images/general/loading.gif) no-repeat center 10px;
 }
 
 @media screen and (max-width: 480px)
