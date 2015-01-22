@@ -23,7 +23,7 @@ var archivos={
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
-				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/61','/63']
+				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/60','/61','/63']
 			};
 			 
 function onBodyLoad(type, container)
@@ -258,7 +258,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							destination=geo_lat+","+geo_lon;
 							get_geo_route_map();
 							
-							cadena+="<br><iframe width='100%' style='height:400px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";			
+							cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";			
 							
 						}
 						
@@ -292,7 +292,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							for(i=0;i<data.Result.TotalVideos;i++)
 							{
 								var src_video=$(videos[i].Embed).attr('src');
-								$(videos[i].Embed).css('max-width','100%'); 								
 								
 								if(src_video.substring(0, 2)=="//")
 								{
@@ -303,6 +302,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								if(src_video.substring(0, 4)=="http")
 									cadena+="<br>"+videos[i].Embed;			
 							}
+							
+							$(videos[i].Embed).css('max-width','100%'); 	
 							
 							cadena+="<br>";
 						}
@@ -353,7 +354,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					
 					if(isLocal)
 					{
-						window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
+						/*window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
 							function listDir(fileEntry)
 							{  
 								console.log(JSON.stringify(fileEntry.fullPath));
@@ -375,8 +376,14 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									}
 								}); 
 								
-							}, fail);
-  
+							}, fail);*/
+							if(d.Total>0) 
+							{
+								var imagenes=d.Items;
+								for(i=0;i<d.Total;i++)
+									cadena+="<br><img src='file:///mnt/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									//Cargar aquí la  imagen local
+							}
 						
 					}
 					else
