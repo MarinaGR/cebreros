@@ -49,8 +49,21 @@ function check_internet(){
 
 	var isOffline = 'onLine' in navigator && !navigator.onLine;
 
+	var networkState = navigator.connection.type;
+	var states = {};
+	states[Connection.UNKNOWN]  = 'Conexión desconocida';
+	states[Connection.ETHERNET] = 'Conexión Ethernet';
+	states[Connection.WIFI]     = 'Conexión WiFi';
+	states[Connection.CELL_2G]  = 'Conexión 2G';
+	states[Connection.CELL_3G]  = 'Conexión 3G';
+	states[Connection.CELL_4G]  = 'Conexión 4G';
+	states[Connection.CELL]     = 'Conexión genérica';
+	states[Connection.NONE]     = 'Sin conexión';
+	
+	alert(states[networkState]);
+		
 	if(!isOffline) 
-	{		
+	{			
 		//Primera ejecución, descargamos contenidos si está online y en la página principal
 		/*var fecha=getLocalStorage("fecha"); 
 		if(typeof fecha == "undefined"  || fecha==null)	
@@ -68,6 +81,10 @@ function check_internet(){
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 		}
 			
+	}
+	else
+	{
+		//alert(states[networkState]);
 	}
 
 }
@@ -99,7 +116,7 @@ function onOnline()
 		$("#contenido").attr("src",siteurl);
 	},250);*/
 	
-	var networkState = navigator.connection.type;
+	/*var networkState = navigator.connection.type;
 
     var states = {};
     states[Connection.UNKNOWN]  = 'Unknown connection';
@@ -111,9 +128,7 @@ function onOnline()
     states[Connection.CELL]     = 'Cell generic connection';
     states[Connection.NONE]     = 'No network connection';
 
-	online=true;
-	conexion_type=states;
-   // alert('Conexión: ' + states[networkState]);
+    alert('Conexión: ' + states[networkState]);*/
 
 }
 function onOffline()
@@ -1212,7 +1227,7 @@ function downloadToDir(d) {
 	}, 500);*/
 }
 
-function downloadImages(imagenes, i, total, fs) {
+function downloadImages(imagenes, i, total, path) {
 
 	var imagen_local=(imagenes[i].Image).split("/public/images/");
 
@@ -1225,7 +1240,7 @@ function downloadImages(imagenes, i, total, fs) {
 			cargar_barra("barra_carga");
 			i++;			
 			if(i<total)
-				downloadImages(imagenes, i, total, fs);
+				downloadImages(imagenes, i, total, path);
 		}, 
 		function(error){
 			$("#descarga").append(imagen_local[1]+" .... KO "+error.code+"<br>");
