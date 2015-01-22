@@ -145,7 +145,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{		
-		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
+		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
@@ -292,6 +292,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							for(i=0;i<data.Result.TotalVideos;i++)
 							{
 								var src_video=$(videos[i].Embed).attr('src');
+								$(videos[i].Embed).css('max-width','100%'); 
 								
 								if(src_video.substring(0, 2)=="//")
 								{
@@ -1251,11 +1252,11 @@ function downloadToDir(d) {
 		
 	}, 250);
 	
-	/*setTimeout(function() {
-		$("#descarga").html("");
+	setTimeout(function() {
+		//$("#descarga").html("");
 		setLocalStorage("first_time", true);
 		$("#descarga").hide();
-	}, 500);*/
+	}, 3500);
 }
 
 function downloadImages(imagenes, i, total, path) {
