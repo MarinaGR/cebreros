@@ -9,6 +9,8 @@ var coord_image=new Array();
 var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
+var total_img_gals;
+
 var first_click=true;
 var zoom=1.15;
 
@@ -19,12 +21,12 @@ var fs;
 var DATADIR;
 
 var archivos={
-			  "":['routes', 'galleries'],		
+			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
-			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
 				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/60','/61','/63']
 			};
+			//category:['/5','/14', '/17', '/18'],
 			 
 function onBodyLoad(type, container)
 {	
@@ -145,7 +147,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{		
-		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
+		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
@@ -1107,13 +1109,6 @@ function onFileSystemSuccess(fileSystem)
 
 	console.log("File System OK");
 	//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
-	
-	//window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.unlimitedStorage, console.log.bind(console));
-
-	/*navigator.webkitPersistentStorage.requestQuota (1024*1024*1024, function() {
-		  console.log ('requestQuota: ', arguments);
-		}, onError);*/
-
 		
 	fs=fileSystem.root;
 	
@@ -1194,6 +1189,8 @@ function downloadToDir(d) {
 			//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 			var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
 						
+				var total_gals=data1.Result.TotalItems;
+				
 				$.each(data1.Result.Items, function(index, gal){   
 
 					//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
@@ -1201,46 +1198,31 @@ function downloadToDir(d) {
 						
 						var d=data2.Result;
 											
-						//if(online)
-						{ 
-							if(d.Total>0) 
-							{
-								fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
+						if(d.Total>0) 
+						{
+							fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
 
-									var imagenes=d.Items;
-									//for(i=0;i<d.Total;i++)
-									{				
-										/*var imagen_local=(imagenes[i].Image).split("/public/images/");
-		
-										console.log("RUTA WEB: "+imagenes[i].Image);
-										console.log("RUTA LOCAL: "+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]);
+								var imagenes=d.Items;
+								
+								i=0;
+								total_img_gals=d.Total;
+								downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
+								if(total_img_gals==0)
+									total_gals--;
 										
-										var ft = new FileTransfer();		
-										
-										var dlPath = fs.toURL()+file_path+"/gallery/"+gal.ID+"/"+imagen_local[1]; 	*/		
-
-										//$("#descarga").append(dlPath);
-										i=0;
-										downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
-										
-										/*setTimeout(function() {
-											ft.download(imagenes[i].Image , dlPath, function() {
-													$("#descarga").append(dlPath+" .... OK<br>");
-												}, 
-												function(error){
-													$("#descarga").append(dlPath+" .... KO "+error.code+"<br>");
-												});
-										}, 50);*/
-									}
-									
-								} ,function(error){
-									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
-									//alert("Get Directory "+folder+" fail " + error.code);
-								});
-							}
-							
+								
+							} ,function(error){
+								$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
+								//alert("Get Directory "+folder+" fail " + error.code);
+							});
 						}
-
+							
+						if(total_gals==0)
+						{
+							//$("#descarga").html("");
+							setLocalStorage("first_time", true);
+							$("#descarga").hide();
+						}
 				
 					}).fail(function(jqXHR, textStatus, errorThrown) {							
 						console.log("Error al recoger la galeria");				
@@ -1259,11 +1241,6 @@ function downloadToDir(d) {
 		
 	}, 250);
 	
-	setTimeout(function() {
-		//$("#descarga").html("");
-		setLocalStorage("first_time", true);
-		$("#descarga").hide();
-	}, 3500);
 }
 
 function downloadImages(imagenes, i, total, path) {
@@ -1277,11 +1254,13 @@ function downloadImages(imagenes, i, total, path) {
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
+			total_img_gals--;
 			i++;			
 			if(i<total)
 				downloadImages(imagenes, i, total, path);
 		}, 
 		function(error){
+			total_img_gals--;
 			$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
 		}
 	);

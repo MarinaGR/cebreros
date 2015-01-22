@@ -1,7 +1,7 @@
 {
     "Sucess": 1,
     "Result": {
-        "ItemCount": 8,
+        "ItemCount": 13,
         "Items": [
 			{
                 "ID": "44",
@@ -146,7 +146,99 @@
                 "ViewCategory": "Qué visitar",
                 "ViewAuthor": "ayuntamiento",
                 "Permalink": "turismo/que-visitar/la-antena-de-la-esa"
-            }      
+            },     
+			
+			 {
+                "ID": "48",
+                "PreTitle": null,
+                "Title": "El Puente San Marcos y del Becedas",
+                "PostTitle": null,
+                "Summary": null,
+                "Page": "<p>En una hermosa zona de la Villa de Cebreros entre viñas y pinares y sobre el arroyo de la Pizarra encontramos el puente de San Marcos, de un solo ojo, tajamar a dos aguas y con paramentos laterales, se cree que es de traza romana-románica con varias reconstrucciones. <br><br>A continuación de este, en un camino a la izquierda se alza ante nuestra mirada el puente del Becedas. De mayor tamaño que el de San Marcos, con calzada lastrillada y de un solo ojo, destaca el lomo de lobo en el machón, siendo achatado desde su tajamar.<br></p>",
+                "Image": "page48-img-el-puente-san-marcos-y-del-becedas.jpg",
+                "DatePublish": "2014-12-01 00:00:00",
+                "DateExpire": "2024-12-05 00:00:00",
+                "PageTitle": null,
+                "MetaKeyWords": null,
+                "MetaDescription": null,
+                "Geolocation": "(40.47376944444444, -4.429536111111111)15",
+                "ViewCategory": "Puentes de Cebreros",
+                "ViewAuthor": "ayuntamiento",
+                "Permalink": "turismo/que-visitar/puentes-de-cebreros/el-puente-san-marcos-y-del-becedas"
+            },
+            {
+                "ID": "47",
+                "PreTitle": null,
+                "Title": "El Puente de Valsordo y Santa Justa",
+                "PostTitle": null,
+                "Summary": null,
+                "Page": "<p>A poco más de tres kilómetros de Cebreros en el camino en dirección al río Alberche nos encontramos con el puente de Valsordo y Santa Justa. <br>Por Cebreros discurría según varios escritos una calzada romana que incluía un puente sobre el río Alberche, que posteriormente se convertiría en el camino imperial de Toledo a Valladolid de la Cañada Real Leonesa oriental debido a la trashumancia de ganados.<br><br>Con el desarrollo de la Mesta en el siglo XIII, Cebreros se vuelve en un lugar de paso obligado de ganados. A lo largo de las cañadas había contaderos de animales y uno de éstos se hallaba en el puente de Valsordo y Santa Justa. <br><br>Se supone que el puente de Valsordo aún teniendo reconstrucciones medievales tuvo que tener un primer origen romano porque cuenta con arcos de medio punto, mientras que&nbsp; los medievales tenían arcos de ojiva. De los tres arcos, el central es de mayor tamaño&nbsp; y el puente tiene perfil de doble asno o a dos aguas con un tajamar contra corriente y con calzada lastricada. <br><br>Antes de pasar al puente encontramos la inscripción: <br><i><br>“SEPAN TODOS LOS SEÑORES DE GANADOS QUE ENTRE EL HONRADO CONCEJO DE LA MESTA E LOS SEÑORES DEÁN Y CABILDO DE AVILA SE DIO ASIENTO SOBRE EL PASO DESTE PUENTE DE VALSORDO E DEL… ARRIEZMO DE TODO EL OBISPADO QUE PAGUEN DE CADA MILLAR CUARENTA E TRES MARVEDIS E MEDIO E LO MAS O MENOS A SU CUENTA; LA SENTENCIA DELLO FALLARAN EN EL ARCA DEL CONCEJO DE VILLACASTIN DONDE TIENE SUS ESCRIPTURAS CON OTRAS MUCHAS CONDICIONES”.</i><br><br>A pocos metros del primer puente encontramos otra gran piedra con otra inscripción que dice: <br><br><i>“SEPAN TODOS LOS SEÑORES DE GANADO QUE ENTRE EL HONRADO CONCEJO DE LA MESTA E EL SEÑOR DON GOMEZ SUAREZ DE FIGUEROA CONDE DE FERIA SE DIO ASIENTO SOBRE EL PASO DE SANCTA YUSTA QUE ES EN SU TIERRA E AN DE PAGAR TODOSN LOS GANADOS QUE PASEN ADELANTE A CCCCXL MARAVEDIS EL MILLAR E LOS QUE FUEREN A BADAJOZ A OCHO ELMILLAR E A CUENTO E DESCUENTO DE CADA PARTIDO; LA SENTENCIA DELLO FALLARANLA EN EL ARCA DEL CONCEJO DE VILLACASTIN DONDE TIENEN SUS ESCRIPTURAS CON OTRAS MUCHAS CONDICIONES”.</i> Esta ya pertenece al siguiente puente, el de Santa Justa.<br><br>El puente de Santa Justa es de un solo ojo, calzada lastricada a dos aguas con paramentos. Este es mucho más sencillo que el de Valsordo, pero ambos forman un conjunto de extraordinaria belleza arquitectónica de obligada parada al visitante.<br></p>",
+                "Image": "page47-img-el-puente-de-valsordo-y-santa-justa.jpg",
+                "DatePublish": "2014-12-01 00:00:00",
+                "DateExpire": "2024-12-05 00:00:00",
+                "PageTitle": null,
+                "MetaKeyWords": null,
+                "MetaDescription": null,
+                "Geolocation": "(40.423941666666664, -4.465772222222222)15",
+                "ViewCategory": "Puentes de Cebreros",
+                "ViewAuthor": "ayuntamiento",
+                "Permalink": "turismo/que-visitar/puentes-de-cebreros/el-puente-de-valsordo-y-santa-justa"
+            },
+			
+			{
+                "ID": "51",
+                "PreTitle": null,
+                "Title": "La plaza del Altozano",
+                "PostTitle": null,
+                "Summary": null,
+                "Page": "<p>La Plaza de Tetuán, popularmente conocida por la plaza del Altozano es una plaza cuadrangular con hermosos edificios en piedra&nbsp; encalados&nbsp; que bordean su perímetro, de la que parte de ésta es peatonal. Del conjunto destaca su fuente de finales del siglo XIX, en la que podemos leer dos inscripciones en el gran cuerpo central de piedra: <i>“El Ayuntamiento de Cebreros presidido por el alcalde D. Fernando González en 1884” y “La constancia y buena… del pueblo y su Ayuntamiento nos botaron estas… que dicen viva Cebreros”.</i><br><br>De la fuente&nbsp; destaca especialmente su decoración, con un pilón octogonal. Del centro se eleva una pilastra flanqueada por una gran viera sobre bolas redondas. El hecho de que la fuente termine en una concha hace alusión al camino de Santiago procedente de levante que pasa por la villa. <br><br>Se cuenta que&nbsp; D. Jacinto Benavente, basándose en hechos reales, escribió su novela \"La Malquerida\" en Cebreros y que todas las mañanas acudía a la plaza del Altozano como lugar de estímulo para su escritura. <br></p>",
+                "Image": "page51-img-la-plaza-del-altozano.jpg",
+                "DatePublish": "2014-12-01 00:00:00",
+                "DateExpire": "2024-12-05 00:00:00",
+                "PageTitle": null,
+                "MetaKeyWords": null,
+                "MetaDescription": null,
+                "Geolocation": "(40.454636111111114, -4.462680555555556)15",
+                "ViewCategory": "Plazas de Cebreros",
+                "ViewAuthor": "ayuntamiento",
+                "Permalink": "turismo/que-visitar/plazas-de-cebreros/la-plaza-del-altozano"
+            },
+            {
+                "ID": "50",
+                "PreTitle": null,
+                "Title": "La plaza de la Santísima Trinidad",
+                "PostTitle": null,
+                "Summary": null,
+                "Page": "<p>Aunque su nombre actual sea Plaza de la Santísima Trinidad, es conocida en Cebreros&nbsp; como \"el cotanillo del pozo de la Tía Rodriga” debido a que en ella alberga una vivienda típica castellana construida con adobes, madera y piedra de la que destaca el pozo y su antiguo brocal así como la vieja cuadra de ganados. Es la casa popular mejor conservada de Cebreros, y que nos revela cómo pudo llegar a ser la arquitectura de la villa.</p>",
+                "Image": "page50-img-la-plaza-de-la-santisima-trinidad.jpg",
+                "DatePublish": "2014-12-01 00:00:00",
+                "DateExpire": "2024-12-05 00:00:00",
+                "PageTitle": null,
+                "MetaKeyWords": null,
+                "MetaDescription": null,
+                "Geolocation": "(40.454461111111115, -4.463188888888889)15",
+                "ViewCategory": "Plazas de Cebreros",
+                "ViewAuthor": "ayuntamiento",
+                "Permalink": "turismo/que-visitar/plazas-de-cebreros/la-plaza-de-la-santisima-trinidad"
+            },
+            {
+                "ID": "49",
+                "PreTitle": null,
+                "Title": "La plaza de España",
+                "PostTitle": null,
+                "Summary": null,
+                "Page": "<p>La Plaza España de Cebreros es el centro neurálgico de reunión y disfrute de la villa, de dilatadas dimensiones y actualmente peatonal posee el encanto de sus vistas, tanto hacia la Iglesia de Santiago declarada como bien de interés cultural, como hacia las fachadas históricas de edificios emblemáticos, la casa consistorial e inmuebles aledaños. &nbsp;<br><br>Aunque ha visto como el paso del tiempo la convertían en más contemporánea, dinámica y afín a los momentos actuales, no ha perdido el encanto de su historia y ha conservado parte de algunos de sus elementos principales como los restos de la&nbsp; antigua fuente de cuatro caños.<br><br>Originariamente la fuente de la Plaza de Cebreros, de pilón octogonal tenía dieciséis metros de perímetro que se redujeron a ocho en 1940. En el interior del pilón había cuatro pilares con caños de cabeza de león o dragón en bronce, que también fueron sustituidos por cuatro losas de piedras adheridas al cuerpo central en el siglo XX, formado éste por un pedestal flanqueado con forma circular donde se situaban dos querubines de bronce, rodeados por un adorno de forja de dos lámparas. <br><br>Actualmente de la antigua fuente solo se conservan los querubines en bronce y fueron ubicados en la actual fuente que imita íntegramente a la antigua en las obras realizadas en 2007 cuando se llevaron a cabo las obras para transformarla en peatonal.<br></p>",
+                "Image": "page49-img-la-plaza-de-espana.jpg",
+                "DatePublish": "2014-12-01 00:00:00",
+                "DateExpire": "2024-12-05 00:00:00",
+                "PageTitle": null,
+                "MetaKeyWords": null,
+                "MetaDescription": null,
+                "Geolocation": "(40.45509444444445, -4.464930555555556)15",
+                "ViewCategory": "Plazas de Cebreros",
+                "ViewAuthor": "ayuntamiento",
+                "Permalink": "turismo/que-visitar/plazas-de-cebreros/la-plaza-de-espana"
+            }
                        
             
         ]
