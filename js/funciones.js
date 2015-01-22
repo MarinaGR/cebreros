@@ -1,5 +1,5 @@
-var api_url='http://cebreros.es/api/v1/';
-var extern_url='http://cebreros.es/';
+var api_url='http://www.cebreros.es/api/v1/';
+var extern_url='http://www.cebreros.es/';
 var local_url='./resources/json/';
 var storage_url='Cebreros/resources/';
 var file_path;
@@ -19,7 +19,7 @@ var fs;
 var DATADIR;
 
 var archivos={
-			  "":['routes'],		
+			  "":['routes', 'galleries'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
@@ -75,8 +75,8 @@ function check_internet(){
 		if(current_url.indexOf("index.html")!=-1) 
 		{
 			alert(states[networkState]);
-			//var first_time=getLocalStorage("first_time"); 
-			//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+			var first_time=getLocalStorage("first_time"); 
+			if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 		}
 			
@@ -145,13 +145,13 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{		
-		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
+		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				//alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
-				$("#"+container).html("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
+				$("#"+container).append("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
 			});
 			
 		});
@@ -350,7 +350,35 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					
 					cadena+=d.Description;
 					
-					//if(online)
+					if(isLocal)
+					{
+						window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
+							function listDir(fileEntry)
+							{  
+								console.log(JSON.stringify(fileEntry.fullPath));
+
+								var reader = fileEntry.createReader();
+								reader.readEntries(function gotList(entries) {
+									for(i=0; i<entries.length; i++) {
+										if(entries[i].name.indexOf(".jpg") != -1) {
+											cadena+="<br><img src='"+entries[i].name+"' style='display:block;margin:auto;' alt='Imagen' />";
+										}
+									}
+								}, function() {
+									if(d.Total>0) 
+									{
+										var imagenes=d.Items;
+										for(i=0;i<d.Total;i++)
+											cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+											//Cargar aquí la  imagen local
+									}
+								}); 
+								
+							}, fail);
+  
+						
+					}
+					else
 					{
 						if(d.Total>0) 
 						{
@@ -498,7 +526,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
 		//alert('Error: '+textStatus+" - "+errorThrown);	
-		$("#"+container).html("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
+		$("#"+container).html("No se han cargado los datos del fichero.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
 	}	
 }
 
@@ -1137,14 +1165,12 @@ function downloadToDir(d) {
 				//$("#descarga").append(dlPath+"<br>");
 				
 				ft.download(api_url+folder+filename , dlPath, function() {
-						$("#descarga").append(folder+filename+".json"+" .... OK<br>");
+						//$("#descarga").append(folder+filename+".json"+" .... OK<br>");
 						cargar_barra("barra_carga");
 					}, 
 					function(error){
 						$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
 					});
-					
-				//downloadFiles(folder+filename, fs)
 			}
 			,function(error){
 				$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
@@ -1225,32 +1251,11 @@ function downloadToDir(d) {
 		
 	}, 250);
 	
-	setLocalStorage("first_time", true);
-	
 	/*setTimeout(function() {
 		$("#descarga").html("");
+		setLocalStorage("first_time", true);
 		$("#descarga").hide();
 	}, 500);*/
-}
-
-function downloadFiles(relative_path, fs) {
-	
-	var ft = new FileTransfer();		
-	
-	var dlPath = fs.toURL()+file_path+"/"+relative_path+".json"; 			
-
-	//$("#descarga").append(dlPath+"<br>");
-	
-	ft.download(api_url+folder+filename , dlPath, function() {
-			$("#descarga").append(relative_path+".json"+" .... OK<br>");
-			cargar_barra("barra_carga");
-			downloadFiles(relative_path, fs)
-		}, 
-		function(error){
-			$("#descarga").append(relative_path+".json"+" .... KO "+error.code+"<br>");
-		}
-	);
-
 }
 
 function downloadImages(imagenes, i, total, path) {
@@ -1262,14 +1267,14 @@ function downloadImages(imagenes, i, total, path) {
 	var dlPath = path+"/"+imagen_local[1]; 
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
-			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
+			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
 			i++;			
 			if(i<total)
 				downloadImages(imagenes, i, total, path);
 		}, 
 		function(error){
-			$("#descarga").append(imagen_local[1]+" .... KO "+error.code+"<br>");
+			$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
 		}
 	);
 }
