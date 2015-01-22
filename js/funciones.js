@@ -9,7 +9,7 @@ var coord_image=new Array();
 var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
-var total_img_gals;
+var total_img_gals, total_gals;
 
 var first_click=true;
 var zoom=1.15;
@@ -1186,15 +1186,15 @@ function downloadToDir(d) {
 		//Descarga imagenes
 		fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
 		
-			//var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
-			var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
+			var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
+			//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
 						
-				var total_gals=data1.Result.TotalItems;
+				total_gals=data1.Result.TotalItems;
 				
 				$.each(data1.Result.Items, function(index, gal){   
 
 					//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
-					var objajax2=$.getJSON(api_url+"gallery/"+gal.ID+".json", function donwload_images(data2) {
+					var objajax2=$.getJSON(api_url+"gallery/"+gal.ID, function donwload_images(data2) {
 						
 						var d=data2.Result;
 											
@@ -1207,8 +1207,6 @@ function downloadToDir(d) {
 								i=0;
 								total_img_gals=d.Total;
 								downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
-								if(total_img_gals==0)
-									total_gals--;
 										
 								
 							} ,function(error){
@@ -1216,16 +1214,10 @@ function downloadToDir(d) {
 								//alert("Get Directory "+folder+" fail " + error.code);
 							});
 						}
-							
-						if(total_gals==0)
-						{
-							//$("#descarga").html("");
-							setLocalStorage("first_time", true);
-							$("#descarga").hide();
-						}
 				
 					}).fail(function(jqXHR, textStatus, errorThrown) {							
-						console.log("Error al recoger la galeria");				
+						console.log("Error al recoger la galeria");
+						total_gals--;												
 					});
 
 				});
@@ -1264,6 +1256,16 @@ function downloadImages(imagenes, i, total, path) {
 			$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
 		}
 	);
+	
+	if(total_img_gals==1)
+		total_gals--;
+		
+	if(total_gals==0)
+	{
+		//$("#descarga").html("");
+		setLocalStorage("first_time", true);
+		$("#descarga").hide();
+	}		
 }
 function cargar_barra(id)
 {		
