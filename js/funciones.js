@@ -76,18 +76,25 @@ function check_internet(){
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
-			alert(states[networkState]);
-			var first_time=getLocalStorage("first_time"); 
-			if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
-				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+			if(states[Connection.ETHERNET] || states[Connection.WIFI])
+			{		
+				alert(states[networkState]+". Descarga de datos");
+				var first_time=getLocalStorage("first_time"); 
+				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+			}
+			else
+			{
+				var first_time=getLocalStorage("first_time"); 
+				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+				{
+					var confirmacion=confirm(states[networkState]+". Para ver la aplicación correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, ¿desea continuar?");
+					if(confirmacion)
+						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+				}
+			}
 		}
 			
-	}
-	else
-	{
-		var current_url=window.location.href;
-		if(current_url.indexOf("index.html")!=-1) 
-			alert(states[networkState]);
 	}
 
 }
@@ -540,7 +547,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
 		//alert('Error: '+textStatus+" - "+errorThrown);	
-		$("#"+container).html("No se han cargado los datos del fichero.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
+		$("#"+container).html("No se han cargado los datos del fichero.<br>Error de conexi&oacute;n");
 	}	
 }
 
