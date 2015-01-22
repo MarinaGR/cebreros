@@ -1252,7 +1252,7 @@ function downloadImages(imagenes, i, total, path) {
 	var dlPath = path+"/"+imagen_local[1]; 
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
-			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
+			$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
 			total_img_gals--;
 			i++;			
