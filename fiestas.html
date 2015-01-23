@@ -15,8 +15,8 @@
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
 		
-		<script>				
-			$(document).ready(function() {
+		<script>			
+			document.addEventListener("deviceready", function() {
 				ajax_recover_data('category', '/5', 'contenido', true);				
 			});
 		</script>

@@ -153,7 +153,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			alert("No se cargo el archivo "+fs.toURL()+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			alert("No se ha cargado el archivo "+fs.toURL()+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -179,8 +179,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}
 	
 	function f_success(data) {
-	
-		alert(data.Result.ID);
 	
 		//data = $.parseJSON(data);
 		
@@ -1265,7 +1263,7 @@ function downloadImages(imagenes, i, total, path) {
 		}
 	);
 	
-	if(total_img_gals==total_gals)
+	if(total_img_gals==total_gals-1)
 	{
 		//$("#descarga").html("");
 		setLocalStorage("first_time", true);

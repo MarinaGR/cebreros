@@ -15,7 +15,7 @@
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
 		<script>
-			$(document).ready(function() {
+			document.addEventListener("deviceready", function()  {
 				var id=get_var_url("id");
 				var local=get_var_url("local"); 
 				ajax_recover_data('page', '/'+id, 'contenido', local);
