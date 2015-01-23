@@ -76,12 +76,13 @@ function check_internet(){
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
-			if(states[Connection.ETHERNET] || states[Connection.WIFI])
+			if(states[networkState]==Connection.ETHERNET || states[networkState]==Connection.WIFI)
 			{		
-				alert(states[networkState]+". Descarga de datos");
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
-					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+					alert(states[networkState]+". Descarga de datos");
+				
+				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 			}
 			else
 			{
@@ -148,14 +149,14 @@ function onOffline()
 
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
-	alert(isLocal+" "+fs.toURL()+file_path+type+id+".json");
+	alert(isLocal+" "+file_path+type+id+".json");
 	
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
+		var objajax=$.getJSON(file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			alert("No se ha cargado el archivo "+fs.toURL()+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			alert("No se ha cargado el archivo "+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -390,7 +391,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							{
 								var imagenes=d.Items;
 								for(i=0;i<d.Total;i++)
-									cadena+="<br><img src='/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									cadena+="<br><img src='"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar aquí la  imagen local
 							}
 						
@@ -1249,8 +1250,6 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#descarga").append(" "+total_gals+" ");	
-	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
@@ -1270,7 +1269,7 @@ function downloadImages(imagenes, i, total, path) {
 		setTimeout(function() {
 			setLocalStorage("first_time", true);
 			$("#descarga").hide();
-		}, 50);
+		}, 100);
 	}		
 }
 function cargar_barra(id)
