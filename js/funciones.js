@@ -14,11 +14,10 @@ var total_img_gals=0, total_gals=0;
 var zoom=1.15;
 
 var now=new Date(2014,0,1).getTime(); 
-var tdownload;
 
 var destination;
 var fs;
-var DATADIR;
+var DATADIR, IMGDIR;
 
 var archivos={
 			  "":['routes'],		
@@ -87,20 +86,19 @@ function check_internet(){
 			}
 			else
 			{
-				console.log(tdownload);
-				
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 				{
 					var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
 					if(confirmacion)
 					{
-						if(tdownload!=false)				
+						var tdownload=getSessionStorage("tdownload"); 
+						if(typeof tdownload == "undefined"  || tdownload==null || tdownload==true)	
 							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 					}
 					else
 					{
-						tdownload=false;
+						setSessionStorage("tdownload",false); 
 					}
 				}
 				
@@ -166,10 +164,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON("/sdcard/"+storage_url+type+id+".json", f_success)
+		var objajax=$.getJSON(DATADIR+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			console.log("No se ha cargado el archivo /sdcard/"+storage_url+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			console.log("No se ha cargado el archivo "+DATADIR+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -406,11 +404,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								var imagenes=d.Items;
 								for(i=0;i<d.Total;i++)
 								{
-									cadena+="<br><img src='"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-									
-									cadena+="<br><img src='/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-									
-									cadena+="<br><img src='file:///sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									cadena+="<br><img src='"+IMGDIR+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar aquí la  imagen local
 								}
 							}
@@ -423,7 +417,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							var imagenes=d.Items;
 							for(i=0;i<d.Total;i++)
 								cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-								//Cargar aquí la  imagen local
+								//Cargar aquí la imagen web
 						}
 						
 					}
@@ -1219,6 +1213,8 @@ function downloadToDir(d) {
 			
 				var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 				//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
+				
+					IMGDIR=fs.toURL()+file_path+"/gallery/";
 					
 					$.each(data1.Result.Items, function(index, gal){   
 
@@ -1270,8 +1266,6 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#descarga").append(total_gals+" ");
-	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 			cargar_barra("barra_carga");
@@ -1289,7 +1283,7 @@ function downloadImages(imagenes, i, total, path) {
 	if(total_img_gals==total_gals+1)
 	{
 		setTimeout(function() {
-			tdownload=false;
+			setSessionStorage("tdownload",false);
 			setLocalStorage("first_time", true);
 			$("#descarga").hide();
 		}, 100);
@@ -1360,5 +1354,23 @@ function getLocalStorage(keyoutput)
 	} 
 	else { 
 		alert("localStorage no definido"); 
+	}
+}
+function setSessionStorage(keyinput,valinput)
+{
+	if(typeof(window.sessionStorage) != 'undefined') { 
+		window.sessionStorage.setItem(keyinput,valinput); 
+	} 
+	else { 
+		alert("sessionStorage no definido"); 
+	}
+}
+function getSessionStorage(keyoutput)
+{
+	if(typeof(window.sessionStorage) != 'undefined') { 
+		return window.sessionStorage.getItem(keyoutput); 
+	} 
+	else { 
+		alert("sessionStorage no definido"); 
 	}
 }
