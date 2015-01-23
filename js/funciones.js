@@ -28,7 +28,7 @@ var archivos={
 			};
 			//category:['/5','/14', '/17', '/18'],
 			 
-function onBodyLoad(type, container)
+function onBodyLoad()
 {	
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
@@ -89,34 +89,24 @@ function check_internet(){
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 				{
-					var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
-					if(confirmacion)
+					var tdownload=getSessionStorage("tdownload"); 
+					if(typeof tdownload == "undefined"  || tdownload==null || tdownload==true)	
 					{
-						var tdownload=getSessionStorage("tdownload"); 
-						if(typeof tdownload == "undefined"  || tdownload==null || tdownload==true)	
+						var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
+						if(confirmacion)
+						{
 							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-					}
-					else
-					{
-						setSessionStorage("tdownload",false); 
+						}
+						else
+						{
+							setSessionStorage("tdownload",false); 
+						}
 					}
 				}
 				
 			}
 		}
 			
-	}
-	else
-	{
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) 
-		{
-			console.log("FileSystem OK");
-			//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
-				
-			fs=fileSystem.root;
-			setFilePath();	
-			
-		}, onFileSystemError);
 	}
 
 }
@@ -174,34 +164,43 @@ function onOffline()
 
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
-	if(isLocal==true || isLocal=="true")
-	{			
-		var objajax=$.getJSON(fs.toURL()+file_path+"/"+type+id+".json", f_success)
-		.fail(function(jqXHR, textStatus, errorThrown) {		
-		
-			console.log("No se ha cargado el archivo "+fs.toURL()+file_path+"/"+type+id+".json ..... Probando con "+local_url+type+id+".json");
-			
-			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
-			.fail(function(jqXHR, textStatus, errorThrown) {
-				//alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
-				$("#"+container).append("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
-			});
-			
-		});
-	
-	}
-	else 
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) 
 	{
-		$.ajax({
-		  url: api_url+type+id,
-		  type: 'GET',
-		  dataType: 'json',
-		  crossDomain: true, 
-		  success: f_success,
-		  error: f_error,
-		  async:false,
-		});
-	
+		console.log("FileSystem OK");
+		//Cargado el sistema de archivos, recuperar ficheros
+			
+		fs=fileSystem.root;
+		setFilePath();	
+		
+		if(isLocal==true || isLocal=="true")
+		{			
+			var objajax=$.getJSON(fs.toURL()+file_path+"/"+type+id+".json", f_success)
+			.fail(function(jqXHR, textStatus, errorThrown) {		
+			
+				console.log("No se ha cargado el archivo "+fs.toURL()+file_path+"/"+type+id+".json ..... Probando con "+local_url+type+id+".json");
+				
+				var objajax2=$.getJSON(local_url+type+id+".json", f_success)
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					//alert('Error: '+type+id+" - "+textStatus+"  "+errorThrown);	
+					$("#"+container).append("No se han cargado los datos del archivo.<br>Error: "+type+id+" - "+textStatus+"  "+errorThrown);
+				});
+				
+			});
+		
+		}
+		else 
+		{
+			$.ajax({
+			  url: api_url+type+id,
+			  type: 'GET',
+			  dataType: 'json',
+			  crossDomain: true, 
+			  success: f_success,
+			  error: f_error,
+			  async:false,
+			});
+		
+		}
 	}
 	
 	function f_success(data) {
