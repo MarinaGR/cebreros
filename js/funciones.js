@@ -179,7 +179,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		var objajax=$.getJSON(fs.toURL()+file_path+"/"+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			console.log("No se ha cargado el archivo "+fs.toURL()+file_path+"/"+type+id+".json" ..... Probando con "+local_url+type+id+".json");
+			console.log("No se ha cargado el archivo "+fs.toURL()+file_path+"/"+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
