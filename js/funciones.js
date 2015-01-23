@@ -11,10 +11,10 @@ var array_coord_image=new Array();
 
 var total_img_gals=0, total_gals=0;
 
-var first_click=true;
 var zoom=1.15;
 
 var now=new Date(2014,0,1).getTime(); 
+var tdownload=true;
 
 var destination;
 var fs;
@@ -87,12 +87,21 @@ function check_internet(){
 			}
 			else
 			{
-				var first_time=getLocalStorage("first_time"); 
-				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+				if(tdownload)
 				{
-					var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
-					if(confirmacion)
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+					var first_time=getLocalStorage("first_time"); 
+					if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+					{
+						var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
+						if(confirmacion)
+						{
+							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+						}
+						else
+						{
+							tdownload=false;
+						}
+					}
 				}
 			}
 		}
@@ -156,10 +165,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
+		var objajax=$.getJSON("/sdcard/"+storage_url+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			alert("No se ha cargado el archivo "+storage_url+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			console.log("No se ha cargado el archivo /sdcard/"+storage_url+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -214,8 +223,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 						
-						//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
-						cadena+="<h3>"+d.Title+"</h3>";
+						cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
+						//cadena+="<h3>"+d.Title+"</h3>";
 						
 						if(isLocal)
 							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
@@ -396,6 +405,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								var imagenes=d.Items;
 								for(i=0;i<d.Total;i++)
 									cadena+="<br><img src='"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									
+									cadena+="<br><img src='/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									
+									cadena+="<br><img src='file:///sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar aquí la  imagen local
 							}
 						
@@ -1271,6 +1284,7 @@ function downloadImages(imagenes, i, total, path) {
 	if(total_img_gals==total_gals+1)
 	{
 		setTimeout(function() {
+			tdownload=false;
 			setLocalStorage("first_time", true);
 			$("#descarga").hide();
 		}, 100);
