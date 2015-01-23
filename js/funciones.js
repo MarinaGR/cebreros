@@ -75,12 +75,14 @@ function check_internet(){
 			//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
 		}*/
 		
+		
+		online=true;
+		
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
 			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
-				online=true;
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 					alert(states[networkState]+". Descarga de datos");
@@ -241,19 +243,22 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
-						if(imagen!=null && imagen!="null" && imagen!="") 
-						{						
-							if(imagen.indexOf("http")<0)
-							{
-								if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
-									cadena+="<img src='"+extern_url+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
+						//if(online)
+						{
+							if(imagen!=null && imagen!="null" && imagen!="") 
+							{						
+								if(imagen.indexOf("http")<0)
+								{
+									if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
+										cadena+="<img src='"+extern_url+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
+									else
+										cadena+="<img src='"+extern_url+"public/thumbnails/"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
+								
+								}
 								else
-									cadena+="<img src='"+extern_url+"public/thumbnails/"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
-							
+									cadena+="<img src='"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
+								
 							}
-							else
-								cadena+="<img src='"+imagen+"' style='display:block;margin:auto;' alt='Imagen principal' />";
-							
 						}
 						
 						cadena+=d.Page;
@@ -369,7 +374,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 						if(isLocal)
 						{
-							window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
+							/*window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
 								function listDir(fileEntry)
 								{  
 									console.log(JSON.stringify(fileEntry.fullPath));
@@ -391,18 +396,21 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 										}
 									}); 
 									
-								}, function() { cadena+="<p>Error al cargar las im&aacute;genes de "+fs.toURL()+file_path+"/galleries/gallery/"+d.ID+"</p>"; });
+								}, function() { cadena+="<p>Error al cargar las im&aacute;genes de "+fs.toURL()+file_path+"/galleries/gallery/"+d.ID+"</p>"; }
+							*/
 								
-								if(d.Total>0) 
+							if(d.Total>0) 
+							{
+								var imagenes=d.Items;
+								for(i=0;i<d.Total;i++)
 								{
-									var imagenes=d.Items;
-									for(i=0;i<d.Total;i++)
-									{
-										cadena+="<br><img src='"+IMGDIR+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-										cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image;
-										//Cargar imagen local
-									}
+									//Sacar ruta local para la imagen	
+									var imagen_local=(imagenes[i].Image).split("/public/images/");
+								
+									cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
+									//Cargar imagen local
 								}
+							}
 							
 						}
 						else
@@ -553,7 +561,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		}
 		function f_error(jqXHR, textStatus, errorThrown){
 			//alert('Error: '+textStatus+" - "+errorThrown);	
-			$("#"+container).html("No se han cargado los datos, necesita tener conexi&oacute;n a internet para acceder a esta sección.");
+			$("#"+container).html("No se han cargado los datos, necesita tener conexi&oacute;n a internet para acceder a esta secci&oacute;n.");
 		}
 		
 	}, onFileSystemError);   
