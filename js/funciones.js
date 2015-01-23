@@ -374,31 +374,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 						if(isLocal)
 						{
-							/*window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
-								function listDir(fileEntry)
-								{  
-									console.log(JSON.stringify(fileEntry.fullPath));
-
-									var reader = fileEntry.createReader();
-									reader.readEntries(function gotList(entries) {
-										for(i=0; i<entries.length; i++) {
-											if(entries[i].name.indexOf(".jpg") != -1) {
-												cadena+="<br><img src='"+entries[i].name+"' style='display:block;margin:auto;' alt='Imagen' />";
-											}
-										}
-									}, function() {
-										if(d.Total>0) 
-										{
-											var imagenes=d.Items;
-											for(i=0;i<d.Total;i++)
-												cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-												//Habría que cargar aquí la  imagen local
-										}
-									}); 
-									
-								}, function() { cadena+="<p>Error al cargar las im&aacute;genes de "+fs.toURL()+file_path+"/galleries/gallery/"+d.ID+"</p>"; }
-							*/
-								
 							if(d.Total>0) 
 							{
 								var imagenes=d.Items;
@@ -407,7 +382,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									//Sacar ruta local para la imagen	
 									var imagen_local=(imagenes[i].Image).split("/public/images/");
 								
-									cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
+									cadena+="<br><img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar imagen local
 								}
 							}
@@ -1270,6 +1245,8 @@ function downloadImages(imagenes, i, total, path) {
 	var ft = new FileTransfer();		
 	
 	var dlPath = path+"/"+imagen_local[1]; 
+	
+	$("#descarga").append(total_gals+" ... ");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
