@@ -18,7 +18,8 @@
 		<script>		
 			$(document).ready(function() {
 				var id=get_var_url("id");
-				ajax_recover_data('gallery', '/'+id, 'contenido');
+				var local=get_var_url("local"); 
+				ajax_recover_data('gallery', '/'+id, 'contenido', local);
 			});
 
 		</script>

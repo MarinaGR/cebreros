@@ -85,13 +85,9 @@ function check_internet(){
 			}
 			else
 			{
-				var first_time=getLocalStorage("first_time"); 
-				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
-				{
-					var confirmacion=confirm(states[networkState]+". Para ver la aplicación correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, ¿desea continuar?");
-					if(confirmacion)
-						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-				}
+				var confirmacion=confirm(states[networkState]+". Para ver la aplicación correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, ¿desea continuar?");
+				if(confirmacion)
+					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 			}
 		}
 			
@@ -153,7 +149,7 @@ function onOffline()
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
 	if(isLocal==true || isLocal=="true")
-	{		
+	{			
 		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
@@ -345,7 +341,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal)
 							cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"&local=true'>VER</a></div>";
 						else
-							cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"'>VER</a></div>";
+							cadena+="<a class='vermas' href='fotos.html?id="+d.ID+"&local=false'>VER</a></div>";
 
 					});
 					
@@ -547,7 +543,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	}
 	function f_error(jqXHR, textStatus, errorThrown){
 		//alert('Error: '+textStatus+" - "+errorThrown);	
-		$("#"+container).html("No se han cargado los datos del fichero.<br>Error de conexi&oacute;n");
+		$("#"+container).html("No se han cargado los datos, no hay conexi&oacute;n.");
 	}	
 }
 
@@ -1151,95 +1147,98 @@ function setFilePath() {
 
 function downloadToDir(d) {
 
-	console.log('created directory '+d.name);
+	var first_time=getLocalStorage("first_time"); 
+	if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+	{
+		console.log('created directory '+d.name);
 
-	DATADIR = d;  
+		DATADIR = d;  
 
-	$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
-	//$("body").prepend("<div id='descarga'></div>");
-		
-	$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
-	
-	$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');
-	
-	$.each(archivos, function(folder,files)  
-	{	
-		$.each(files, function(index,filename)  
-		{	
+		$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
+		//$("body").prepend("<div id='descarga'></div>");
 			
-			fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
+		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
+		
+		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');
+		
+		$.each(archivos, function(folder,files)  
+		{	
+			$.each(files, function(index,filename)  
+			{	
 				
-				console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
-				console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
-				
-				var ft = new FileTransfer();		
-				
-				var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
+				fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
+					
+					console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
+					console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
+					
+					var ft = new FileTransfer();		
+					
+					var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
 
-				//$("#descarga").append(dlPath+"<br>");
-				
-				ft.download(api_url+folder+filename , dlPath, function() {
-						//$("#descarga").append(folder+filename+".json"+" .... OK<br>");
-						cargar_barra("barra_carga");
-					}, 
-					function(error){
-						$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
+					//$("#descarga").append(dlPath+"<br>");
+					
+					ft.download(api_url+folder+filename , dlPath, function() {
+							//$("#descarga").append(folder+filename+".json"+" .... OK<br>");
+							cargar_barra("barra_carga");
+						}, 
+						function(error){
+							$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
+						});
+				}
+				,function(error){
+					$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
+					//alert("Get Directory "+folder+" fail " + error.code);
+				});
+			});
+		});
+		
+		setTimeout(function() {
+			//Descarga imagenes
+			fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
+			
+				var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
+				//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
+					
+					$.each(data1.Result.Items, function(index, gal){   
+
+						//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
+						var objajax2=$.getJSON(api_url+"gallery/"+gal.ID, function donwload_images(data2) {
+							
+							var d=data2.Result;
+												
+							if(d.Total>0) 
+							{
+								fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
+
+									var imagenes=d.Items;
+									
+									i=0;
+									total_img_gals+=d.Total;
+									downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
+									
+								} ,function(error){
+									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
+									//alert("Get Directory "+folder+" fail " + error.code);
+								});
+							}
+					
+						}).fail(function(jqXHR, textStatus, errorThrown) {							
+							console.log("Error al recoger la galeria");											
+						});
+
 					});
-			}
-			,function(error){
-				$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
+
+				}).fail(function(jqXHR, textStatus, errorThrown) {					
+					console.log("Error al recoger galleries.json");			
+				});
+					
+			},function(error){
+				$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
 				//alert("Get Directory "+folder+" fail " + error.code);
 			});
-		});
-	});
-	
-	setTimeout(function() {
-		//Descarga imagenes
-		fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
-		
-			var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
-			//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
-				
-				$.each(data1.Result.Items, function(index, gal){   
-
-					//var objajax2=$.getJSON("./resources/json/gallery/"+gal.ID+".json", function donwload_images(data2) {
-					var objajax2=$.getJSON(api_url+"gallery/"+gal.ID, function donwload_images(data2) {
-						
-						var d=data2.Result;
-											
-						if(d.Total>0) 
-						{
-							fs.getDirectory(file_path+"/gallery/"+gal.ID,{create:true, exclusive:false},function() {
-
-								var imagenes=d.Items;
-								
-								i=0;
-								total_img_gals+=d.Total;
-								downloadImages(imagenes, i, d.Total, fs.toURL()+file_path+"/gallery/"+gal.ID);
-								
-							} ,function(error){
-								$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
-								//alert("Get Directory "+folder+" fail " + error.code);
-							});
-						}
-				
-					}).fail(function(jqXHR, textStatus, errorThrown) {							
-						console.log("Error al recoger la galeria");											
-					});
-
-				});
-
-			}).fail(function(jqXHR, textStatus, errorThrown) {					
-				console.log("Error al recoger galleries.json");			
-			});
-				
-		},function(error){
-			$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
-			//alert("Get Directory "+folder+" fail " + error.code);
-		});
-		
-	}, 250);
-	
+			
+		}, 200);
+	}
 }
 
 function downloadImages(imagenes, i, total, path) {
