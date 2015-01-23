@@ -572,7 +572,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 			//alert('Error: '+textStatus+" - "+errorThrown);	
 			$("#"+container).html("No se han cargado los datos, no hay conexi&oacute;n.");
 		}
-	}		
+		
+	}, onFileSystemError);   
 }
 
 var canvasOffset;
