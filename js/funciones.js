@@ -77,9 +77,6 @@ function check_internet(){
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
-			alert(networkState);
-			alert(Connection.WIFI+" *** "+Connection.ETHERNET+" *** "+Connection.CELL_3G);
-			
 			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
 				var first_time=getLocalStorage("first_time"); 
@@ -159,10 +156,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON(storage_path+type+id+".json", f_success)
+		var objajax=$.getJSON(storage_url+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			alert("No se ha cargado el archivo "+storage_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			alert("No se ha cargado el archivo "+storage_url+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
