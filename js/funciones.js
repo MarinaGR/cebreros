@@ -106,6 +106,18 @@ function check_internet(){
 		}
 			
 	}
+	else
+	{
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) 
+		{
+			console.log("FileSystem OK");
+			//Cargado el sistema de archivos, crear los directorios pertinentes para la descarga de los ficheros.
+				
+			fs=fileSystem.root;
+			setFilePath();	
+			
+		}, onFileSystemError);
+	}
 
 }
 function onBackKeyDown()
@@ -164,10 +176,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON(DATADIR+type+id+".json", f_success)
+		var objajax=$.getJSON(fs.toURL()+file_path+"/"+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			console.log("No se ha cargado el archivo "+DATADIR+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			console.log("No se ha cargado el archivo "+fs.toURL()+file_path+"/"+type+id+".json" ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -405,6 +417,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								for(i=0;i<d.Total;i++)
 								{
 									cadena+="<br><img src='"+IMGDIR+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+									cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+
 									//Cargar aquí la  imagen local
 								}
 							}
@@ -1209,12 +1223,13 @@ function downloadToDir(d) {
 		
 		setTimeout(function() {
 			//Descarga imagenes
-			fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function() {
+			fs.getDirectory(file_path+"/gallery",{create:true, exclusive:false},function(dimg) {
 			
 				var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 				//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
 				
-					IMGDIR=fs.toURL()+file_path+"/gallery/";
+					//IMGDIR=fs.toURL()+file_path+"/gallery/";
+					IMGDIR=dimg.fullPath;
 					
 					$.each(data1.Result.Items, function(index, gal){   
 

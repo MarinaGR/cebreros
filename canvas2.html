@@ -23,10 +23,6 @@
 				document.getElementById("zoom_out").addEventListener("click", function zoomin() {
 					window.location.href="canvas.html?id="+get_var_url("id");
 				}, false);	
-				
-				document.getElementById("boton_atras").addEventListener("click", function() {
-					window.location.href="canvas.html?id="+get_var_url("id");
-				}, false);	
 			});
 
 		</script>
@@ -42,7 +38,6 @@
 			
 			<div class="nav_02" id="boton_menu"> </div>
 			<div id="boton_salir"></div>
-			<div id="boton_atras"></div>
 			<div class="boton_zoom" id="zoom_out" ></div>
 			<div id="boton_refresh" onclick="show_geoloc()" ></div>
 			<div class="boton_zoom" id="cargando" style="display:none">
