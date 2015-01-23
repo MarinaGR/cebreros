@@ -14,7 +14,7 @@ var total_img_gals=0, total_gals=0;
 var zoom=1.15;
 
 var now=new Date(2014,0,1).getTime(); 
-var tdownload=true;
+var tdownload;
 
 var destination;
 var fs;
@@ -87,22 +87,23 @@ function check_internet(){
 			}
 			else
 			{
-				if(tdownload)
+				console.log(tdownload);
+				
+				var first_time=getLocalStorage("first_time"); 
+				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 				{
-					var first_time=getLocalStorage("first_time"); 
-					if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+					var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
+					if(confirmacion)
 					{
-						var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
-						if(confirmacion)
-						{
+						if(tdownload!=false)				
 							window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-						}
-						else
-						{
-							tdownload=false;
-						}
+					}
+					else
+					{
+						tdownload=false;
 					}
 				}
+				
 			}
 		}
 			
@@ -223,8 +224,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 						
-						cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
-						//cadena+="<h3>"+d.Title+"</h3>";
+						//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
+						cadena+="<h3>"+d.Title+"</h3>";
 						
 						if(isLocal)
 							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
@@ -404,12 +405,14 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							{
 								var imagenes=d.Items;
 								for(i=0;i<d.Total;i++)
+								{
 									cadena+="<br><img src='"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									
 									cadena+="<br><img src='/sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									
 									cadena+="<br><img src='file:///sdcard/"+storage_url+"/galleries/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar aquí la  imagen local
+								}
 							}
 						
 					}
@@ -1266,6 +1269,8 @@ function downloadImages(imagenes, i, total, path) {
 	var ft = new FileTransfer();		
 	
 	var dlPath = path+"/"+imagen_local[1]; 
+	
+	$("#descarga").append(total_gals+" ");
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
