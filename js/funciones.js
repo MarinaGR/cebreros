@@ -148,6 +148,8 @@ function onOffline()
 
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
+	alert(isLocal+" "+fs.toURL()+file_path+type+id+".json");
+	
 	if(isLocal==true || isLocal=="true")
 	{			
 		var objajax=$.getJSON(fs.toURL()+file_path+type+id+".json", f_success)
@@ -1263,11 +1265,12 @@ function downloadImages(imagenes, i, total, path) {
 		}
 	);
 	
-	if(total_img_gals==total_gals-1)
+	if(total_img_gals==total_gals+1)
 	{
-		//$("#descarga").html("");
-		setLocalStorage("first_time", true);
-		$("#descarga").hide();
+		setTimeout(function() {
+			setLocalStorage("first_time", true);
+			$("#descarga").hide();
+		}, 50);
 	}		
 }
 function cargar_barra(id)
