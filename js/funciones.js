@@ -4,6 +4,8 @@ var local_url='./resources/json/';
 var storage_url='Cebreros/resources/';
 var file_path;
 
+var online;
+
 var coord_image_ppal=new Array();
 var coord_image=new Array();
 var array_coord_image_ppal=new Array();
@@ -78,6 +80,7 @@ function check_internet(){
 		{
 			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
+				online=true;
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 					alert(states[networkState]+". Descarga de datos");
@@ -132,34 +135,14 @@ function onOutKeyDown()
 	navigator.app.exitApp();
 	return false;
 }
+
 function onOnline()
 {
-	/*setTimeout(function(){
-		$("#contenido").attr("src",siteurl);
-	},250);*/
-	
-	/*var networkState = navigator.connection.type;
-
-    var states = {};
-    states[Connection.UNKNOWN]  = 'Unknown connection';
-    states[Connection.ETHERNET] = 'Ethernet connection';
-    states[Connection.WIFI]     = 'WiFi connection';
-    states[Connection.CELL_2G]  = 'Cell 2G connection';
-    states[Connection.CELL_3G]  = 'Cell 3G connection';
-    states[Connection.CELL_4G]  = 'Cell 4G connection';
-    states[Connection.CELL]     = 'Cell generic connection';
-    states[Connection.NONE]     = 'No network connection';
-
-    alert('Conexión: ' + states[networkState]);*/
-
+	online=true;
 }
 function onOffline()
 {
-	//$(".contenedor").prepend("Necesita una conexión a internet para poder ver correctamente todos los contenidos de la aplicación");
-	/*setTimeout(function(){
-		$("#contenido").attr("src","offline.html");
-	},250);*/
-
+	online=false;
 }
 
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
@@ -275,7 +258,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 						cadena+=d.Page;
 						
-						//if(online)
+						if(online)
 						{
 							var geolocation2=d.Geolocation;
 							if(geolocation2!="" && geolocation2!=null)
@@ -284,14 +267,12 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								var geo_lat=geolocation2[1];
 								var geo_lon=geolocation2[2];
 								var my_zoom=parseInt(geolocation2[3]);
-								
-								//cadena+="<br><iframe width='100%' style='height:300px;border:none;'  src='http://maps.google.es/maps?q=loc:"+geo_lat+","+geo_lon+"&z="+my_zoom+"&output=embed' ></iframe>";
-								
+																
 								destination=geo_lat+","+geo_lon;
 								get_geo_route_map();
 								
 								cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";			
-								
+
 							}
 							
 							var imagenes=data.Result.Images;
@@ -302,22 +283,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									
 								cadena+="<br>";
 							}
-							var adjuntos=data.Result.Attachments;
-							if(data.Result.TotalAttachments>0) 
-							{
-								for(i=0;i<data.Result.TotalAttachments;i++)
-									cadena+="<br><a href='"+(extern_url+"public/files/"+adjuntos[i].File)+"' target='_blank' >"+adjuntos[i].Description+"</a>";
-								
-								cadena+="<br>";
-							}
-							var enlaces=data.Result.Links;
-							if(data.Result.TotalLinks>0) 
-							{
-								for(i=0;i<data.Result.TotalLinks;i++)
-									cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+enlaces[i].Link+"\', \'_system\', \'location=yes\');'>"+enlaces[i].Description+"</a>";	
-								
-								cadena+="<br>";
-							}
+							
 							var videos=data.Result.Videos;
 							if(data.Result.TotalVideos>0) 
 							{
@@ -339,6 +305,23 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								
 								cadena+="<br>";
 							}
+						}
+						
+						var adjuntos=data.Result.Attachments;
+						if(data.Result.TotalAttachments>0) 
+						{
+							for(i=0;i<data.Result.TotalAttachments;i++)
+								cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+extern_url+"public/files/"+adjuntos[i].File+"\', \'_system\', \'location=yes\');'>"+adjuntos[i].Description+"</a>";	
+							
+							cadena+="<br>";
+						}
+						var enlaces=data.Result.Links;
+						if(data.Result.TotalLinks>0) 
+						{
+							for(i=0;i<data.Result.TotalLinks;i++)
+								cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+enlaces[i].Link+"\', \'_system\', \'location=yes\');'>"+enlaces[i].Description+"</a>";	
+							
+							cadena+="<br>";
 						}
 					
 						$("#"+container).html(cadena);
@@ -386,7 +369,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 						if(isLocal)
 						{
-							/*window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
+							window.resolveLocalFileSystemURL(fs.toURL()+file_path+"/galleries/gallery/"+d.ID, 
 								function listDir(fileEntry)
 								{  
 									console.log(JSON.stringify(fileEntry.fullPath));
@@ -404,34 +387,36 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 											var imagenes=d.Items;
 											for(i=0;i<d.Total;i++)
 												cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-												//Cargar aquí la  imagen local
+												//Habría que cargar aquí la  imagen local
 										}
 									}); 
 									
-								}, fail);*/
+								}, function() { cadena+="<p>Error al cargar las im&aacute;genes de "+fs.toURL()+file_path+"/galleries/gallery/"+d.ID+"</p>"; });
+								
 								if(d.Total>0) 
 								{
 									var imagenes=d.Items;
 									for(i=0;i<d.Total;i++)
 									{
 										cadena+="<br><img src='"+IMGDIR+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-										cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-
-										//Cargar aquí la  imagen local
+										cadena+="<img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagenes[i].Image;
+										//Cargar imagen local
 									}
 								}
 							
 						}
 						else
 						{
-							if(d.Total>0) 
+							if(online)
 							{
-								var imagenes=d.Items;
-								for(i=0;i<d.Total;i++)
-									cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
-									//Cargar aquí la imagen web
-							}
-							
+								if(d.Total>0) 
+								{
+									var imagenes=d.Items;
+									for(i=0;i<d.Total;i++)
+										cadena+="<br><img src='"+imagenes[i].Image+"' style='display:block;margin:auto;' alt='Imagen' />";
+										//Cargar imagen web
+								}
+							}	
 						}
 						$("#"+container).html(cadena);
 						break;
@@ -473,13 +458,11 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							switch(id)
 							{
 								case "/1":src_image='./resources/images/mapas/mapa_01.jpg';  
-										  //coord_image_ppal=[["top-left", "40.4758", "-4.4805"],["bottom-left", "40.4365", "-4.4805"], ["top-right","40.4758", "-4.3698"]];
 										  coord_image_ppal=[["top-left", "40.4797", "-4.4814"],["bottom-left", "40.4210", "-4.4814"], ["top-right","40.4797", "-4.3656"]];
 										  break;
 										  
 								case "/2": src_image='./resources/images/mapas/mapa_02.jpg';  
 										   coord_image_ppal=[["top-left", "40.6769", "-4.7371"],["bottom-left", "40.6379", "-4.7371"], ["top-right","40.6769", "-4.6257"]];
-										   // coord_image_ppal=[["top-left", "40.4880", "-4.5537"],["bottom-left", "40.4294", "-4.5537"], ["top-right","40.4880", "-4.4379"]];
 										   break;
 										   
 								case "/3": src_image='./resources/images/mapas/mapa_03.jpg';
@@ -570,7 +553,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		}
 		function f_error(jqXHR, textStatus, errorThrown){
 			//alert('Error: '+textStatus+" - "+errorThrown);	
-			$("#"+container).html("No se han cargado los datos, no hay conexi&oacute;n.");
+			$("#"+container).html("No se han cargado los datos, necesita tener conexi&oacute;n a internet para acceder a esta sección.");
 		}
 		
 	}, onFileSystemError);   
@@ -1133,7 +1116,6 @@ function get_var_url(variable){
 		return false;
 	
 }
-
 
 
 function onFileSystemError(error) 
