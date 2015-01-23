@@ -180,7 +180,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 	
 	function f_success(data) {
 	
-	alert("CARGADO");
+		alert(data.Result.ID);
 	
 		//data = $.parseJSON(data);
 		
@@ -215,7 +215,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal)
 							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
 						else
-							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"'>VER</a>";
+							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=false'>VER</a>";
 
 					});
 
@@ -1249,7 +1249,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#descarga").append(" "+total_img_gals+" ");	
+	$("#descarga").append(" "+total_gals+" ");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
