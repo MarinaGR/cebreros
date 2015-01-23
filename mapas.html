@@ -16,7 +16,7 @@
 		<script src="./cordova.js"></script>
 		
 		<script>				
-			$(document).ready(function() {
+			document.addEventListener("deviceready", function()  {
 				ajax_recover_data('routes', '', 'contenido', true);				
 			});
 		</script>
