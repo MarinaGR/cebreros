@@ -23,8 +23,9 @@ var DATADIR;
 var archivos={
 			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
+			  gallery:['/2','/3', '/4'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
-				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/61','/63']
+				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/60','/61','/63']
 			};
 			//category:['/5','/14', '/17', '/18'],
 			 
@@ -76,7 +77,10 @@ function check_internet(){
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
-			if(states[networkState]==Connection.ETHERNET || states[networkState]==Connection.WIFI)
+			alert(networkState);
+			alert(Connection.WIFI+" *** "+Connection.ETHERNET+" *** "+Connection.CELL_3G);
+			
+			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
@@ -86,9 +90,13 @@ function check_internet(){
 			}
 			else
 			{
-				var confirmacion=confirm(states[networkState]+". Para ver la aplicación correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, ¿desea continuar?");
-				if(confirmacion)
-					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+				var first_time=getLocalStorage("first_time"); 
+				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+				{
+					var confirmacion=confirm(states[networkState]+". Para ver la aplicacion correctamente se deben descargar algunos archivos. Esto puede afectar a su consumo de datos, desea empezar la descarga?");
+					if(confirmacion)
+						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+				}
 			}
 		}
 			
@@ -149,14 +157,12 @@ function onOffline()
 
 function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_number) {
 
-	alert(isLocal+" "+file_path+type+id+".json");
-	
 	if(isLocal==true || isLocal=="true")
 	{			
-		var objajax=$.getJSON(file_path+type+id+".json", f_success)
+		var objajax=$.getJSON(storage_path+type+id+".json", f_success)
 		.fail(function(jqXHR, textStatus, errorThrown) {		
 		
-			alert("No se ha cargado el archivo "+file_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
+			alert("No se ha cargado el archivo "+storage_path+type+id+".json ..... Probando con "+local_url+type+id+".json");
 			
 			var objajax2=$.getJSON(local_url+type+id+".json", f_success)
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -210,8 +216,9 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
-							
-						cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
+						
+						//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
+						cadena+="<h3>"+d.Title+"</h3>";
 						
 						if(isLocal)
 							cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
@@ -311,9 +318,9 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									
 								if(src_video.substring(0, 4)=="http")
 									cadena+="<br>"+videos[i].Embed;			
+									
+								$(videos[i].Embed).css('max-width','100%'); 	
 							}
-							
-							$(videos[i].Embed).css('max-width','100%'); 	
 							
 							cadena+="<br>";
 						}
