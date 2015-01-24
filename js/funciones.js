@@ -25,8 +25,9 @@ var archivos={
 			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  gallery:['/2','/3', '/4'],
-			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48',
-				  '/49', '/50', '/51', '/52', '/53', '/54','/56','/57','/58','/60','/61','/63']
+			  page:['/42', '/43', '/44', '/45', '/46', '/47', 
+					'/48', '/49', '/50', '/51', '/52', '/53', 
+					'/54','/56','/57','/58','/60','/61','/63']
 			};
 			//category:['/5','/14', '/17', '/18'],
 			 
@@ -200,6 +201,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							var fecha=new Date(d.DatePublish);
 							var imagen=d.Image; 
 
+							
 							if(imagen!=null && imagen!="null" && imagen!="") 
 							{						
 								if(imagen.indexOf("http")<0)
@@ -211,7 +213,6 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								}
 								else
 									cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
-								
 							}
 								
 							if(isLocal!=true && isLocal!="true")
@@ -316,7 +317,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(data.Result.TotalAttachments>0) 
 						{
 							for(i=0;i<data.Result.TotalAttachments;i++)
-								cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+extern_url+"public/files/"+adjuntos[i].File+"\', \'_system\', \'location=yes\');'>"+adjuntos[i].Description+"</a>";	
+								cadena+='<br><a class="vermas" onclick="window.open(\''+extern_url+'public/files/'+adjuntos[i].File+'\', \'_system\', \'location=yes\');" href="#" >'+adjuntos[i].Description+'</a>';
 							
 							cadena+="<br>";
 						}
@@ -324,7 +325,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(data.Result.TotalLinks>0) 
 						{
 							for(i=0;i<data.Result.TotalLinks;i++)
-								cadena+="<br><a class='vermas' href='#' onclick='window.open(\'"+enlaces[i].Link+"\', \'_system\', \'location=yes\');'>"+enlaces[i].Description+"</a>";	
+								cadena+='<br><a class="vermas" onclick="window.open(\''+enlaces[i].Link+'\', \'_system\', \'location=yes\');" href="#" >'+enlaces[i].Description+'</a>';
 							
 							cadena+="<br>";
 						}
@@ -382,8 +383,11 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									//Sacar ruta local para la imagen	
 									var imagen_local=(imagenes[i].Image).split("/public/images/");
 								
-									cadena+="<br><img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
+									//cadena+="<br><img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar imagen local
+									
+									cadena+='<br><a class="vermas" onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');" href="#" ><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" /></a>';
+									
 								}
 							}
 							
@@ -445,7 +449,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 										  break;
 										  
 								case "/2": src_image='./resources/images/mapas/mapa_02.jpg';  
-										   coord_image_ppal=[["top-left", "40.6769", "-4.7371"],["bottom-left", "40.6379", "-4.7371"], ["top-right","40.6769", "-4.6257"]];
+										   coord_image_ppal=[["top-left", "40.4880", "-4.5537"],["bottom-left", "40.4294", "-4.5537"], ["top-right","40.4880", "-4.4379"]];
 										   break;
 										   
 								case "/3": src_image='./resources/images/mapas/mapa_03.jpg';
@@ -1152,8 +1156,11 @@ function downloadToDir(d) {
 		//$("body").prepend("<div id='descarga'></div>");
 			
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
+		$("#descarga").append("<p>Esta acción puede tardar algunos minutos.</p>");
 		
 		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');
+		
+		$("#descarga").append('<p> </p>');
 		
 		$.each(archivos, function(folder,files)  
 		{	
@@ -1173,7 +1180,7 @@ function downloadToDir(d) {
 					
 					ft.download(api_url+folder+filename , dlPath, function() {
 							//$("#descarga").append(folder+filename+".json"+" .... OK<br>");
-							cargar_barra("barra_carga");
+							cargar_barra("barra_carga", 100);
 						}, 
 						function(error){
 							$("#descarga").append(folder+filename+".json"+" .... KO "+error.code+"<br>");
@@ -1246,11 +1253,11 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#descarga").append(total_gals+" ... ");	
+	$("#descarga").append(total_gals+".. ");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
-			cargar_barra("barra_carga");
+			cargar_barra("barra_carga", total_gals);
 			total_gals++;
 			i++;			
 			if(i<total)
@@ -1271,11 +1278,11 @@ function downloadImages(imagenes, i, total, path) {
 		}, 100);
 	}		
 }
-function cargar_barra(id)
+function cargar_barra(id, total)
 {		
 	var barra_progreso=$("#"+id);
 	var value = barra_progreso.val();  
-	value+=0.9;
+	value+=90/total;
     barra_progreso.val(value);  				
 }
 
