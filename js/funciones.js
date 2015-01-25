@@ -386,7 +386,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									//cadena+="<br><img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar imagen local
 									
-									cadena+='<br><a class="vermas" onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');" href="#" ><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" /></a>';
+									cadena+='<br><a onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');" href="#" ><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" /></a>';
 									
 								}
 							}
@@ -1156,10 +1156,9 @@ function downloadToDir(d) {
 		//$("body").prepend("<div id='descarga'></div>");
 			
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
-		$("#descarga").append("<p>Esta acción puede tardar algunos minutos.</p>");
+		$("#descarga").append("<p>Esta acci&oacute;n puede tardar algunos minutos.</p>");
 		
-		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');
-		
+		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');		
 		$("#descarga").append('<p> </p>');
 		
 		$.each(archivos, function(folder,files)  

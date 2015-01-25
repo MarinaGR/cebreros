@@ -79,7 +79,7 @@ ul li b {
 }
 .nav_01 ul li {
 	border-bottom: 1px solid #EEEEEE;
-	padding: 12px 2px;
+	padding: 15px 2px;
 }
 .nav_01 ul:first-child  {
 	border-top: 1px solid #EEEEEE;
@@ -201,7 +201,7 @@ ul li b {
 
 .section_01 {
 	min-height: 25vh;
-	padding: 25px 35px;
+	padding: 25px 6%;
 	background-color: #00405D;
 	color: #EEEEEE;
 }
@@ -214,7 +214,7 @@ ul li b {
 }
 .section_02 {
 	min-height: 50vh;
-	padding: 25px 35px;
+	padding: 25px 6%;
 	background-color: #EEEEEE;
 }
 .article_01 {
@@ -292,12 +292,12 @@ ul li b {
 
 #descarga {
 	position: absolute;
-	width: 100%;
+	width: 90%;
 	height: 100%;
 	color: #333;
-	padding: 20px;
+	padding: 20px 5%;
 	padding-top: 120px;
-	background: rgba(255,255,255,0.95) url(../resources/images/general/loading.gif) no-repeat center 10px;
+	background: rgba(255,255,255,0.95) url(../resources/images/general/loading.gif) no-repeat center 25px;
 }
 
 @media screen and (max-width: 480px)
