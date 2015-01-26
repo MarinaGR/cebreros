@@ -21,9 +21,14 @@
 			document.addEventListener("deviceready", function()  {
 				var id=get_var_url("id");
 				ajax_recover_data('route', id, 'contenido', true, true, 2);
+				
 				document.getElementById("zoom_out").addEventListener("click", function zoomin() {
 					window.location.href="canvas.html?id="+get_var_url("id");
 				}, false);	
+				
+				document.addEventListener("backbutton", function() {
+					window.location.href="canvas.html?id="+get_var_url("id");
+				}, false);
 			});
 
 		</script>

@@ -29,6 +29,10 @@
 				document.getElementById("boton_atras").addEventListener("click", function() {
 					window.location.href="mapa.html?id="+ id.substring(1,2);
 				}, false);	
+				
+				document.addEventListener("backbutton", function() {
+					window.location.href="mapa.html?id="+ id.substring(1,2);
+				}, false);
 								
 			});
 

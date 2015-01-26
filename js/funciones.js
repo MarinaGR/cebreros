@@ -48,6 +48,25 @@ function onDeviceReady()
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
+	Ext.Viewport.element.dom.addEventListener('click', function (e) {
+		if (e.target.tagName !== 'a') {
+			return;
+		};
+
+		var url = e.target.getAttribute('href');
+		var containsHttp = new RegExp('http\\b'); 
+
+		//if href value begins with 'http'
+		if(containsHttp.test(url)) { 
+			e.preventDefault();
+			window.open(url, "_system", "location=yes"); // For iOS
+			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+		}
+		else {
+			return;
+		}
+	}, false);
+	
 	check_internet();
 	 
 }    
@@ -75,10 +94,11 @@ function check_internet(){
 			var nueva_fecha=now;  
 			setLocalStorage("fecha", nueva_fecha);
 			//window.requestFileSystem(PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);    
-		}*/
-		
+		}*/	
 		
 		online=true;
+		
+		$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
 		
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
@@ -106,6 +126,7 @@ function check_internet(){
 						}
 						else
 						{
+							$("#descarga").hide();
 							setSessionStorage("tdownload",false); 
 						}
 					}
@@ -1253,7 +1274,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	//$("#descarga").html(total_gals+"%");	
+	$("#porcentaje").html(total_gals+" %");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
@@ -1274,6 +1295,7 @@ function downloadImages(imagenes, i, total, path) {
 		setTimeout(function() {
 			setSessionStorage("tdownload",false);
 			setLocalStorage("first_time", true);
+			$("#descarga_close").hide();
 			$("#descarga").hide();
 		}, 100);
 	}		
@@ -1284,8 +1306,6 @@ function cargar_barra(id, total)
 	var value = barra_progreso.val();  
 	value+=90/total;
     barra_progreso.val(value);  */			
-
-$("#porcentaje").html(90/total+"%");		
 }
 
 function gotFS(fileSystem) 
@@ -1312,6 +1332,7 @@ function fail_getFile(error) {
     alert("Ocurrió un error recuperando el fichero: " + error.message);
 }
 function onError(e){
+	$("#descarga_close").show();
 	alert("ERROR "+e.code+" - "+e.source+" - "+e.target);
 }
 function readAsText(file) {
