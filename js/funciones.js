@@ -37,17 +37,6 @@ function onBodyLoad()
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
-	
-	$("a").on("click", function(e) {
-	    var url = $(this).attr('href');
-		var containsHttp = new RegExp('http\\b'); 
-		
-		if(containsHttp.test(url)) { 
-			e.preventDefault(); 
-			window.open(url, "_system", "location=yes"); // For iOS
-			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
-		}
-	});	
 }
 function onDeviceReady()
 {
@@ -94,8 +83,6 @@ function check_internet(){
 		if(current_url.indexOf("index.html")!=-1) 
 		{
 		
-			$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
-		
 			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
 				var first_time=getLocalStorage("first_time"); 
@@ -119,7 +106,6 @@ function check_internet(){
 						}
 						else
 						{
-							$("#descarga").hide();
 							setSessionStorage("tdownload",false); 
 						}
 					}
@@ -1209,6 +1195,7 @@ function downloadToDir(d) {
 
 		DATADIR = d;  
 
+		$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
 		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
 		//$("body").prepend("<div id='descarga'></div>");
 			
