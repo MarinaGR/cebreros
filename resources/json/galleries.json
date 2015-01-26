@@ -6,9 +6,9 @@
             {
                 "ID": "2",
                 "IDFather": "0",
-                "Title": "Carnavales",
+                "Title": "Carnaval de Cebreros",
                 "DatePublish": "2014-12-01",
-                "Image": "http://w3.cebreros.es//public/images/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "Image": "http://www.cebreros.es//public/images/gallery2-img-carnaval-de-cebreros.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -22,15 +22,15 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "1",
-                "MinImage": "http://w3.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
-                "Permalink": "http://w3.cebreros.es/turismo/galerias-de-imagenes/carnavales"
+                "MinImage": "http://www.cebreros.es//public/thumbnails/gallery2-img-carnaval-de-cebreros.jpg",
+                "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/carnavales"
             },
             {
                 "ID": "3",
                 "IDFather": "0",
                 "Title": "Entorno natural",
                 "DatePublish": "2014-12-01",
-                "Image": "http://w3.cebreros.es//public/images/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "Image": "http://www.cebreros.es//public/images/gallery3-img-entorno-natural.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -44,15 +44,15 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "0",
-                "MinImage": "http://w3.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
-                "Permalink": "http://w3.cebreros.es/turismo/galerias-de-imagenes/entorno-natural"
+                "MinImage": "http://www.cebreros.es//public/thumbnails/gallery3-img-entorno-natural.jpg",
+                "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/entorno-natural"
             },
             {
                 "ID": "4",
                 "IDFather": "0",
-                "Title": "Turismo",
+                "Title": "Fotografías Turismo Cebreros",
                 "DatePublish": "2015-01-19",
-                "Image": "http://w3.cebreros.es//public/images/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "Image": "http://www.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -66,8 +66,8 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "1",
-                "MinImage": "http://w3.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
-                "Permalink": "http://w3.cebreros.es/turismo/galerias-de-imagenes/turismo"
+                "MinImage": "http://www.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/turismo"
             }
         ]
     }

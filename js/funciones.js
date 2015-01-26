@@ -364,11 +364,16 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var cadena="";
 						
 						$.each(data.Result.Items, function(index, d){   
-							var imagen=d.MinImage; 
+							var imagen=d.Image; 
 							
 							cadena+="<div class='buttons_galleries'>";
 							if(imagen!=null && imagen!="null" && imagen!="") 
-								cadena+="<div style='width:100%;height:75px;background: #FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							{
+								//Sacar ruta local para la imagen	
+								var imagen_local=imagen.split("/public/images/");
+							
+								cadena+="<div style='width:100%;height:75px;background: #FFF url("+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+") no-repeat center;background-size:cover;'></div>";
+							}
 								
 							cadena+="<h3>"+d.Title+"</h3>";
 							
