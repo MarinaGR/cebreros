@@ -37,6 +37,22 @@ function onBodyLoad()
     document.addEventListener("deviceready", onDeviceReady, false);
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
+	
+	$("a").click(function(e) {
+	    var url = $(this).attr('href');
+		var containsHttp = new RegExp('http\\b'); 
+		
+		alert(url);
+		
+		if(containsHttp.test(url)) { 
+		
+			alert(url);
+
+			e.preventDefault(); 
+			window.open(url, "_system", "location=yes"); // For iOS
+			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+		}
+	});	
 }
 function onDeviceReady()
 {
@@ -47,21 +63,6 @@ function onDeviceReady()
 	
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
-	
-	$("a").click(function(e) {
-	    var url = $(this).attr('href');
-		var containsHttp = new RegExp('http\\b'); 
-		
-		if(containsHttp.test(url)) { 
-		
-		alert(url);
-		
-		
-			e.preventDefault(); 
-			window.open(url, "_system", "location=yes"); // For iOS
-			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
-		}
-	});	
 	
 	check_internet();
 	 
@@ -296,7 +297,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								destination=geo_lat+","+geo_lon;
 								get_geo_route_map();
 								
-								cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";			
+								cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";		
+
+									/*¿USAR API GOOGLE MAPS?*/								
+
 
 							}
 							
