@@ -1253,7 +1253,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	//$("#porcentaje").html(total_gals+"%");	
+	$("#descarga").html(total_gals+"%");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
@@ -1285,7 +1285,7 @@ function cargar_barra(id, total)
 	value+=90/total;
     barra_progreso.val(value);  */			
 
-$("#porcentaje").html(value+=90/total+"%");		
+$("#porcentaje").html(90/total+"%");		
 }
 
 function gotFS(fileSystem) 

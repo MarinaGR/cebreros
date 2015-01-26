@@ -282,6 +282,9 @@ ul li b {
 	color: #FFDB42;
 	padding: 8px 30px;
 	margin-bottom: 40px;
+	outline:none;
+	outline: 0;
+	-webkit-outline: 0;
 }
 .footer_01 {
 	min-height: 5vh;
