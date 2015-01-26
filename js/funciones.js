@@ -53,6 +53,10 @@ function onDeviceReady()
 		var containsHttp = new RegExp('http\\b'); 
 		
 		if(containsHttp.test(url)) { 
+		
+		alert(url);
+		
+		
 			e.preventDefault(); 
 			window.open(url, "_system", "location=yes"); // For iOS
 			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
@@ -90,11 +94,12 @@ function check_internet(){
 		
 		online=true;
 		
-		$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
-		
 		var current_url=window.location.href;
 		if(current_url.indexOf("index.html")!=-1) 
 		{
+		
+			$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
+		
 			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
 				var first_time=getLocalStorage("first_time"); 
