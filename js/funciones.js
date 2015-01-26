@@ -1159,7 +1159,7 @@ function downloadToDir(d) {
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
 		$("#descarga").append("<p>Esta acci&oacute;n puede tardar algunos minutos.</p>");
 		
-		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');		
+		//$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');		
 		$("#descarga").append('<p id="porcentaje"> </p>');
 		
 		$.each(archivos, function(folder,files)  
@@ -1253,7 +1253,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#porcentaje").html(total_gals+"%");	
+	//$("#porcentaje").html(total_gals+"%");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
@@ -1280,10 +1280,12 @@ function downloadImages(imagenes, i, total, path) {
 }
 function cargar_barra(id, total)
 {		
-	var barra_progreso=$("#"+id);
+	/*var barra_progreso=$("#"+id);
 	var value = barra_progreso.val();  
 	value+=90/total;
-    barra_progreso.val(value);  				
+    barra_progreso.val(value);  */			
+
+$("#porcentaje").html(value+=90/total+"%");		
 }
 
 function gotFS(fileSystem) 
