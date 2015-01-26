@@ -48,24 +48,16 @@ function onDeviceReady()
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
-	Ext.Viewport.element.dom.addEventListener('click', function (e) {
-		if (e.target.tagName !== 'a') {
-			return;
-		};
-
-		var url = e.target.getAttribute('href');
+	$("a").click(function(e) {
+	    var url = $(this).attr('href');
 		var containsHttp = new RegExp('http\\b'); 
-
-		//if href value begins with 'http'
+		
 		if(containsHttp.test(url)) { 
-			e.preventDefault();
+			e.preventDefault(); 
 			window.open(url, "_system", "location=yes"); // For iOS
 			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
 		}
-		else {
-			return;
-		}
-	}, false);
+	});	
 	
 	check_internet();
 	 
@@ -1179,7 +1171,7 @@ function downloadToDir(d) {
 
 		DATADIR = d;  
 
-		$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
+		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
 		//$("body").prepend("<div id='descarga'></div>");
 			
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
@@ -1300,7 +1292,7 @@ function downloadImages(imagenes, i, total, path) {
 		setTimeout(function() {
 			setSessionStorage("tdownload",false);
 			setLocalStorage("first_time", true);
-			$("#descarga_close").hide();
+			$("#descarga_close").show();
 			$("#descarga").hide();
 		}, 100);
 	}		
