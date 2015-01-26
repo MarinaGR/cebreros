@@ -25,6 +25,7 @@ var archivos={
 			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  gallery:['/2','/3', '/4'],
+			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', 
 					'/48', '/49', '/50', '/51', '/52', '/53', 
 					'/54','/56','/57','/58','/60','/61','/63']
@@ -1159,7 +1160,7 @@ function downloadToDir(d) {
 		$("#descarga").append("<p>Esta acci&oacute;n puede tardar algunos minutos.</p>");
 		
 		$("#descarga").append('<progress id="barra_carga" max="98" value="1"></progress>');		
-		$("#descarga").append('<p> </p>');
+		$("#descarga").append('<p id="porcentaje"> </p>');
 		
 		$.each(archivos, function(folder,files)  
 		{	
@@ -1252,7 +1253,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	var dlPath = path+"/"+imagen_local[1]; 
 	
-	$("#descarga").append(total_gals+".. ");	
+	$("#porcentaje").html(total_gals+"%");	
 	
 	ft.download(imagenes[i].Image , dlPath, function() {
 			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
