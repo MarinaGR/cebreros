@@ -1118,6 +1118,17 @@ function return_user_geoloc(position)
 	
 	var latlon_user=lat+","+lon;
 	$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
+	
+	$("a").on("click", function(e) {
+		var url = $(this).attr('href');
+		var containsHttp = new RegExp('http\\b'); 
+		
+		if(containsHttp.test(url)) { 
+			e.preventDefault(); 
+			window.open(url, "_system", "location=yes"); // For iOS
+			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+		}
+	});	
 
 }
 function error_user_geoloc(position)
