@@ -19,7 +19,7 @@ var now=new Date(2014,0,1).getTime();
 
 var destination;
 var fs;
-var DATADIR, IMGDIR;
+var DATADIR;
 
 var archivos={
 			  "":['routes'],		
@@ -38,16 +38,11 @@ function onBodyLoad()
 	document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
 	document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
 	
-	$("a").click(function(e) {
+	$("a").on("click", function(e) {
 	    var url = $(this).attr('href');
 		var containsHttp = new RegExp('http\\b'); 
 		
-		alert(url);
-		
 		if(containsHttp.test(url)) { 
-		
-			alert(url);
-
 			e.preventDefault(); 
 			window.open(url, "_system", "location=yes"); // For iOS
 			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
@@ -354,6 +349,17 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						}
 					
 						$("#"+container).html(cadena);
+						
+						$("a").on("click", function(e) {
+							var url = $(this).attr('href');
+							var containsHttp = new RegExp('http\\b'); 
+							
+							if(containsHttp.test(url)) { 
+								e.preventDefault(); 
+								window.open(url, "_system", "location=yes"); // For iOS
+								//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+							}
+						});	
 					
 						break;
 						
@@ -434,6 +440,18 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							}	
 						}
 						$("#"+container).html(cadena);
+						
+						$("a").on("click", function(e) {
+							var url = $(this).attr('href');
+							var containsHttp = new RegExp('http\\b'); 
+							
+							if(containsHttp.test(url)) { 
+								e.preventDefault(); 
+								window.open(url, "_system", "location=yes"); // For iOS
+								//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+							}
+						});	
+	
 						break;
 						
 				case "routes": 
@@ -560,6 +578,17 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						cadena+="<p><a class='vermas' href='canvas.html?id="+id+"'>Ver ruta con geolocalizaci&oacute;n</a></p>";				
 						
 						$("#"+container).append(cadena);
+						
+						$("a").on("click", function(e) {
+							var url = $(this).attr('href');
+							var containsHttp = new RegExp('http\\b'); 
+							
+							if(containsHttp.test(url)) { 
+								e.preventDefault(); 
+								window.open(url, "_system", "location=yes"); // For iOS
+								//navigator.app.loadUrl(url, {openExternal: true}); //For Android
+							}
+						});	
 						
 						break;
 
@@ -1196,8 +1225,8 @@ function downloadToDir(d) {
 				
 				fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
 					
-					console.log(" RUTA WEB: "+api_url+folder+filename+"<br>");
-					console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json<br>");
+					//console.log(" RUTA WEB: "+api_url+folder+filename);
+					//console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json");
 					
 					var ft = new FileTransfer();		
 					
@@ -1226,9 +1255,6 @@ function downloadToDir(d) {
 			
 				var objajax=$.getJSON("./resources/json/galleries.json", function donwload_images(data1) {
 				//var objajax=$.getJSON(api_url+"galleries", function donwload_images(data1) {
-				
-					//IMGDIR=fs.toURL()+file_path+"/gallery/";
-					IMGDIR=dimg.fullPath;
 					
 					$.each(data1.Result.Items, function(index, gal){   
 
