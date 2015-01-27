@@ -25,7 +25,7 @@ var archivos={
 			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  gallery:['/2','/3', '/4'],
-			  category:['/5','/14', '/17', '/18'],
+			  category:['/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48', 
 					'/49', '/50', '/51', '/52', '/53', '/54','/55',
 					'/56', '/57','/58','/60','/61','/63']
@@ -204,17 +204,24 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								var fecha=new Date(d.DatePublish);
 								var imagen=d.Image; 
 								
-								if(imagen!=null && imagen!="null" && imagen!="" && (imagen.indexOf("jpg")>0 || imagen.indexOf("png")>0)) 
-								{						
-									if(imagen.indexOf("http")<0)
-									{
-										if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
-											cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
+								if(online)
+								{
+									if(imagen!=null && imagen!="null" && imagen!="" && (imagen.indexOf("jpg")>0 || imagen.indexOf("png")>0)) 
+									{						
+										if(imagen.indexOf("http")<0)
+										{
+											if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
+												cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
+											else
+												cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/thumbnails/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+										}
 										else
-											cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/thumbnails/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+											cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 									}
 									else
-										cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
+									{
+										cadena+="<div style='width:100%;height:75px;background:#FFF url(./resources/images/general/sin_imagen.jpg) no-repeat center;background-size:cover;'></div>";
+									}
 								}
 								else
 								{
@@ -1215,7 +1222,7 @@ function setFilePath() {
 
 function downloadToDir(d) {
 
-	var first_time=getLocalStorage("first_time"); alert("Paso3: "+first_time);
+	var first_time=getLocalStorage("first_time"); 
 	if(typeof first_time == "undefined"  || first_time==null || first_time==false || first_time=="false")	
 	{
 		console.log('created directory '+d.name);
@@ -1349,6 +1356,8 @@ function downloadImages(imagenes, i, total, path) {
 			setLocalStorage("first_time", true);
 			$("#descarga_close").show();
 			$("#descarga").hide();
+			$("#div_update").html("Actualizacion finalizada");
+			
 		}, 100);
 	}		
 }

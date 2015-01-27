@@ -245,15 +245,16 @@ ul li b {
 }
 .tlfs b {
 	background-color: #ddd;
-	padding: 5px;
+	padding: 6px;
 	margin: 5px 0;
 }
 .tlfs li  {
-	margin: 10px 0;
+	margin: 5px 0;
 }
 .tlfs li a {
 	text-decoration: none;
 	font-size: 1.2em;
+	margin: 0 0 0 2px;
 }
 
 .data_route {

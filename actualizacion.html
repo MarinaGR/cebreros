@@ -15,28 +15,30 @@
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
 		<script>
-		    document.addEventListener("deviceready", function() 
+			function onLoad() 
 			{
-				var isOffline = 'onLine' in navigator && !navigator.onLine;
-					
-				if(!isOffline) 
-				{								
-					online=true;
+				document.addEventListener("deviceready", function() 
+				{
+					var isOffline = 'onLine' in navigator && !navigator.onLine;
 						
-					alert("Paso1: "+getLocalStorage("first_time"));
-					
-					setLocalStorage("first_time",false); 
+					if(!isOffline) 
+					{								
+						online=true;
 
-					alert("Paso2: "+getLocalStorage("first_time"));
-					
-					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
-					
-				}
-			}, false);
+						setLocalStorage("first_time",false); 
+						
+						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+						
+					}
+				}, false);
+				
+				document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
+				document.getElementById("boton_salir").addEventListener("click", onOutKeyDown, false);	
+			}
 		</script>
 	</head>
 
-	<body onload="onBodyLoad()">
+	<body onload="onLoad()">
 
 		<div class="contenedor">
 			<div class="header_02">
@@ -46,7 +48,7 @@
 			</div>
 			
 			<div class="section_02">
-				<div class="article_01" id="contenido"> </div>
+				<div class="article_01" id="div_update">Espere mientras se actualiza la aplicación....</div>
 			</div>	
 			
 			<div class="footer_01">
