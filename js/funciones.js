@@ -259,7 +259,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						if(isLocal!=true && isLocal!="true")
 							cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 
-						//if(online)
+						if(online)
 						{
 							if(imagen!=null && imagen!="null" && imagen!="" && (imagen.indexOf("jpg")>0 || imagen.indexOf("png")>0)) 
 							{						
@@ -531,9 +531,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								$("#"+container).css("height",height);
 								$("#datos_geo").append("<div id='datos_geo_position'></div>");
 							}
-							
-							//$("#datos_geo").append("<div class='vermas' onclick='show_geoloc()'>ACTUALIZAR</div>");
-							
+			
 							break;
 						}
 						
@@ -1140,17 +1138,6 @@ function return_user_geoloc(position)
 	$("#datos_geo_position").html(cadena);
 	
 	//$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
-	
-	/*$("a").on("click", function(e) {
-		var url = $(this).attr('href');
-		var containsHttp = new RegExp('http\\b'); 
-		
-		if(containsHttp.test(url)) { 
-			e.preventDefault(); 
-			window.open(url, "_system", "location=yes"); // For iOS
-			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
-		}
-	});	*/
 
 }
 function error_user_geoloc(position)
@@ -1231,7 +1218,6 @@ function downloadToDir(d) {
 		DATADIR = d;  
 
 		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
-		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
 		$("body").prepend("<div id='descarga'><div id='descarga_close'>CERRAR</div></div>");
 			
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
@@ -1247,15 +1233,10 @@ function downloadToDir(d) {
 				
 				fs.getDirectory(file_path+"/"+folder,{create:true, exclusive:false},function() {
 					
-					//console.log(" RUTA WEB: "+api_url+folder+filename);
-					//console.log(" RUTA2 LOCAL: "+fs.toURL()+file_path+"/"+folder+filename+".json");
-					
 					var ft = new FileTransfer();		
 					
 					var dlPath = fs.toURL()+file_path+"/"+folder+filename+".json"; 			
 
-					//$("#descarga").append(dlPath+"<br>");
-					
 					ft.download(api_url+folder+filename , dlPath, function() {
 							//$("#descarga").append(folder+filename+".json"+" .... OK<br>");
 							cargar_barra("barra_carga", 100);
@@ -1266,7 +1247,6 @@ function downloadToDir(d) {
 				}
 				,function(error){
 					$("#descarga").append("Get Directory "+fs.toURL()+file_path+"/"+folder+" fail " + error.code+"<br>");
-					//alert("Get Directory "+folder+" fail " + error.code);
 				});
 			});
 		});
@@ -1297,7 +1277,6 @@ function downloadToDir(d) {
 									
 								} ,function(error){
 									$("#descarga").append("Get Directory "+file_path+"/gallery/"+gal.ID+" fail " + error.code+"<br>");
-									//alert("Get Directory "+folder+" fail " + error.code);
 								});
 							}
 					
@@ -1313,7 +1292,6 @@ function downloadToDir(d) {
 					
 			},function(error){
 				$("#descarga").append("Get Directory "+file_path+"/gallery fail " + error.code+"<br>");
-				//alert("Get Directory "+folder+" fail " + error.code);
 			});
 			
 		}, 200);
@@ -1331,6 +1309,7 @@ function downloadImages(imagenes, i, total, path) {
 	
 	try {	
 		ft.download(imagenes[i].Image , dlPath, function() {
+		
 				//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
 				cargar_barra("barra_carga", total_gals);
 				total_gals++;
@@ -1346,6 +1325,7 @@ function downloadImages(imagenes, i, total, path) {
 				else
 				{
 					total_gals++;
+					intentos=0;
 				}
 			}
 		);
@@ -1376,9 +1356,6 @@ function cargar_barra(id, total)
 
 function gotFS(fileSystem) 
 {
-	//var fichero="./resources/json/routes.json";
-    //fileSystem.root.getFile(fichero, {create: false}, success_getFile, fail_getFile);
-   
     var reader = fileSystem.root.createReader();
     reader.readEntries(gotList, fail_getFile);  
 
@@ -1400,18 +1377,6 @@ function fail_getFile(error) {
 function onError(e){
 	$("#descarga_close").show();
 	alert("ERROR "+e.code+" - "+e.source+" - "+e.target);
-}
-function readAsText(file) {
-  var reader = new FileReader();
-  //asnycrhonous task has finished, fire the event:
-  reader.onloadend = function(evt) {
-    console.log("Read as text");
-    console.log(evt.target.result);
-    //assign the data to the global var
-    jsonString = evt.target.result
-    //keep working with jsonString here
-  };
-  reader.readAsText(file);    
 }
 
 function setLocalStorage(keyinput,valinput) 
