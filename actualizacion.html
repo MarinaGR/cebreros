@@ -23,7 +23,12 @@
 				{								
 					online=true;
 						
-					setLocalStorage("first_time",false); 
+					alert(getLocalStorage("first_time"));
+					
+					setLocalStorage("first_time",false);
+
+					alert(getLocalStorage("first_time"));
+					
 					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 					
 				}

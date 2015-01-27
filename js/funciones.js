@@ -198,36 +198,40 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var cadena="";
 
 						$.each(data.Result.Items, function(index, d){   
-							var fecha=new Date(d.DatePublish);
-							var imagen=d.Image; 
-							
-							if(imagen!=null && imagen!="null" && imagen!="" && imagen.indexOf("jpg")>0 && imagen.indexOf("png")>0) 
-							{						
-								if(imagen.indexOf("http")<0)
-								{
-									if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
-										cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
+						
+							if(d.ID!=64)
+							{
+								var fecha=new Date(d.DatePublish);
+								var imagen=d.Image; 
+								
+								if(imagen!=null && imagen!="null" && imagen!="" && (imagen.indexOf("jpg")>0 || imagen.indexOf("png")>0)) 
+								{						
+									if(imagen.indexOf("http")<0)
+									{
+										if(imagen.indexOf("public/images")>=0 || imagen.indexOf("public/thumbnails")>=0)
+											cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+imagen+") no-repeat center;background-size:cover;'></div>";
+										else
+											cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/thumbnails/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+									}
 									else
-										cadena+="<div style='width:100%;height:75px;background:#FFF url("+extern_url+"public/thumbnails/"+imagen+") no-repeat center;background-size:cover;'></div>";							
+										cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
 								}
 								else
-									cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
-							}
-							else
-							{
-								cadena+="<div style='width:100%;height:75px;background:#FFF url(./resources/images/general/sin_imagen.jpg) no-repeat center;background-size:cover;'></div>";
-							}
+								{
+									cadena+="<div style='width:100%;height:75px;background:#FFF url(./resources/images/general/sin_imagen.jpg) no-repeat center;background-size:cover;'></div>";
+								}
+									
+								if(isLocal!=true && isLocal!="true")
+									cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
 								
-							if(isLocal!=true && isLocal!="true")
-								cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
-							
-							//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
-							cadena+="<h3>"+d.Title+"</h3>";
-							
-							if(isLocal)
-								cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
-							else
-								cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=false'>VER</a>";
+								//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
+								cadena+="<h3>"+d.Title+"</h3>";
+								
+								if(isLocal)
+									cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=true'>VER</a>";
+								else
+									cadena+="<a class='vermas' href='noticia.html?id="+d.ID+"&local=false'>VER</a>";
+							}
 
 						});
 
@@ -249,7 +253,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 						//if(online)
 						{
-							if(imagen!=null && imagen!="null" && imagen!="" && imagen.indexOf("jpg")>0 && imagen.indexOf("png")>0) 
+							if(imagen!=null && imagen!="null" && imagen!="" && (imagen.indexOf("jpg")>0 || imagen.indexOf("png")>0)) 
 							{						
 								if(imagen.indexOf("http")<0)
 								{
@@ -1112,7 +1116,7 @@ function get_geo_route_map()
 	}
 	else
 	{	
-		var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
+		var cadena='<br><a class="vermas" onclick="window.open(\'http://www.maps.google.com/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
 	
 		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>"+cadena);	
 	}
@@ -1124,7 +1128,7 @@ function return_user_geoloc(position)
 	
 	var latlon_user=lat+","+lon;	
 	
-	var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+latlon_user+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
+	var cadena='<br><a class="vermas" onclick="window.open(\'http://www.maps.google.com/maps?saddr='+latlon_user+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
 	
 	$("#datos_geo_position").html(cadena);
 	
@@ -1144,7 +1148,7 @@ function return_user_geoloc(position)
 }
 function error_user_geoloc(position)
 {
-	var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
+	var cadena='<br><a class="vermas" onclick="window.open(\'http://www.maps.google.com/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
 	
 	$("#datos_geo_position").html("<p>Error en la geolocalizaci&oacute;n</p>"+cadena);
 }
