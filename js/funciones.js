@@ -421,7 +421,9 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 									//cadena+="<br><img src='"+fs.toURL()+file_path+"/gallery/"+d.ID+"/"+imagen_local[1]+"' style='display:block;margin:auto;' alt='Imagen' />";
 									//Cargar imagen local
 									
-									cadena+='<br><a onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');" href="#" ><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" /></a>';
+									//cadena+='<br><a onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');" href="#" ><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" /></a>';
+									
+									cadena+='<br><img src="'+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'" style="display:block;margin:auto;" alt="Imagen" onclick="window.open(\''+fs.toURL()+file_path+'/gallery/'+d.ID+'/'+imagen_local[1]+'\', \'_system\', \'location=yes\');"  />';
 									
 								}
 							}
