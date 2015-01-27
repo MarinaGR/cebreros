@@ -201,7 +201,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 							var fecha=new Date(d.DatePublish);
 							var imagen=d.Image; 
 							
-							if(imagen!=null && imagen!="null" && imagen!="" && image.indexOf("jpg")>0 && image.indexOf("png")>0) 
+							if(imagen!=null && imagen!="null" && imagen!="" && imagen.indexOf("jpg")>0 && imagen.indexOf("png")>0) 
 							{						
 								if(imagen.indexOf("http")<0)
 								{
@@ -249,7 +249,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 						//if(online)
 						{
-							if(imagen!=null && imagen!="null" && imagen!="" && image.indexOf("jpg")>0 && image.indexOf("png")>0) 
+							if(imagen!=null && imagen!="null" && imagen!="" && imagen.indexOf("jpg")>0 && imagen.indexOf("png")>0) 
 							{						
 								if(imagen.indexOf("http")<0)
 								{
