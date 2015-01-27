@@ -26,11 +26,10 @@ var archivos={
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  gallery:['/2','/3', '/4'],
 			  category:['/14', '/17', '/18'],
-			  page:['/42', '/43', '/44', '/45', '/46', '/47', 
-					'/48', '/49', '/50', '/51', '/52', '/53', 
-					'/54','/56','/57','/58','/60','/61','/63']
+			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48', 
+					'/49', '/50', '/51', '/52', '/53', '/54','/55',
+					'/56', '/57','/58','/60','/61','/63']
 			};
-			//category:['/5','/14', '/17', '/18'],
 			 
 function onBodyLoad()
 {	
@@ -83,15 +82,15 @@ function check_internet(){
 		if(current_url.indexOf("index.html")!=-1) 
 		{
 		
-			if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
+			//if(networkState==Connection.ETHERNET || networkState==Connection.WIFI)
 			{		
 				var first_time=getLocalStorage("first_time"); 
-				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
-					alert(states[networkState]+". Descarga de datos");
+				//if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+				//	alert(states[networkState]+". Descarga de datos");
 				
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 			}
-			else
+			/*else
 			{
 				var first_time=getLocalStorage("first_time"); 
 				if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
@@ -111,7 +110,7 @@ function check_internet(){
 					}
 				}
 				
-			}
+			}*/
 		}
 			
 	}
@@ -276,12 +275,14 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								var my_zoom=parseInt(geolocation2[3]);
 																
 								destination=geo_lat+","+geo_lon;
-								get_geo_route_map();
 								
-								cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe><div id='datos_geo_position'></div>";		
+								cadena+='<br><a class="vermas" onclick="'+get_geo_route_map()+'" href="#" >Ver localización en el mapa</a>';
+								
+								//cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe>";
+								
+								cadena+="<div id='datos_geo_position'></div>";		
 
-									/*¿USAR API GOOGLE MAPS?*/								
-
+									/*USAR API GOOGLE MAPS*/								
 
 							}
 							
@@ -1108,6 +1109,9 @@ function get_geo_route_map()
 	}
 	else
 	{	
+	
+		window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+destination+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
+	
 		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
 	}
 }
@@ -1117,9 +1121,12 @@ function return_user_geoloc(position)
   	var lon = position.coords.longitude;
 	
 	var latlon_user=lat+","+lon;
-	$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
 	
-	$("a").on("click", function(e) {
+	window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+latlon_user+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
+	
+	//$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
+	
+	/*$("a").on("click", function(e) {
 		var url = $(this).attr('href');
 		var containsHttp = new RegExp('http\\b'); 
 		
@@ -1128,11 +1135,13 @@ function return_user_geoloc(position)
 			window.open(url, "_system", "location=yes"); // For iOS
 			//navigator.app.loadUrl(url, {openExternal: true}); //For Android
 		}
-	});	
+	});	*/
 
 }
 function error_user_geoloc(position)
 {
+	window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+destination+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
+	
 	$("#datos_geo_position").html("<p>Error en la geolocalizaci&oacute;n</p>");
 }
 
@@ -1206,9 +1215,9 @@ function downloadToDir(d) {
 
 		DATADIR = d;  
 
-		$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
+		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'><div id='descarga_close'>CERRAR</div></div>");
 		//$("body").prepend("<div id='descarga' onclick='$(this).hide()'></div>");
-		//$("body").prepend("<div id='descarga'></div>");
+		$("body").prepend("<div id='descarga'><div id='descarga_close'>CERRAR</div></div>");
 			
 		$("#descarga").append("<p>DESCARGANDO ARCHIVOS...</p>");
 		$("#descarga").append("<p>Esta acci&oacute;n puede tardar algunos minutos.</p>");
@@ -1300,25 +1309,31 @@ function downloadImages(imagenes, i, total, path) {
 
 	var imagen_local=(imagenes[i].Image).split("/public/images/");
 
-	var ft = new FileTransfer();		
-	
+	var ft = new FileTransfer();			
 	var dlPath = path+"/"+imagen_local[1]; 
 	
 	$("#porcentaje").html(total_gals+" %");	
 	
-	ft.download(imagenes[i].Image , dlPath, function() {
-			//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
-			cargar_barra("barra_carga", total_gals);
-			total_gals++;
-			i++;			
-			if(i<total)
-				downloadImages(imagenes, i, total, path);
-		}, 
-		function(error){
-			total_gals++;
-			$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
-		}
-	);
+	try {	
+		ft.download(imagenes[i].Image , dlPath, function() {
+				//$("#descarga").append(imagen_local[1]+" .... OK<br>");	
+				cargar_barra("barra_carga", total_gals);
+				total_gals++;
+				i++;			
+				if(i<total)
+					downloadImages(imagenes, i, total, path);
+			}, 
+			function(error){
+				total_gals++;
+				$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
+				if(i<total)
+					downloadImages(imagenes, i, total, path);
+			}
+		);
+	}
+	catch(e) {
+	   $("#descarga_close").show();
+	}
 	
 	if(total_img_gals==total_gals+1)
 	{
@@ -1334,7 +1349,7 @@ function cargar_barra(id, total)
 {		
 	/*var barra_progreso=$("#"+id);
 	var value = barra_progreso.val();  
-	value+=90/total;
+	value+=parseInt(90/total);
     barra_progreso.val(value);  */			
 }
 
@@ -1377,8 +1392,6 @@ function readAsText(file) {
   };
   reader.readAsText(file);    
 }
-
-
 
 function setLocalStorage(keyinput,valinput) 
 {

@@ -18,7 +18,6 @@
         If you do not want any permissions to be added to your app, add the
         following tag to your config.xml; you will still have the INTERNET
         permission on your app, which PhoneGap requires.
-    
     -->
 	
 	<preference name="permissions" value="none"/>
@@ -47,8 +46,7 @@
 	<!--<preference name="android-targetSdkVersion"	  value="14" />-->				
 	<!-- android: TARGET SDK version, designating the API Level that the application targets. If not set, the default value equals that given to minSdkVersion. ¿Nivel con el que se ha probado? -->
 	
-    <preference name="android-minSdkVersion"      value="8" />             <!-- poner 14 luego 
-	android: MIN SDK version supported on the target device. MAX version is blank by default. -->
+    <preference name="android-minSdkVersion"      value="14" />             <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 
     <!-- Plugins -->

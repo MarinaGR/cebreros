@@ -15,7 +15,19 @@
 		<script src="./js/funciones.js"></script>
 		<script src="./cordova.js"></script>
 		<script>
-		    document.addEventListener("deviceready", onDeviceReady, false);
+		    document.addEventListener("deviceready", function() 
+			{
+				var isOffline = 'onLine' in navigator && !navigator.onLine;
+					
+				if(!isOffline) 
+				{								
+					online=true;
+						
+					setLocalStorage("first_time",false); 
+					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
+					
+				}
+			}, false);
 		</script>
 	</head>
 
@@ -30,21 +42,6 @@
 			
 			<div class="section_01">
 			
-				<div class="nav_01">
-					<ul>
-						<a href="bienvenida.html"><li>BIENVENIDO A CEBREROS</li></a>
-						<a href="#" onclick="window.open('http://www.cebreros.es', '_system', 'location=yes');"><li>WEB AYUNTAMIENTO DE CEBREROS</li></a>
-						<a href="noticias.html"><li>NOTICIAS</li></a>
-						<a href="turismo.html"><li>TURISMO</li></a>
-						<a href="mapas.html"><li>PATRIMONIO NATURAL Y SENDERISMO</li></a>
-						<a href="fiestas.html"><li>FIESTAS Y CARNAVAL</li></a>
-						<a href="galerias.html"><li>FOTOS</li></a>
-						<a href="comollegar.html"><li>COMO LLEGAR</li></a>
-						<a href="tlfs.html"><li>TELÉFONOS DE INTERÉS</li></a>
-						<a href="creditos.html"><li>CRÉDITOS</li></a>
-						<a href="actualizacion.html"><li>ACTUALIZAR APP</li></a>
-					</ul>
-				</div>
 			</div>	
 			
 			<div class="footer_01">
