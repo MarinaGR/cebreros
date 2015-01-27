@@ -8,7 +8,7 @@
                 "IDFather": "0",
                 "Title": "Carnaval de Cebreros",
                 "DatePublish": "2014-12-01",
-                "Image": "http://www.cebreros.es//public/images/gallery2-img-carnaval-de-cebreros.jpg",
+                "Image": "http://www.cebreros.es/public/images/galleries2-img2-carnaval-de-cebreros-2.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -22,7 +22,7 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "1",
-                "MinImage": "http://www.cebreros.es//public/thumbnails/gallery2-img-carnaval-de-cebreros.jpg",
+                "MinImage": "http://www.cebreros.es/public/thumbnails/galleries2-img2-carnaval-de-cebreros-2.jpg",
                 "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/carnavales"
             },
             {
@@ -30,7 +30,7 @@
                 "IDFather": "0",
                 "Title": "Entorno natural",
                 "DatePublish": "2014-12-01",
-                "Image": "http://www.cebreros.es//public/images/gallery3-img-entorno-natural.jpg",
+                "Image": "http://www.cebreros.es/public/images/galleries3-img40-1_cebreros-subiendo-arrebataca.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -44,7 +44,7 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "0",
-                "MinImage": "http://www.cebreros.es//public/thumbnails/gallery3-img-entorno-natural.jpg",
+                "MinImage": "http://www.cebreros.es/public/thumbnails/galleries3-img-entorno-natural.jpg",
                 "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/entorno-natural"
             },
             {
@@ -52,7 +52,7 @@
                 "IDFather": "0",
                 "Title": "Fotografías Turismo Cebreros",
                 "DatePublish": "2015-01-19",
-                "Image": "http://www.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "Image": "http://www.cebreros.es/public/images/galleries4-img66-3_iglesia-santiago-apostol.jpg",
                 "Description": "",
                 "ImageWidth": "1200",
                 "ImageHeight": "1200",
@@ -66,7 +66,7 @@
                 "LevelEdit": "2",
                 "LevelDelete": "2",
                 "Drafted": "1",
-                "MinImage": "http://www.cebreros.es//public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
+                "MinImage": "http://www.cebreros.es/public/thumbnails/auto-galleries4-img87-plaza-del-altozano.jpg",
                 "Permalink": "http://www.cebreros.es/turismo/galerias-de-imagenes/turismo"
             }
         ]

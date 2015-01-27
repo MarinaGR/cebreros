@@ -25,7 +25,7 @@ var archivos={
 			  "":['routes'],		
 			  route:['/1', '/2', '/3', '/4', '/5', '/6', '/7'],		
 			  gallery:['/2','/3', '/4'],
-			  category:['/14', '/17', '/18'],
+			  category:['/5','/14', '/17', '/18'],
 			  page:['/42', '/43', '/44', '/45', '/46', '/47', '/48', 
 					'/49', '/50', '/51', '/52', '/53', '/54','/55',
 					'/56', '/57','/58','/60','/61','/63']
@@ -200,9 +200,8 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						$.each(data.Result.Items, function(index, d){   
 							var fecha=new Date(d.DatePublish);
 							var imagen=d.Image; 
-
 							
-							if(imagen!=null && imagen!="null" && imagen!="") 
+							if(imagen!=null && imagen!="null" && imagen!="" && image.indexOf("jpg")>0 && image.indexOf("png")>0) 
 							{						
 								if(imagen.indexOf("http")<0)
 								{
@@ -213,6 +212,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								}
 								else
 									cadena+="<div style='width:100%;height:75px;background:#FFF url("+imagen+") no-repeat center;background-size:cover;'></div>";
+							}
+							else
+							{
+								cadena+="<div style='width:100%;height:75px;background:#FFF url(./resources/images/general/sin_imagen.jpg) no-repeat center;background-size:cover;'></div>";
 							}
 								
 							if(isLocal!=true && isLocal!="true")
@@ -246,7 +249,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 
 						//if(online)
 						{
-							if(imagen!=null && imagen!="null" && imagen!="") 
+							if(imagen!=null && imagen!="null" && imagen!="" && image.indexOf("jpg")>0 && image.indexOf("png")>0) 
 							{						
 								if(imagen.indexOf("http")<0)
 								{
@@ -276,11 +279,11 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 																
 								destination=geo_lat+","+geo_lon;
 								
-								cadena+='<br><a class="vermas" onclick="'+get_geo_route_map()+'" href="#" >Ver localización en el mapa</a>';
+								get_geo_route_map();
 								
 								//cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe>";
 								
-								cadena+="<div id='datos_geo_position'></div>";		
+								cadena+="<div id='datos_geo_position'>Esperando geolocalizaci&oacute...</div>";		
 
 									/*USAR API GOOGLE MAPS*/								
 
@@ -584,7 +587,7 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 		}
 		function f_error(jqXHR, textStatus, errorThrown){
 			//alert('Error: '+textStatus+" - "+errorThrown);	
-			$("#"+container).html("No se han cargado los datos, necesita tener conexi&oacute;n a internet para acceder a esta secci&oacute;n.");
+			$("#"+container).html("Necesita tener conexi&oacute;n a internet para acceder a esta secci&oacute;n.");
 		}
 		
 	}, onFileSystemError);   
@@ -1109,10 +1112,9 @@ function get_geo_route_map()
 	}
 	else
 	{	
+		var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
 	
-		window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+destination+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
-	
-		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>");	
+		$("#datos_geo_position").html("<p>Tu dispositivo no permite la geolocalizaci&oacute;n din&aacute;mica.</p>"+cadena);	
 	}
 }
 function return_user_geoloc(position)
@@ -1120,9 +1122,11 @@ function return_user_geoloc(position)
 	var lat = position.coords.latitude;
   	var lon = position.coords.longitude;
 	
-	var latlon_user=lat+","+lon;
+	var latlon_user=lat+","+lon;	
 	
-	window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+latlon_user+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
+	var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+latlon_user+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
+	
+	$("#datos_geo_position").html(cadena);
 	
 	//$("#geo_route_map").attr("src","https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+latlon_user+"&destination="+destination+"&avoid=tolls|highways&language=es");
 	
@@ -1140,9 +1144,9 @@ function return_user_geoloc(position)
 }
 function error_user_geoloc(position)
 {
-	window.open('https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin='+destination+'&destination='+destination+'&avoid=tolls|highways&language=es', '_system', 'location=yes');
+	var cadena='<br><a class="vermas" onclick="window.open(\'https://www.maps.google.es/maps?saddr='+destination+'&daddr='+destination+'&avoid=tolls|highways&language=es\', \'_system\', \'location=yes\');" href="#" >Ver geolocalizaci&oacute;n en Google Maps</a>';		
 	
-	$("#datos_geo_position").html("<p>Error en la geolocalizaci&oacute;n</p>");
+	$("#datos_geo_position").html("<p>Error en la geolocalizaci&oacute;n</p>"+cadena);
 }
 
 
