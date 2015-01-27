@@ -12,6 +12,7 @@ var array_coord_image_ppal=new Array();
 var array_coord_image=new Array();
 
 var total_img_gals=0, total_gals=0;
+var intentos;
 
 var zoom=1.15;
 
@@ -1338,10 +1339,14 @@ function downloadImages(imagenes, i, total, path) {
 					downloadImages(imagenes, i, total, path);
 			}, 
 			function(error){
-				total_gals++;
 				$("#descarga").append(imagen_local[1]+" .... KO (err."+error.code+")<br>");
-				if(i<total)
+				intentos++;
+				if(i<total && intentos<2)
 					downloadImages(imagenes, i, total, path);
+				else
+				{
+					total_gals++;
+				}
 			}
 		);
 	}

@@ -313,6 +313,7 @@ ul li b {
 }
 
 #descarga {
+	z-index: 9999;
 	position: absolute;
 	width: 90%;
 	height: 100%;
