@@ -23,11 +23,11 @@
 				{								
 					online=true;
 						
-					alert(getLocalStorage("first_time"));
+					alert("Paso1: "+getLocalStorage("first_time"));
 					
-					setLocalStorage("first_time",false);
+					setLocalStorage("first_time",false); 
 
-					alert(getLocalStorage("first_time"));
+					alert("Paso2: "+getLocalStorage("first_time"));
 					
 					window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 					

@@ -1216,7 +1216,7 @@ function setFilePath() {
 
 function downloadToDir(d) {
 
-	var first_time=getLocalStorage("first_time"); 
+	var first_time=getLocalStorage("first_time"); alert("Paso3: "+first_time);
 	if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
 	{
 		console.log('created directory '+d.name);
