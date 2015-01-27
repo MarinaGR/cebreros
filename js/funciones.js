@@ -271,27 +271,26 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 						cadena+=d.Page;
 						
+						var geolocation2=d.Geolocation;
+						if(geolocation2!="" && geolocation2!=null)
+						{
+							geolocation2=geolocation2.split(/[(,)]/);
+							var geo_lat=geolocation2[1];
+							var geo_lon=geolocation2[2];
+							var my_zoom=parseInt(geolocation2[3]);
+															
+							destination=geo_lat+","+geo_lon;
+							
+							get_geo_route_map();
+							
+							//cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe>";
+							
+							cadena+="<div id='datos_geo_position'>Esperando geolocalizaci&oacute;n...</div>";							
+
+						}
+						
 						if(online)
 						{
-							var geolocation2=d.Geolocation;
-							if(geolocation2!="" && geolocation2!=null)
-							{
-								geolocation2=geolocation2.split(/[(,)]/);
-								var geo_lat=geolocation2[1];
-								var geo_lon=geolocation2[2];
-								var my_zoom=parseInt(geolocation2[3]);
-																
-								destination=geo_lat+","+geo_lon;
-								
-								get_geo_route_map();
-								
-								//cadena+="<br><iframe width='100%' style='height:450px;border:none;' id='geo_route_map'  src='https://www.google.com/maps/embed/v1/directions?key=AIzaSyAD0H1_lbHwk3jMUzjVeORmISbIP34XtzU&origin="+destination+"&destination="+destination+"&avoid=tolls|highways&language=es' ></iframe>";
-								
-								cadena+="<div id='datos_geo_position'>Esperando geolocalizaci&oacute...</div>";		
-
-									/*USAR API GOOGLE MAPS*/								
-
-							}
 							
 							var imagenes=data.Result.Images;
 							if(data.Result.TotalImages>0) 
@@ -1217,7 +1216,7 @@ function setFilePath() {
 function downloadToDir(d) {
 
 	var first_time=getLocalStorage("first_time"); alert("Paso3: "+first_time);
-	if(typeof first_time == "undefined"  || first_time==null || first_time==false)	
+	if(typeof first_time == "undefined"  || first_time==null || first_time==false || first_time=="false")	
 	{
 		console.log('created directory '+d.name);
 

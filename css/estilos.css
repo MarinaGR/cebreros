@@ -238,6 +238,24 @@ ul li b {
 	border-bottom: 1px solid #FFDB42;
 }
 
+.tlfs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.tlfs b {
+	background-color: #ddd;
+	padding: 5px;
+	margin: 5px 0;
+}
+.tlfs li  {
+	margin: 10px 0;
+}
+.tlfs li a {
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
 .data_route {
 	color: #fff;
 	background-color: #00405D;
