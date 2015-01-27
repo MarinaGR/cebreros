@@ -30,6 +30,11 @@
 						window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, onFileSystemError);   
 						
 					}
+					else
+					{
+						$("#div_update").html("Necesita tener conexi&oacute;n a internet para actualizar la aplicaci&oacute;n.");
+					}
+					
 				}, false);
 				
 				document.getElementById("boton_menu").addEventListener("click", onMenuKeyDown, false);	
