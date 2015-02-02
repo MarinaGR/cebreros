@@ -128,7 +128,7 @@
                 "ViewCategory": "Puentes de Cebreros",
                 "ViewAuthor": "ayuntamiento",
                 "Permalink": "turismo/que-visitar/puentes-de-cebreros/el-puente-de-valsordo-y-santa-justa"
-            }
+            },
 			{
                 "ID": "51",
                 "PreTitle": null,
@@ -182,7 +182,7 @@
                 "ViewCategory": "Plazas de Cebreros",
                 "ViewAuthor": "ayuntamiento",
                 "Permalink": "turismo/que-visitar/plazas-de-cebreros/la-plaza-de-espana"
-            }
+            },
 			{
                 "ID": "52",
                 "PreTitle": null,
@@ -254,8 +254,7 @@
                 "ViewCategory": "Qué visitar",
                 "ViewAuthor": "ayuntamiento",
                 "Permalink": "turismo/que-visitar/el-centro-de-productos-de-la-tierra"
-            },           
-            
+            }
             
         ]
     }
