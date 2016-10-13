@@ -42,8 +42,6 @@ function onDeviceReady()
 {
 	document.addEventListener("offline", onOffline, false);
 	document.addEventListener("online", onOnline, false);
-
-	//cordova.plugins.backgroundMode.enable(); 	
 	
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
@@ -53,18 +51,8 @@ function onDeviceReady()
 }    
 function check_internet(){
 
-	var isOffline = 'onLine' in navigator && !navigator.onLine;
-
-	var networkState = navigator.connection.type;
-	var states = {};
-	states[Connection.UNKNOWN]  = 'Conexion desconocida';
-	states[Connection.ETHERNET] = 'Conexion Ethernet';
-	states[Connection.WIFI]     = 'Conexion WiFi';
-	states[Connection.CELL_2G]  = 'Conexion 2G';
-	states[Connection.CELL_3G]  = 'Conexion 3G';
-	states[Connection.CELL_4G]  = 'Conexion 4G';
-	states[Connection.CELL]     = 'Conexion generica';
-	states[Connection.NONE]     = 'Sin conexion';
+	//var isOffline = 'onLine' in navigator && !navigator.onLine;
+	var isOffline = navigator.connection.type=='none' || navigator.connection.type=='unknown';		
 		
 	if(!isOffline) 
 	{			
