@@ -2,9 +2,10 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
 		xmlns:gap   = "http://phonegap.com/ns/1.0"
 		id          = "com.ovnyline.aytocebreros"
-		versionCode = "350" 
-		version     = "1.0.2" >
+		versionCode = "353" 
+		version     = "1.0.3" >
 		<!-- Actualizamos archivos rutas pcr a prc -->
+		<!-- Añadido logo Junta -->
 
     <name>Ayuntamiento de Cebreros</name>
 
