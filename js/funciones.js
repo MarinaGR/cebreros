@@ -218,7 +218,15 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 								}
 									
 								if(isLocal!=true && isLocal!="true")
-									cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+								{
+									//Para IOS
+									var fecha_solo=fecha.toString().split(/[ ]+/g);
+									var fecha_split=fecha_solo[0].split("-");
+									
+									cadena+="<div class='fecha_01'>"+fecha_split[2]+"/"+fecha_split[1]+"/"+fecha_split[0]+"</div>";
+									//ANDROID
+									//cadena+="<div class='fecha_01'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+								}
 								
 								//cadena+="<h3>"+decodeURIComponent(escape(d.Title))+"</h3>";
 								cadena+="<h3>"+d.Title+"</h3>";
@@ -245,7 +253,15 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						cadena+="<h2>"+d.Title+"</h2>";
 						
 						if(isLocal!=true && isLocal!="true")
-							cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+						{
+							//IOS
+							var fecha_solo=fecha.toString().split(/[ ]+/g);
+							var fecha_split=fecha_solo[0].split("-");
+									
+							cadena+="<div class='fecha_02'>"+fecha_split[2]+"/"+fecha_split[1]+"/"+fecha_split[0]+"</div>";
+							//ANDROID
+							//cadena+="<div class='fecha_02'>"+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+"</div>";
+						}
 
 						if(online)
 						{

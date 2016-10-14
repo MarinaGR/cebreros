@@ -90,16 +90,21 @@
 	
 	<gap:plugin name="cordova-plugin-whitelist" source="npm" spec="1.2.2" />
 
-	<!-- Ocultar barra ios, a partir de ios7-->
+	<!-- Ocultar barra ios, a partir de ios7
 	<gap:plugin name="de.appplant.cordova.plugin.hidden-statusbar-overlay" source="pgb" version="1.2.0" />
 	<gap:config-file platform="ios" parent="UIStatusBarHidden">
 		<true/>
 	</gap:config-file>
 	<gap:config-file platform="ios" parent="UIViewControllerBasedStatusBarAppearance">
 		<false/>
+	</gap:config-file>-->
+	<gap:plugin name="cordova-plugin-statusbar" source="npm" spec="2.2.0" />
+	<gap:config-file platform="ios" parent="UIStatusBarHidden">
+		<true/>
 	</gap:config-file>
-
-	
+	<gap:config-file platform="ios" parent="UIViewControllerBasedStatusBarAppearance">
+		<false/>
+	</gap:config-file>	
 
     <!-- Define app icon for each platform. -->
     <icon src="res/icon/icon.png" />
