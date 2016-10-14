@@ -190,7 +190,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						
 							if(d.ID!=64)
 							{
-								var fecha=new Date(d.DatePublish);
+								//ANDROID
+								//var fecha=new Date(d.DatePublish);
+								//IOS
+								var fecha=d.DatePublish;
 								var imagen=d.Image; 
 								
 								if(online)
@@ -248,7 +251,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					
 						var d=data.Result.Data;
 							
-						var fecha=new Date(d.DatePublish);
+						//ANDROID
+						//var fecha=new Date(d.DatePublish);
+						//IOS
+						var fecha=d.DatePublish;
 						var imagen=d.Image; 
 						cadena+="<h2>"+d.Title+"</h2>";
 						
@@ -406,7 +412,10 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 					
 						var d=data.Result;
 						
-						var fecha=new Date(d.DatePublish);
+						//ANDROID
+						//var fecha=new Date(d.DatePublish);
+						//IOS
+						var fecha=d.DatePublish;
 						var imagen=d.Image; 
 						cadena+="<h2>"+d.Title+"</h2>";
 						
@@ -465,7 +474,11 @@ function ajax_recover_data(type, id, container, isLocal, haveCanvas, canvas_numb
 						var cadena="";
 						
 						$.each(data.Result.Items, function(index, d){   
-							var fecha=new Date(d.DatePublish);
+							
+							//ANDROID
+							//var fecha=new Date(d.DatePublish);
+							//IOS
+							var fecha=d.DatePublish;
 							
 							cadena+="<div class='buttons_routes' onclick='window.location.href=\"mapa.html?id="+d.ID+"\"'>";
 							
